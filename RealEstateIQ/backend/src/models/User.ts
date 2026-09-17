@@ -1,0 +1,57 @@
+import mongoose, { Schema, Document } from 'mongoose';
+import bcrypt from 'bcryptjs';
+
+export type UserRole = 'USER' | 'ADMIN';
+
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  passwordHash: string;
+  role: UserRole;
+  createdAt: Date;
+  updatedAt: Date;
+  comparePassword(password: string): Promise<boolean>;
+}
+
+const userSchema = new Schema<IUser>(
+  {
+    name: {
+      type: String,
+      required: [true, 'Name is required'],
+      trim: true,
+      minlength: 2,
+      maxlength: 100,
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, 'Invalid email format'],
+    },
+    passwordHash: {
+      type: String,
+      required: true,
+      select: false, // Never return password hash in queries by default
+    },
+    role: {
+      type: String,
+      enum: ['USER', 'ADMIN'],
+      default: 'USER',
+    },
+  },
+  { timestamps: true }
+);
+
+// Index for fast email lookups
+userSchema.index({ email: 1 });
+
+// Compare plain password against stored hash
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return bcrypt.compare(password, this.passwordHash);
+};
+
+export const User = mongoose.model<IUser>('User', userSchema);

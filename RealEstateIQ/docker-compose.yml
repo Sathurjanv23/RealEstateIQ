@@ -1,0 +1,88 @@
+version: '3.9'
+
+services:
+  # ── MongoDB ──────────────────────────────────────────────────────────────────
+  mongodb:
+    image: mongo:7
+    container_name: realestate_iq_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: realestate_iq
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - realestate_net
+
+  # ── Python ML Service ────────────────────────────────────────────────────────
+  ml-service:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    container_name: realestate_iq_ml
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      PORT: "8000"
+      ALLOWED_ORIGINS: "http://localhost:5000,http://backend:5000"
+    networks:
+      - realestate_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ── Node.js Backend ──────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: realestate_iq_backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      PORT: "5000"
+      MONGO_URI: "mongodb://mongodb:27017/realestate_iq"
+      ML_SERVICE_URL: "http://ml-service:8000"
+      JWT_SECRET: "${JWT_SECRET:-change-this-in-production}"
+      JWT_EXPIRES_IN: "7d"
+      CORS_ORIGIN: "http://localhost:3000"
+    depends_on:
+      - mongodb
+      - ml-service
+    networks:
+      - realestate_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Next.js Frontend ─────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: realestate_iq_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: "http://localhost:5000"
+    depends_on:
+      - backend
+    networks:
+      - realestate_net
+
+volumes:
+  mongodb_data:
+
+networks:
+  realestate_net:
+    driver: bridge
