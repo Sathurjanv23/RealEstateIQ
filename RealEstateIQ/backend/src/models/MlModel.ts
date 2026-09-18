@@ -52,6 +52,5 @@ const mlModelSchema = new Schema<IMlModel>(
 );
 
 mlModelSchema.index({ status: 1 });
-mlModelSchema.index({ version: 1 });
 
 export const MlModel = mongoose.model<IMlModel>('MlModel', mlModelSchema);

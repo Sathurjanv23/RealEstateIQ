@@ -7,7 +7,7 @@ import { MlModel } from '../models/MlModel';
 import { Dataset } from '../models/Dataset';
 import { logger } from '../utils/logger';
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/realestate_iq';
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017/realestate_iq';
 
 const seedProperties = [
   {
@@ -131,7 +131,9 @@ const seedProperties = [
 
 async function seed() {
   try {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(MONGO_URI, {
+      dbName: 'realestate_iq',
+    });
     logger.info('Connected to MongoDB for seeding...');
 
     // Create admin + demo user

@@ -60,3 +60,13 @@ export async function checkMlHealth(): Promise<boolean> {
     return false;
   }
 }
+
+export async function getMlModelInfo(): Promise<Record<string, unknown> | null> {
+  try {
+    const resp = await mlClient.get('/model-info');
+    return resp.data;
+  } catch {
+    return null;
+  }
+}
+

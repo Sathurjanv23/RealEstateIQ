@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Brain, Home, History, BookmarkCheck, TrendingUp, ArrowRight, BarChart3 } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
-import { predictionService, propertyService } from '../services/services';
+import { predictionService, propertyService, marketService } from '../services/services';
 
 function StatCard({ label, value, icon, color }: { label: string; value: string | number; icon: React.ReactNode; color: string }) {
   return (
@@ -46,8 +46,19 @@ export default function DashboardPage() {
     enabled: isAuthenticated,
   });
 
+  const { data: modelData } = useQuery({
+    queryKey: ['marketModelInfo'],
+    queryFn: () => marketService.getModelInfo(),
+    enabled: isAuthenticated,
+  });
+
   const predictions = historyData?.data?.data?.predictions || [];
   const totalProperties = propertiesData?.data?.data?.pagination?.total || 0;
+  const modelInfo = modelData?.data?.data;
+  const modelVersion = modelInfo?.version || modelInfo?.model_version || 'LR-v1.0';
+  const modelR2 = modelInfo?.metrics?.r2 != null
+    ? Number(modelInfo.metrics.r2).toFixed(4)
+    : (modelInfo?.r2 != null ? Number(modelInfo.r2).toFixed(4) : '0.9965');
 
   if (isLoading || !isAuthenticated) {
     return (
@@ -98,13 +109,13 @@ export default function DashboardPage() {
             />
             <StatCard
               label="Model"
-              value="LR-v1.0"
+              value={modelVersion}
               icon={<TrendingUp size={20} className="text-emerald-300" />}
               color="bg-emerald-500/20"
             />
             <StatCard
               label="R² Score"
-              value="0.9965"
+              value={modelR2}
               icon={<BarChart3 size={20} className="text-amber-300" />}
               color="bg-amber-500/20"
             />

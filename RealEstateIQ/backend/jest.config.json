@@ -7,6 +7,6 @@
     "^.+\\.tsx?$": "ts-jest"
   },
   "moduleFileExtensions": ["ts", "js", "json"],
-  "setupFilesAfterFramework": [],
+  "setupFilesAfterEnv": [],
   "testTimeout": 30000
 }

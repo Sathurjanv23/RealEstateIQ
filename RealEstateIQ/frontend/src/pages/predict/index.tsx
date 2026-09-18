@@ -28,6 +28,23 @@ export default function PredictPage() {
     if (!isLoading && !isAuthenticated) router.push('/login');
   }, [isLoading, isAuthenticated, router]);
 
+  useEffect(() => {
+    if (!router.isReady) return;
+    const { area, bedrooms, bathrooms, location, house_age, parking, propertyId } = router.query;
+    if (area || bedrooms || bathrooms || location || house_age || parking || propertyId) {
+      setForm((prev) => ({
+        ...prev,
+        ...(area ? { area: String(area) } : {}),
+        ...(bedrooms ? { bedrooms: String(bedrooms) } : {}),
+        ...(bathrooms ? { bathrooms: String(bathrooms) } : {}),
+        ...(location && LOCATIONS.includes(String(location)) ? { location: String(location) } : {}),
+        ...(house_age ? { house_age: String(house_age) } : {}),
+        ...(parking ? { parking: String(parking) } : {}),
+        ...(propertyId ? { propertyId: String(propertyId) } : {}),
+      }));
+    }
+  }, [router.isReady, router.query]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -97,8 +114,13 @@ export default function PredictPage() {
                 style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
                 <Brain size={22} className="text-white" />
               </div>
-              <div>
-                <h2 className="text-xl font-bold text-white">Property Details</h2>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-bold text-white">Property Details</h2>
+                  {form.propertyId && (
+                    <span className="badge-indigo text-xs">Pre-filled from property</span>
+                  )}
+                </div>
                 <p className="text-white/50 text-sm">Enter property characteristics for ML estimation</p>
               </div>
             </div>

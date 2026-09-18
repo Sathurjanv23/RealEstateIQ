@@ -31,6 +31,7 @@ export const predictionService = {
 export const marketService = {
   getAnalytics: (params?: Record<string, unknown>) => api.get('/api/market/analytics', { params }),
   getRecommendations: (params?: Record<string, unknown>) => api.get('/api/market/recommendations', { params }),
+  getModelInfo: () => api.get('/api/market/model-info'),
 };
 
 export const adminService = {
