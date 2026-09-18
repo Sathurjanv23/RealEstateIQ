@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '../context/AuthContext';
 import '../styles/globals.css';
+import 'leaflet/dist/leaflet.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,3 +1,4 @@
+import path from 'path';
 import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
@@ -11,6 +12,7 @@ import propertyRoutes from './routes/propertyRoutes';
 import predictionRoutes from './routes/predictionRoutes';
 import marketRoutes from './routes/marketRoutes';
 import adminRoutes from './routes/adminRoutes';
+import inquiryRoutes from './routes/inquiryRoutes';
 import { errorHandler, notFound } from './middleware/errorHandler';
 import { logger } from './utils/logger';
 
@@ -18,7 +20,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ── Security middleware ──────────────────────────────────────────────────────
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
+
 
 const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',');
 app.use(
@@ -82,12 +89,16 @@ app.get('/health', (req, res) => {
   });
 });
 
+// ── Static uploads ─────────────────────────────────────────────────────────
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // ── API routes ───────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/predictions', predictionRoutes);
 app.use('/api/market', marketRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/inquiries', inquiryRoutes);
 
 // ── 404 & Error handlers ─────────────────────────────────────────────────────
 app.use(notFound);

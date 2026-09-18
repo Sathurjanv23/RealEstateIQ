@@ -2,35 +2,58 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { Search, Filter, Home, MapPin, Bed, Bath, Car, BookmarkPlus, BookmarkCheck, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Search, Filter, Home, MapPin, Bed, Bath, Car, BookmarkPlus, BookmarkCheck, ChevronLeft, ChevronRight, X, Map, LayoutGrid } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { propertyService } from '../../services/services';
 import { Property } from '../../types';
 
+const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
+  ssr: false,
+  loading: () => <div className="skeleton h-[550px] w-full rounded-2xl" />,
+});
+
 const LOCATIONS = ['', 'Colombo', 'Kandy', 'Galle', 'Negombo'];
 const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 function PropertyCard({ property, onSave, saved }: { property: Property; onSave: (id: string) => void; saved: boolean }) {
+  const hasImage = property.images && property.images.length > 0 && property.images[0];
+
   return (
-    <div className="glass-card-hover overflow-hidden group">
-      {/* Colored header */}
-      <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #6366f1, #8b5cf6)' }} />
-      <div className="p-5">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex-1 min-w-0">
-            <span className="badge-indigo text-xs mb-2 inline-flex capitalize">{property.propertyType}</span>
-            <h3 className="font-semibold text-white text-sm truncate mt-1">{property.title}</h3>
+    <div className="glass-card-hover overflow-hidden group flex flex-col justify-between">
+      <div>
+        {hasImage ? (
+          <div className="h-44 w-full relative overflow-hidden bg-surface-800">
+            <img
+              src={property.images[0]}
+              alt={property.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <span className="badge-indigo text-xs absolute top-3 left-3 capitalize backdrop-blur-md bg-surface-900/80 shadow">
+              {property.propertyType}
+            </span>
           </div>
-          <button
-            onClick={() => onSave(property._id)}
-            className={`ml-2 p-2 rounded-lg transition-all ${saved ? 'text-brand-400 bg-brand-500/20' : 'text-white/30 hover:text-brand-400 hover:bg-brand-500/10'}`}
-          >
-            {saved ? <BookmarkCheck size={16} /> : <BookmarkPlus size={16} />}
-          </button>
-        </div>
+        ) : (
+          <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #6366f1, #8b5cf6)' }} />
+        )}
+        <div className="p-5">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1 min-w-0">
+              {!hasImage && (
+                <span className="badge-indigo text-xs mb-2 inline-flex capitalize">{property.propertyType}</span>
+              )}
+              <h3 className="font-semibold text-white text-sm truncate mt-1">{property.title}</h3>
+            </div>
+            <button
+              onClick={() => onSave(property._id)}
+              className={`ml-2 p-2 rounded-lg transition-all ${saved ? 'text-brand-400 bg-brand-500/20' : 'text-white/30 hover:text-brand-400 hover:bg-brand-500/10'}`}
+            >
+              {saved ? <BookmarkCheck size={16} /> : <BookmarkPlus size={16} />}
+            </button>
+          </div>
 
         <div className="flex items-center gap-1 text-white/50 text-xs mb-3">
           <MapPin size={12} /> {property.location}{property.district ? `, ${property.district}` : ''}
@@ -64,6 +87,7 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
           </Link>
         </div>
       </div>
+      </div>
     </div>
   );
 }
@@ -76,6 +100,7 @@ export default function PropertiesPage() {
   const [filters, setFilters] = useState({ location: '', propertyType: '', minPrice: '', maxPrice: '', bedrooms: '' });
   const [showFilters, setShowFilters] = useState(false);
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
 
   const { data: savedData } = useQuery({
     queryKey: ['savedProperties'],
@@ -130,8 +155,8 @@ export default function PropertiesPage() {
         <div className="space-y-6 animate-fade-in">
           {/* Search & filters */}
           <div className="glass-card p-4">
-            <div className="flex gap-3">
-              <div className="relative flex-1">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="relative flex-1 min-w-[200px]">
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
                 <input
                   type="text"
@@ -141,6 +166,33 @@ export default function PropertiesPage() {
                   className="input-dark pl-9 text-sm"
                 />
               </div>
+
+              {/* View Toggle */}
+              <div className="flex items-center bg-surface-900/90 rounded-xl p-1 border border-white/10">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    viewMode === 'grid'
+                      ? 'bg-brand-500 text-white shadow-sm'
+                      : 'text-white/50 hover:text-white hover:bg-white/5'
+                  }`}
+                  title="Grid View"
+                >
+                  <LayoutGrid size={14} /> Grid
+                </button>
+                <button
+                  onClick={() => setViewMode('map')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    viewMode === 'map'
+                      ? 'bg-brand-500 text-white shadow-sm'
+                      : 'text-white/50 hover:text-white hover:bg-white/5'
+                  }`}
+                  title="Map View"
+                >
+                  <Map size={14} /> Map
+                </button>
+              </div>
+
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`btn-secondary text-sm py-2 ${showFilters ? 'border-brand-500/50 bg-brand-500/10' : ''}`}
@@ -181,11 +233,12 @@ export default function PropertiesPage() {
           <div className="flex items-center justify-between">
             <p className="text-white/50 text-sm">
               {pagination ? `${pagination.total} properties found` : ''}
+              {viewMode === 'map' && ' — Interactive Map View'}
             </p>
             {pagination && <p className="text-white/30 text-xs">Page {pagination.page} of {pagination.pages}</p>}
           </div>
 
-          {/* Grid */}
+          {/* Content View: Grid or Map */}
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[...Array(6)].map((_, i) => <div key={i} className="skeleton h-52 rounded-2xl" />)}
@@ -195,6 +248,14 @@ export default function PropertiesPage() {
               <Home size={48} className="text-white/20 mx-auto mb-4" />
               <p className="text-white/40 text-lg">No properties found</p>
               <p className="text-white/30 text-sm mt-2">Try adjusting your filters or search terms.</p>
+            </div>
+          ) : viewMode === 'map' ? (
+            <div className="animate-fade-in">
+              <PropertyMap
+                properties={properties}
+                height="600px"
+                centerCity={filters.location || undefined}
+              />
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

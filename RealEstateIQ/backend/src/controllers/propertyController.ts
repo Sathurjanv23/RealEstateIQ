@@ -330,4 +330,31 @@ export const compareProperties = async (
   }
 };
 
+// ── Upload Property Image ──────────────────────────────────────────────────
+export const uploadPropertyImage = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (!req.file) {
+      next(createError('No image file provided.', 400, 'FILE_MISSING'));
+      return;
+    }
+
+    const imageUrl = `/uploads/${req.file.filename}`;
+    res.status(201).json({
+      success: true,
+      data: {
+        url: imageUrl,
+        filename: req.file.filename,
+        size: req.file.size,
+        mimetype: req.file.mimetype,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 

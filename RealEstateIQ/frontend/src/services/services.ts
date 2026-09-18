@@ -20,6 +20,27 @@ export const propertyService = {
   unsave: (id: string) => api.delete(`/api/properties/${id}/save`),
   getSaved: () => api.get('/api/properties/saved'),
   compare: (ids: string[]) => api.post('/api/properties/compare', { ids }),
+  uploadImage: (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return api.post('/api/properties/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+};
+
+export const inquiryService = {
+  create: (data: {
+    propertyId: string;
+    propertyName: string;
+    propertyLocation?: string;
+    name: string;
+    phone: string;
+    email?: string;
+    preferredDate?: string;
+    message?: string;
+  }) => api.post('/api/inquiries', data),
+  getAll: (params?: Record<string, unknown>) => api.get('/api/inquiries', { params }),
 };
 
 export const predictionService = {

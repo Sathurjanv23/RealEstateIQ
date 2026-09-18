@@ -1,14 +1,20 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { ArrowLeft, Home, MapPin, Bed, Bath, Car, Calendar, Brain, BookmarkPlus, BookmarkCheck, TrendingUp, TrendingDown, Minus, Mail, Phone, Send, X, GitCompare } from 'lucide-react';
+import { ArrowLeft, Home, MapPin, Bed, Bath, Car, Calendar, Brain, BookmarkPlus, BookmarkCheck, TrendingUp, TrendingDown, Minus, Mail, Phone, Send, X, GitCompare, Loader2 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
-import { propertyService, predictionService } from '../../services/services';
+import { propertyService, predictionService, inquiryService } from '../../services/services';
 import { Property } from '../../types';
-import { useState } from 'react';
+
+const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
+  ssr: false,
+  loading: () => <div className="skeleton h-[280px] w-full rounded-2xl" />,
+});
 
 export default function PropertyDetailPage() {
   const router = useRouter();
@@ -16,19 +22,10 @@ export default function PropertyDetailPage() {
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const [saved, setSaved] = useState(false);
+  const [activeImage, setActiveImage] = useState<number>(0);
   const [inquireModal, setInquireModal] = useState(false);
+  const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
   const [inquiry, setInquiry] = useState({ name: '', phone: '', email: '', date: '', message: '' });
-
-  const handleInquirySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inquiry.name || !inquiry.phone) {
-      toast.error('Please provide your name and contact phone number.');
-      return;
-    }
-    toast.success('Inquiry submitted! The property agent will contact you shortly.');
-    setInquireModal(false);
-    setInquiry({ name: '', phone: '', email: '', date: '', message: '' });
-  };
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['property', id],
@@ -37,6 +34,36 @@ export default function PropertyDetailPage() {
   });
 
   const property: Property | undefined = data?.data?.data?.property;
+
+  const handleInquirySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inquiry.name || !inquiry.phone) {
+      toast.error('Please provide your name and contact phone number.');
+      return;
+    }
+    setIsSubmittingInquiry(true);
+    try {
+      await inquiryService.create({
+        propertyId: id as string,
+        propertyName: property?.title || 'Property',
+        propertyLocation: property?.location,
+        name: inquiry.name,
+        phone: inquiry.phone,
+        email: inquiry.email || undefined,
+        preferredDate: inquiry.date || undefined,
+        message: inquiry.message || undefined,
+      });
+      toast.success('Inquiry submitted! Confirmation email dispatched.');
+      setInquireModal(false);
+      setInquiry({ name: '', phone: '', email: '', date: '', message: '' });
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      toast.error(error.response?.data?.message || 'Failed to submit inquiry.');
+    } finally {
+      setIsSubmittingInquiry(false);
+    }
+  };
+
 
   const saveMutation = useMutation({
     mutationFn: () => saved ? propertyService.unsave(id as string) : propertyService.save(id as string),
@@ -84,6 +111,44 @@ export default function PropertyDetailPage() {
           <Link href="/properties" className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm transition-colors">
             <ArrowLeft size={16} /> Back to Properties
           </Link>
+
+          {/* Photo Gallery Banner */}
+          {property.images && property.images.length > 0 && (
+            <div className="glass-card overflow-hidden p-3 space-y-3">
+              <div className="relative h-72 md:h-96 rounded-xl overflow-hidden bg-surface-800">
+                <img
+                  src={property.images[activeImage] || property.images[0]}
+                  alt={property.title}
+                  className="w-full h-full object-cover transition-all duration-300"
+                />
+                <div className="absolute top-3 left-3 flex gap-2">
+                  <span className="badge-indigo text-xs capitalize backdrop-blur-md bg-surface-900/80 shadow">
+                    {property.propertyType}
+                  </span>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-surface-900/80 backdrop-blur-md text-white/70 border border-white/10">
+                    Photo {activeImage + 1} of {property.images.length}
+                  </span>
+                </div>
+              </div>
+              {property.images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {property.images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImage(idx)}
+                      className={`relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                        activeImage === idx
+                          ? 'border-brand-400 scale-95 ring-2 ring-brand-400/30'
+                          : 'border-transparent opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Header card */}
           <div className="glass-card p-8">
@@ -172,6 +237,25 @@ export default function PropertyDetailPage() {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Location & Map Card */}
+          <div className="glass-card p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold text-white flex items-center gap-2">
+                <MapPin size={18} className="text-brand-400" /> Location & Area Map
+              </h2>
+              <span className="text-xs text-brand-400 bg-brand-500/10 border border-brand-500/20 px-2.5 py-1 rounded-full font-medium">
+                {property.location}{property.district ? ` · ${property.district}` : ''}
+              </span>
+            </div>
+            <PropertyMap
+              properties={[property]}
+              selectedProperty={property}
+              height="300px"
+              centerCity={property.location}
+              zoom={13}
+            />
           </div>
 
           {/* ML Predict CTA */}
@@ -280,9 +364,14 @@ export default function PropertyDetailPage() {
                     </button>
                     <button
                       type="submit"
-                      className="btn-primary flex-1 text-sm py-2.5 justify-center"
+                      disabled={isSubmittingInquiry}
+                      className="btn-primary flex-1 text-sm py-2.5 justify-center disabled:opacity-50"
                     >
-                      <Send size={15} /> Send Inquiry
+                      {isSubmittingInquiry ? (
+                        <><Loader2 size={15} className="animate-spin" /> Submitting...</>
+                      ) : (
+                        <><Send size={15} /> Send Inquiry</>
+                      )}
                     </button>
                   </div>
                 </form>
