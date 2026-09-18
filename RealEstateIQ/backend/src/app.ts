@@ -101,9 +101,11 @@ const startServer = async () => {
   });
 };
 
-startServer().catch((err) => {
-  logger.error('Failed to start server:', err);
-  process.exit(1);
-});
+if (process.env.NODE_ENV !== 'test') {
+  startServer().catch((err) => {
+    logger.error('Failed to start server:', err);
+    process.exit(1);
+  });
+}
 
 export default app;

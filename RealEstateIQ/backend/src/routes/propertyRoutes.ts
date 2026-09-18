@@ -32,6 +32,24 @@ const propertyValidation = [
   body('askingPrice').optional().isFloat({ min: 0 }).withMessage('Asking price must be non-negative.'),
 ];
 
+const propertyUpdateValidation = [
+  body('title').optional().trim().isLength({ min: 3, max: 200 }).withMessage('Title must be 3–200 characters.'),
+  body('propertyType')
+    .optional()
+    .isIn(['house', 'apartment', 'land', 'commercial', 'villa'])
+    .withMessage('Invalid property type.'),
+  body('location')
+    .optional()
+    .isIn(['Colombo', 'Kandy', 'Galle', 'Negombo'])
+    .withMessage('Location must be one of: Colombo, Kandy, Galle, Negombo.'),
+  body('area').optional().isFloat({ min: 1 }).withMessage('Area must be a positive number.'),
+  body('bedrooms').optional().isInt({ min: 0, max: 50 }).withMessage('Bedrooms must be 0–50.'),
+  body('bathrooms').optional().isInt({ min: 0, max: 50 }).withMessage('Bathrooms must be 0–50.'),
+  body('houseAge').optional().isInt({ min: 0, max: 200 }).withMessage('House age must be 0–200.'),
+  body('parking').optional().isInt({ min: 0 }).withMessage('Parking must be non-negative.'),
+  body('askingPrice').optional().isFloat({ min: 0 }).withMessage('Asking price must be non-negative.'),
+];
+
 router.get('/', getProperties);
 router.get('/saved', requireAuth, getSavedProperties);
 router.post('/compare', requireAuth, [
@@ -39,7 +57,7 @@ router.post('/compare', requireAuth, [
 ], validate, compareProperties);
 router.get('/:id', getProperty);
 router.post('/', requireAuth, propertyValidation, validate, createProperty);
-router.put('/:id', requireAuth, validate, updateProperty);
+router.put('/:id', requireAuth, propertyUpdateValidation, validate, updateProperty);
 router.delete('/:id', requireAuth, deleteProperty);
 router.post('/:id/save', requireAuth, saveProperty);
 router.delete('/:id/save', requireAuth, unsaveProperty);

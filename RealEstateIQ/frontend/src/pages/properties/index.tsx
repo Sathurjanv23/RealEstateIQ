@@ -77,6 +77,23 @@ export default function PropertiesPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
 
+  const { data: savedData } = useQuery({
+    queryKey: ['savedProperties'],
+    queryFn: () => propertyService.getSaved(),
+    enabled: isAuthenticated,
+  });
+
+  useEffect(() => {
+    if (savedData?.data?.data?.saved) {
+      const ids = new Set<string>(
+        savedData.data.data.saved.map((s: { property?: { _id: string } | string }) =>
+          typeof s.property === 'object' && s.property !== null ? s.property._id : String(s.property)
+        )
+      );
+      setSavedIds(ids);
+    }
+  }, [savedData]);
+
   const { data, isLoading: loading } = useQuery({
     queryKey: ['properties', page, search, filters],
     queryFn: () => propertyService.getAll({ page, limit: 12, search: search || undefined, ...Object.fromEntries(Object.entries(filters).filter(([, v]) => v)) }),

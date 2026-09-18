@@ -44,9 +44,6 @@ const userSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
-// Index for fast email lookups
-userSchema.index({ email: 1 });
-
 // Compare plain password against stored hash
 userSchema.methods.comparePassword = async function (
   password: string

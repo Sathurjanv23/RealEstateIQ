@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { GitCompare, Plus, X, Home, Bed, Bath, Car, MapPin } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
@@ -27,8 +27,16 @@ export default function ComparePage() {
     if (!isLoading && !isAuthenticated) router.push('/login');
   }, [isLoading, isAuthenticated, router]);
 
+  const { data: propData } = useQuery({
+    queryKey: ['availablePropertiesForCompare'],
+    queryFn: () => propertyService.getAll({ limit: 50 }),
+    enabled: isAuthenticated,
+  });
+
+  const availableProperties: Property[] = propData?.data?.data?.properties || [];
+
   const compareMutation = useMutation({
-    mutationFn: () => propertyService.compare(ids.filter(Boolean)),
+    mutationFn: (idsToCompare?: string[]) => propertyService.compare((idsToCompare || ids).filter(Boolean)),
     onSuccess: (data) => {
       setResults(data.data.data.comparisons);
     },
@@ -37,6 +45,20 @@ export default function ComparePage() {
       toast.error(error.response?.data?.message || 'Comparison failed.');
     },
   });
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    const queryIds = router.query.ids;
+    if (queryIds) {
+      const parsed = (Array.isArray(queryIds) ? queryIds[0] : queryIds).split(',').filter(Boolean);
+      if (parsed.length >= 2) {
+        setIds(parsed);
+        compareMutation.mutate(parsed);
+      } else if (parsed.length === 1) {
+        setIds([parsed[0], '']);
+      }
+    }
+  }, [router.isReady, router.query.ids]);
 
   const handleCompare = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,20 +86,38 @@ export default function ComparePage() {
           {/* ID input form */}
           <div className="glass-card p-6">
             <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-              <GitCompare size={18} className="text-brand-400" /> Enter Property IDs
+              <GitCompare size={18} className="text-brand-400" /> Select or Enter Property IDs
             </h3>
             <p className="text-white/40 text-xs mb-4">
-              Copy property IDs from the Properties page (visible in the URL when viewing a property).
+              Select properties from the list below, or paste property IDs directly.
             </p>
             <form onSubmit={handleCompare} className="space-y-3">
               {ids.map((id, i) => (
-                <div key={i} className="flex gap-2">
+                <div key={i} className="flex gap-2 items-center flex-wrap sm:flex-nowrap">
+                  {availableProperties.length > 0 && (
+                    <select
+                      value={id}
+                      onChange={(e) => {
+                        const n = [...ids];
+                        n[i] = e.target.value;
+                        setIds(n);
+                      }}
+                      className="input-dark flex-1 text-xs truncate min-w-[200px]"
+                    >
+                      <option value="">Choose property {i + 1}...</option>
+                      {availableProperties.map((p) => (
+                        <option key={p._id} value={p._id}>
+                          {p.title} ({p.location}) — Rs. {p.askingPrice ? p.askingPrice.toLocaleString() : 'N/A'}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                   <input
                     type="text"
-                    placeholder={`Property ID ${i + 1}`}
+                    placeholder={`Or ID ${i + 1}`}
                     value={id}
                     onChange={(e) => { const n = [...ids]; n[i] = e.target.value; setIds(n); }}
-                    className="input-dark flex-1 font-mono text-sm"
+                    className="input-dark w-36 font-mono text-xs"
                   />
                   {i >= 2 && (
                     <button type="button" onClick={() => removeId(i)} className="p-3 rounded-xl text-white/30 hover:text-rose-400 hover:bg-rose-500/10 transition-all">

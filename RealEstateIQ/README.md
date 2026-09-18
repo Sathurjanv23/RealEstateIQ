@@ -136,6 +136,31 @@ npm run dev
 
 ---
 
+## Running Tests
+
+### 1. Backend Automated Tests (Jest + Supertest)
+```bash
+cd RealEstateIQ/backend
+npm test
+# Runs 4 test suites: health, auth, market, and property endpoints
+```
+
+### 2. ML Service Tests (pytest)
+```bash
+cd RealEstateIQ/ml-service
+python -m pytest tests/ -v
+# Validates predictor singleton, input preprocessing, and predictions across all locations
+```
+
+### 3. Frontend Typecheck & Build
+```bash
+cd RealEstateIQ/frontend
+npm run build
+# Compiles all 23 Next.js TypeScript pages and validates static generation
+```
+
+---
+
 ## Demo Credentials
 
 | Role  | Email                          | Password       |
@@ -177,8 +202,9 @@ GET    /api/predictions/:id      Get prediction [auth]
 
 ### Market
 ```
-GET    /api/market/analytics     Market stats from DB
-GET    /api/market/recommendations  Rule-based recommendations [auth]
+GET    /api/market/analytics        Market stats from DB
+GET    /api/market/recommendations Rule-based recommendations [auth]
+GET    /api/market/model-info       Live active ML model info & metrics
 ```
 
 ### Admin
