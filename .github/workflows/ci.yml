@@ -1,0 +1,109 @@
+name: RealEstateIQ CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+      - 'release/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # ── Backend CI: Lint, TypeScript Build & Unit Tests ───────────────
+  backend-test:
+    name: Backend Test Suite
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: RealEstateIQ/backend/package-lock.json
+
+      - name: Install Backend Dependencies
+        working-directory: RealEstateIQ/backend
+        run: npm ci --legacy-peer-deps
+
+      - name: Seed Test MongoDB
+        working-directory: RealEstateIQ/backend
+        env:
+          MONGO_URI: mongodb://localhost:27017/realestate_iq
+          JWT_SECRET: ci-test-secret-123456789
+        run: npm run seed
+
+      - name: Build Backend (TypeScript)
+        working-directory: RealEstateIQ/backend
+        run: npm run build
+
+      - name: Run Backend Tests (Jest)
+        working-directory: RealEstateIQ/backend
+        env:
+          MONGO_URI: mongodb://localhost:27017/realestate_iq
+          JWT_SECRET: ci-test-secret-123456789
+          NODE_ENV: test
+        run: npm test
+
+  # ── ML Service CI: Python Dependencies & Model Tests ──────────────
+  ml-service-test:
+    name: ML Service Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: RealEstateIQ/ml-service/requirements.txt
+
+      - name: Install ML Dependencies
+        working-directory: RealEstateIQ/ml-service
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest
+
+      - name: Run ML Unit Tests (pytest)
+        working-directory: RealEstateIQ/ml-service
+        run: pytest tests/ -v
+
+  # ── Frontend CI: Next.js TypeScript Build ────────────────────────
+  frontend-build:
+    name: Frontend Typecheck & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: RealEstateIQ/frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        working-directory: RealEstateIQ/frontend
+        run: npm ci --legacy-peer-deps
+
+      - name: Build Next.js Application
+        working-directory: RealEstateIQ/frontend
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:5000
+        run: npm run build
