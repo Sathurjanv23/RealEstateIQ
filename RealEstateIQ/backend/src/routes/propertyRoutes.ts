@@ -10,9 +10,11 @@ import {
   unsaveProperty,
   getSavedProperties,
   compareProperties,
+  uploadPropertyImage,
 } from '../controllers/propertyController';
 import { requireAuth } from '../middleware/auth';
 import { validate } from '../middleware/validate';
+import { upload } from '../middleware/upload';
 
 const router = Router();
 
@@ -55,6 +57,7 @@ router.get('/saved', requireAuth, getSavedProperties);
 router.post('/compare', requireAuth, [
   body('ids').isArray({ min: 2, max: 5 }).withMessage('Provide 2–5 property IDs.'),
 ], validate, compareProperties);
+router.post('/upload', requireAuth, upload.single('image'), uploadPropertyImage);
 router.get('/:id', getProperty);
 router.post('/', requireAuth, propertyValidation, validate, createProperty);
 router.put('/:id', requireAuth, propertyUpdateValidation, validate, updateProperty);
@@ -63,3 +66,4 @@ router.post('/:id/save', requireAuth, saveProperty);
 router.delete('/:id/save', requireAuth, unsaveProperty);
 
 export default router;
+
