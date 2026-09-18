@@ -2,10 +2,11 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Brain, TrendingUp, TrendingDown, Minus, ArrowLeft, BarChart3, Clock, Database } from 'lucide-react';
+import { Brain, TrendingUp, TrendingDown, Minus, ArrowLeft, BarChart3, Clock, Database, Download, FileText } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { Prediction } from '../../types';
+import { generateValuationPDF } from '../../utils/pdfGenerator';
 
 function FeatureBar({ name, value }: { name: string; value: number }) {
   const pct = Math.round(value * 100);
@@ -69,7 +70,30 @@ export default function PredictionResultPage() {
             <h1 className="text-5xl font-black text-gradient mb-2">
               Rs. {predictedPrice.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </h1>
-            <p className="text-white/30 text-xs mt-3">
+
+            {/* 95% Confidence Interval badge & range */}
+            <div className="mt-4 inline-flex flex-col items-center p-3.5 px-6 rounded-2xl bg-brand-500/10 border border-brand-500/20 max-w-lg mx-auto">
+              <span className="text-[11px] uppercase tracking-wider text-brand-300 font-semibold mb-1">
+                95% Valuation Confidence Interval
+              </span>
+              <span className="text-base sm:text-lg font-bold text-white">
+                Rs. {Math.max(0, Math.round(predictedPrice - 8126.7 * 1.96)).toLocaleString()} – Rs. {Math.round(predictedPrice + 8126.7 * 1.96).toLocaleString()}
+              </span>
+              <span className="text-[10px] sm:text-[11px] text-white/40 mt-0.5">
+                Model Margin: ± Rs. {Math.round(8126.7 * 1.96).toLocaleString()} (Linear Regression MAE: Rs. 8,127)
+              </span>
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => generateValuationPDF(prediction)}
+                className="btn-primary inline-flex items-center gap-2 shadow-lg shadow-brand-500/20 text-sm py-2.5 px-6"
+              >
+                <Download size={16} /> Download Valuation Report (PDF)
+              </button>
+            </div>
+
+            <p className="text-white/30 text-xs mt-4">
               ⚠️ This is an ML model estimate, not a guaranteed market valuation.
               Dataset is synthetic.
             </p>
@@ -149,8 +173,14 @@ export default function PredictionResultPage() {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-3">
-            <Link href="/predict" className="btn-primary">New Prediction</Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => generateValuationPDF(prediction)}
+              className="btn-primary"
+            >
+              <Download size={16} /> Download PDF Report
+            </button>
+            <Link href="/predict" className="btn-secondary">New Prediction</Link>
             <Link href="/history" className="btn-secondary">View History</Link>
             <Link href="/properties" className="btn-secondary">Browse Properties</Link>
           </div>
