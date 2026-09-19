@@ -180,20 +180,7 @@ export default function LoginPage() {
               )}
             </div>
 
-            {/* Demo credentials */}
-            <div className="mt-6 p-4 rounded-xl bg-surface-700 border border-white/5">
-              <p className="text-xs text-white/40 font-medium uppercase tracking-wider mb-3">Demo Credentials</p>
-              <div className="space-y-2 text-xs text-white/60">
-                <div className="flex justify-between">
-                  <span>User:</span>
-                  <span className="text-brand-400 font-mono">demo@realestate-iq.com / User@123456</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Admin:</span>
-                  <span className="text-amber-400 font-mono">admin@realestate-iq.com / Admin@123456</span>
-                </div>
-              </div>
-            </div>
+
           </div>
 
           <p className="text-center text-white/50 text-sm mt-6">
