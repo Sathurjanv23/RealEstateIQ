@@ -10,13 +10,13 @@ import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { propertyService } from '../../services/services';
 import { Property } from '../../types';
+import { SL_LOCATIONS_GROUPED } from '../../utils/sriLankaLocations';
 
 const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
   ssr: false,
   loading: () => <div className="skeleton h-[550px] w-full rounded-2xl" />,
 });
 
-const LOCATIONS = ['', 'Colombo', 'Kandy', 'Galle', 'Negombo'];
 const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 function PropertyCard({ property, onSave, saved }: { property: Property; onSave: (id: string) => void; saved: boolean }) {
@@ -210,7 +210,13 @@ export default function PropertiesPage() {
               <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 md:grid-cols-5 gap-3 animate-slide-up">
                 <select value={filters.location} onChange={(e) => setFilters({ ...filters, location: e.target.value })} className="input-dark text-sm py-2">
                   <option value="">All Locations</option>
-                  {LOCATIONS.filter(Boolean).map(l => <option key={l} value={l}>{l}</option>)}
+                  {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
+                    <optgroup key={province} label={`— ${province}`}>
+                      {locs.map(loc => (
+                        <option key={loc.value} value={loc.value}>{loc.label}</option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </select>
                 <select value={filters.propertyType} onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })} className="input-dark text-sm py-2">
                   <option value="">All Types</option>

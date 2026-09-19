@@ -15,12 +15,26 @@ export const createPrediction = async (
     const { area, bedrooms, bathrooms, location, house_age, parking, propertyId } =
       req.body;
 
+    // Map any Sri Lanka district → trained ML hub
+    const SL_HUB_MAP: Record<string, string> = {
+      Colombo: 'Colombo', Kalutara: 'Colombo',
+      Jaffna: 'Colombo', Kilinochchi: 'Colombo', Mannar: 'Colombo',
+      Vavuniya: 'Colombo', Mullaitivu: 'Colombo',
+      Trincomalee: 'Colombo', Batticaloa: 'Colombo', Ampara: 'Colombo',
+      Gampaha: 'Negombo', Kurunegala: 'Negombo', Puttalam: 'Negombo',
+      Kandy: 'Kandy', Matale: 'Kandy', 'Nuwara Eliya': 'Kandy',
+      Anuradhapura: 'Kandy', Polonnaruwa: 'Kandy',
+      Badulla: 'Kandy', Monaragala: 'Kandy', Kegalle: 'Kandy',
+      Galle: 'Galle', Matara: 'Galle', Hambantota: 'Galle', Ratnapura: 'Galle',
+    };
+    const mlLocation = SL_HUB_MAP[location] || 'Colombo';
+
     // Call the Python ML service
     const mlResult = await callMlPredict({
       area,
       bedrooms,
       bathrooms,
-      location,
+      location: mlLocation,
       house_age,
       parking,
     });

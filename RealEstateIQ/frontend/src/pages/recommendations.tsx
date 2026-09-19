@@ -8,8 +8,7 @@ import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 import { marketService } from '../services/services';
 import { Recommendation } from '../types';
-
-const LOCATIONS = ['', 'Colombo', 'Kandy', 'Galle', 'Negombo'];
+import { SL_LOCATIONS_GROUPED } from '../utils/sriLankaLocations';
 const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 export default function RecommendationsPage() {
@@ -65,7 +64,13 @@ export default function RecommendationsPage() {
                 <label className="block text-xs text-white/50 mb-2">Location</label>
                 <select value={prefs.location} onChange={(e) => setPrefs({ ...prefs, location: e.target.value })} className="input-dark text-sm">
                   <option value="">Any Location</option>
-                  {LOCATIONS.filter(Boolean).map(l => <option key={l} value={l}>{l}</option>)}
+                  {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
+                    <optgroup key={province} label={`— ${province}`}>
+                      {locs.map(loc => (
+                        <option key={loc.value} value={loc.value}>{loc.label}</option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </select>
               </div>
               <div>

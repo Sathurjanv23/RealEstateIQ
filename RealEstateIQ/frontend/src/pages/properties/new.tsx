@@ -7,8 +7,7 @@ import Link from 'next/link';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { propertyService } from '../../services/services';
-
-const LOCATIONS = ['Colombo', 'Kandy', 'Galle', 'Negombo'];
+import { SL_LOCATIONS_GROUPED } from '../../utils/sriLankaLocations';
 const TYPES = ['house', 'apartment', 'land', 'commercial', 'villa'];
 const AMENITIES = ['Swimming Pool', 'Garden', 'Parking', 'Security', 'CCTV', 'Solar Panels', 'Gym', 'Elevator', 'Balcony', 'Mountain View', 'Smart Home'];
 
@@ -100,9 +99,15 @@ export default function NewPropertyPage() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-white/70 mb-2">City *</label>
+                  <label htmlFor="location" className="block text-sm font-medium text-white/70 mb-2">District / City *</label>
                   <select id="location" name="location" value={form.location} onChange={handleChange} className="input-dark">
-                    {LOCATIONS.map(l => <option key={l} value={l}>{l}</option>)}
+                    {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
+                      <optgroup key={province} label={`— ${province}`}>
+                        {locs.map(loc => (
+                          <option key={loc.value} value={loc.value}>{loc.label}</option>
+                        ))}
+                      </optgroup>
+                    ))}
                   </select>
                 </div>
               </div>

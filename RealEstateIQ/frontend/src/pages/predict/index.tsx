@@ -7,8 +7,7 @@ import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { predictionService } from '../../services/services';
 import { Prediction } from '../../types';
-
-const LOCATIONS = ['Colombo', 'Kandy', 'Galle', 'Negombo'];
+import { SL_LOCATIONS_GROUPED, SL_LOCATION_VALUES } from '../../utils/sriLankaLocations';
 
 export default function PredictPage() {
   const router = useRouter();
@@ -37,7 +36,7 @@ export default function PredictPage() {
         ...(area ? { area: String(area) } : {}),
         ...(bedrooms ? { bedrooms: String(bedrooms) } : {}),
         ...(bathrooms ? { bathrooms: String(bathrooms) } : {}),
-        ...(location && LOCATIONS.includes(String(location)) ? { location: String(location) } : {}),
+        ...(location && SL_LOCATION_VALUES.includes(String(location)) ? { location: String(location) } : {}),
         ...(house_age ? { house_age: String(house_age) } : {}),
         ...(parking ? { parking: String(parking) } : {}),
         ...(propertyId ? { propertyId: String(propertyId) } : {}),
@@ -126,10 +125,10 @@ export default function PredictPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Location select */}
+              {/* Location select — full Sri Lanka */}
               <div>
                 <label htmlFor="location" className="block text-sm font-medium text-white/70 mb-2">
-                  Location <span className="text-white/30 font-normal">(City)</span>
+                  Location <span className="text-white/30 font-normal">(District / City)</span>
                 </label>
                 <select
                   id="location"
@@ -138,8 +137,12 @@ export default function PredictPage() {
                   onChange={handleChange}
                   className="input-dark"
                 >
-                  {LOCATIONS.map((loc) => (
-                    <option key={loc} value={loc}>{loc}</option>
+                  {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
+                    <optgroup key={province} label={`— ${province} Province`}>
+                      {locs.map(loc => (
+                        <option key={loc.value} value={loc.value}>{loc.label}</option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </div>
@@ -171,13 +174,13 @@ export default function PredictPage() {
               {/* Optional property ID */}
               <div>
                 <label htmlFor="propertyId" className="block text-sm font-medium text-white/70 mb-2">
-                  Property ID <span className="text-white/30 font-normal">(Optional — links prediction to a saved property)</span>
+                  Property ID <span className="text-white/30 font-normal text-xs">(Optional)</span>
                 </label>
                 <input
                   id="propertyId"
                   name="propertyId"
                   type="text"
-                  placeholder="Paste property ID if applicable"
+                  placeholder="Property ID (optional)"
                   value={form.propertyId}
                   onChange={handleChange}
                   className="input-dark"
