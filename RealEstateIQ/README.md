@@ -220,6 +220,14 @@ GET    /api/admin/datasets       Dataset registry [admin]
 GET    /api/admin/audit-logs     System audit trail [admin]
 ```
 
+### Inquiries
+```
+POST   /api/inquiries            Submit viewing inquiry
+GET    /api/inquiries            List inquiries (filter, search, paginate) [auth]
+PATCH  /api/inquiries/:id/status Update inquiry status (new, contacted, resolved, cancelled) [auth]
+DELETE /api/inquiries/:id        Delete inquiry [auth]
+```
+
 ### ML Service (Internal)
 ```
 GET    /health                   Health check
@@ -233,6 +241,7 @@ GET    /docs                     Swagger UI
 ## Features
 
 - 🏠 Property listing with search, filter, pagination
+- 📅 Property viewing inquiry management with direct contact triggers and status tracking
 - 🧠 AI price prediction (LR model, R²=0.9965)
 - 📊 Market analytics with Recharts visualizations
 - ⭐ Rule-based property recommendations (transparent scoring)
