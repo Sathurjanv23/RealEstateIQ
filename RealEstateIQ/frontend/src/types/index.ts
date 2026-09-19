@@ -133,6 +133,21 @@ export interface PaginationMeta {
   pages: number;
 }
 
+export interface Inquiry {
+  _id: string;
+  propertyId: string;
+  propertyName: string;
+  propertyLocation?: string;
+  name: string;
+  phone: string;
+  email?: string;
+  preferredDate?: string;
+  message?: string;
+  status: 'new' | 'contacted' | 'resolved' | 'cancelled';
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data: T;

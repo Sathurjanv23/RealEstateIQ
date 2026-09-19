@@ -41,6 +41,8 @@ export const inquiryService = {
     message?: string;
   }) => api.post('/api/inquiries', data),
   getAll: (params?: Record<string, unknown>) => api.get('/api/inquiries', { params }),
+  updateStatus: (id: string, status: string) => api.patch(`/api/inquiries/${id}/status`, { status }),
+  delete: (id: string) => api.delete(`/api/inquiries/${id}`),
 };
 
 export const predictionService = {

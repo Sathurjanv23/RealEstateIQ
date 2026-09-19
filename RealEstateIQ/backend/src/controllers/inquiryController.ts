@@ -92,3 +92,72 @@ export async function getInquiries(req: Request, res: Response): Promise<void> {
     });
   }
 }
+
+export async function updateInquiryStatus(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!['new', 'contacted', 'resolved', 'cancelled'].includes(status)) {
+      res.status(400).json({
+        success: false,
+        message: 'Invalid status. Must be one of: new, contacted, resolved, cancelled',
+      });
+      return;
+    }
+
+    const inquiry = await Inquiry.findByIdAndUpdate(
+      id,
+      { $set: { status } },
+      { new: true }
+    );
+
+    if (!inquiry) {
+      res.status(404).json({
+        success: false,
+        message: 'Inquiry not found',
+      });
+      return;
+    }
+
+    res.json({
+      success: true,
+      message: `Inquiry status updated to ${status}`,
+      data: { inquiry },
+    });
+  } catch (err: any) {
+    logger.error(`updateInquiryStatus error: ${err.message}`);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update inquiry status',
+      error: err.message,
+    });
+  }
+}
+
+export async function deleteInquiry(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const inquiry = await Inquiry.findByIdAndDelete(id);
+
+    if (!inquiry) {
+      res.status(404).json({
+        success: false,
+        message: 'Inquiry not found',
+      });
+      return;
+    }
+
+    res.json({
+      success: true,
+      message: 'Inquiry deleted successfully',
+    });
+  } catch (err: any) {
+    logger.error(`deleteInquiry error: ${err.message}`);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete inquiry',
+      error: err.message,
+    });
+  }
+}

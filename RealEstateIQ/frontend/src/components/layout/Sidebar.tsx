@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Home, TrendingUp, History, BookmarkCheck,
   GitCompare, BarChart3, Star, LogOut, ChevronRight, Building2,
   Brain, Users, Database, FileBarChart, ClipboardList, Settings,
-  X
+  CalendarCheck, X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -29,6 +29,7 @@ const userNav: NavItem[] = [
 
 const adminNav: NavItem[] = [
   { href: '/admin', label: 'Admin Dashboard', icon: <LayoutDashboard size={18} />, adminOnly: true },
+  { href: '/admin/inquiries', label: 'Viewing Inquiries', icon: <CalendarCheck size={18} />, adminOnly: true },
   { href: '/admin/users', label: 'Users', icon: <Users size={18} />, adminOnly: true },
   { href: '/admin/properties', label: 'Properties', icon: <Building2 size={18} />, adminOnly: true },
   { href: '/admin/predictions', label: 'Predictions', icon: <FileBarChart size={18} />, adminOnly: true },
