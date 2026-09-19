@@ -35,7 +35,7 @@ NUMERIC_FEATURES = ["area", "bedrooms", "bathrooms", "house_age", "parking"]
 CATEGORICAL_FEATURES = ["location"]
 TARGET = "price"
 LOCATIONS = ["Colombo", "Kandy", "Galle", "Negombo"]
-DATASET_VERSION = "v1.0-synthetic-100rows"
+DATASET_VERSION = "v2.0-sl-market-1200rows"
 MODEL_VERSION_PREFIX = {
     "LinearRegression": "LR",
     "DecisionTreeRegressor": "DT",

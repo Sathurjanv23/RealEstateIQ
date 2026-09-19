@@ -20,8 +20,8 @@ export function generateValuationPDF(prediction: Prediction): void {
     createdAt,
   } = prediction;
 
-  // Confidence range calculation (approx 95% CI based on model MAE: ~Rs. 8,127 * 1.96)
-  const mae = 8126.7;
+  // Confidence range calculation (approx 95% CI based on model MAE)
+  const mae = algorithm === 'LinearRegression' ? 8126.7 : 20325.76;
   const margin = Math.round(mae * 1.96);
   const lowRange = Math.max(0, Math.round(predictedPrice - margin));
   const highRange = Math.round(predictedPrice + margin);

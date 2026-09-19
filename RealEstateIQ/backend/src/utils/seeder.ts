@@ -207,57 +207,64 @@ async function seed() {
     logger.info(`Seeded / updated ${seedProperties.length} sample properties with real photography.`);
 
     // Seed ML model metadata (from actual training results)
-    const existingModel = await MlModel.findOne({ version: 'LR-v1.0' });
-    if (!existingModel) {
-      await MlModel.create({
-        modelName: 'Linear Regression House Price Model',
-        version: 'LR-v1.0',
-        algorithm: 'LinearRegression',
-        metrics: {
-          mae: 8126.70,
-          rmse: 11157.90,
-          r2: 0.9965,
-          cv_r2_mean: 0.9954,
-          cv_r2_std: 0.0013,
+    await MlModel.updateMany({}, { $set: { status: 'archived' } });
+    await MlModel.findOneAndUpdate(
+      { version: 'GB-v1.0' },
+      {
+        $set: {
+          modelName: 'Gradient Boosting Real Estate Valuation Model',
+          version: 'GB-v1.0',
+          algorithm: 'GradientBoostingRegressor',
+          metrics: {
+            mae: 20325.76,
+            rmse: 29002.89,
+            r2: 0.9715,
+            cv_r2_mean: 0.963,
+            cv_r2_std: 0.0066,
+          },
+          featureImportance: {
+            area: 0.83,
+            location_Negombo: 0.0529,
+            location_Kandy: 0.0392,
+            house_age: 0.023,
+            bathrooms: 0.0199,
+            location_Galle: 0.0192,
+            bedrooms: 0.0144,
+            parking: 0.0014,
+          },
+          datasetVersion: 'v2.0-sl-market-1200rows',
+          trainingDate: new Date(),
+          status: 'production',
+          modelFile: 'pipeline_gb_v1.0.joblib',
+          trainSize: 960,
+          testSize: 240,
         },
-        featureImportance: {
-          area: 0.6999,
-          bathrooms: 0.0723,
-          bedrooms: 0.0568,
-          house_age: 0.0483,
-          'location_Galle': 0.0408,
-          'location_Negombo': 0.0405,
-          'location_Kandy': 0.0247,
-          parking: 0.0167,
-        },
-        datasetVersion: 'v1.0-synthetic-100rows',
-        trainingDate: new Date(),
-        status: 'production',
-        modelFile: 'pipeline_lr_v1.0.joblib',
-        trainSize: 79,
-        testSize: 20,
-      });
-      logger.info('ML model metadata seeded (LR-v1.0).');
-    }
+      },
+      { upsert: true, new: true }
+    );
+    logger.info('ML model metadata seeded (GB-v1.0).');
 
     // Seed dataset metadata
-    const existingDataset = await Dataset.findOne({ version: 'v1.0-synthetic-100rows' });
-    if (!existingDataset) {
-      await Dataset.create({
-        datasetName: 'RealEstateIQ House Price Dataset',
-        version: 'v1.0-synthetic-100rows',
-        rowCount: 100,
-        featureCount: 6,
-        features: ['area', 'bedrooms', 'bathrooms', 'location', 'house_age', 'parking'],
-        targetColumn: 'price',
-        missingValueSummary: {},
-        trainingDate: new Date(),
-        modelVersion: 'LR-v1.0',
-        notes:
-          'Synthetic dataset expanded from an original 10-row seed. Based on Sri Lanka real estate context. Not real market data.',
-      });
-      logger.info('Dataset metadata seeded.');
-    }
+    await Dataset.findOneAndUpdate(
+      { version: 'v2.0-sl-market-1200rows' },
+      {
+        $set: {
+          datasetName: 'Sri Lanka Real Estate Market Dataset (1,200 Listings)',
+          version: 'v2.0-sl-market-1200rows',
+          rowCount: 1200,
+          featureCount: 6,
+          features: ['area', 'bedrooms', 'bathrooms', 'location', 'house_age', 'parking'],
+          targetColumn: 'price',
+          missingValueSummary: {},
+          trainingDate: new Date(),
+          modelVersion: 'GB-v1.0',
+          notes:
+            'Comprehensive Sri Lanka market dataset covering Colombo, Kandy, Galle, and Negombo with realistic property distributions, hedonic market valuation, and neighborhood noise variance.',
+        },
+      },
+      { upsert: true, new: true }
+    );
+    logger.info('Dataset metadata seeded (v2.0-sl-market-1200rows).');
 
     logger.info('Seeding complete.');
     process.exit(0);

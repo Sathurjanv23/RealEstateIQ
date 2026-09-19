@@ -7,6 +7,7 @@ interface PropertyMapProps {
   height?: string;
   selectedProperty?: Property;
   centerCity?: string;
+  zoom?: number;
 }
 
 const CITY_COORDINATES: Record<string, [number, number]> = {

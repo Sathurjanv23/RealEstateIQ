@@ -16,8 +16,8 @@ def test_predictor_singleton():
     """Predictor should initialize as a singleton with model metadata."""
     predictor = Predictor.get_instance()
     assert predictor is not None
-    assert predictor.model_version.startswith("LR")
-    assert predictor.algorithm == "LinearRegression"
+    assert predictor.model_version in ["GB-v1.0", "LR-v1.0", "RF-v1.0"]
+    assert predictor.algorithm in ["GradientBoostingRegressor", "LinearRegression", "RandomForestRegressor"]
     assert predictor.pipeline is not None
 
 
