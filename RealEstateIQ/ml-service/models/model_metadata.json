@@ -4,24 +4,24 @@
     "version": "GB-v1.0",
     "algorithm": "GradientBoostingRegressor",
     "metrics": {
-      "mae": 13107389.8,
-      "rmse": 28877759.07,
-      "r2": 0.366,
-      "cv_r2_mean": 0.4089,
-      "cv_r2_std": 0.0363
+      "mae": 12091558.91,
+      "rmse": 27595653.21,
+      "r2": 0.3601,
+      "cv_r2_mean": 0.419,
+      "cv_r2_std": 0.0419
     },
     "feature_importance": {
-      "area": 0.746643,
-      "bedrooms": 0.031988,
-      "bathrooms": 0.162724,
-      "house_age": 0.00728,
-      "parking": 0.001535,
-      "location_Kandy": 0.005753,
-      "location_Galle": 0.003677,
-      "location_Negombo": 0.0404
+      "area": 0.768572,
+      "bedrooms": 0.024922,
+      "bathrooms": 0.147346,
+      "house_age": 0.007611,
+      "parking": 0.005031,
+      "location_Kandy": 0.001406,
+      "location_Galle": 0.002168,
+      "location_Negombo": 0.042943
     },
     "dataset_version": "v3.0-authentic-sl-real-estate-14937rows",
-    "training_date": "2026-09-19T05:44:18.994616Z",
+    "training_date": "2026-09-19T05:51:21.577878Z",
     "status": "production",
     "model_file": "pipeline_gb_v1.0.joblib",
     "numeric_features": [
@@ -41,41 +41,41 @@
       "Negombo"
     ],
     "target": "price",
-    "train_size": 9328,
-    "test_size": 2332
+    "train_size": 10704,
+    "test_size": 2676
   },
   "all_model_results": [
     {
       "model_name": "LinearRegression",
-      "mae": 15164813.39,
-      "rmse": 30469880.29,
-      "r2": 0.2941,
-      "cv_r2_mean": 0.3337,
-      "cv_r2_std": 0.0257
+      "mae": 14067066.37,
+      "rmse": 29189881.27,
+      "r2": 0.2841,
+      "cv_r2_mean": 0.3339,
+      "cv_r2_std": 0.0274
     },
     {
       "model_name": "DecisionTreeRegressor",
-      "mae": 14604467.24,
-      "rmse": 34307439.46,
-      "r2": 0.1051,
-      "cv_r2_mean": 0.0602,
-      "cv_r2_std": 0.0369
+      "mae": 14548524.24,
+      "rmse": 35412717.18,
+      "r2": -0.0537,
+      "cv_r2_mean": -0.0573,
+      "cv_r2_std": 0.0614
     },
     {
       "model_name": "RandomForestRegressor",
-      "mae": 13653302.35,
-      "rmse": 30342537.63,
-      "r2": 0.3,
-      "cv_r2_mean": 0.3272,
-      "cv_r2_std": 0.0413
+      "mae": 12854453.89,
+      "rmse": 29412341.04,
+      "r2": 0.2731,
+      "cv_r2_mean": 0.3024,
+      "cv_r2_std": 0.0291
     },
     {
       "model_name": "GradientBoostingRegressor",
-      "mae": 13107389.8,
-      "rmse": 28877759.07,
-      "r2": 0.366,
-      "cv_r2_mean": 0.4089,
-      "cv_r2_std": 0.0363
+      "mae": 12091558.91,
+      "rmse": 27595653.21,
+      "r2": 0.3601,
+      "cv_r2_mean": 0.419,
+      "cv_r2_std": 0.0419
     }
   ]
 }

@@ -62,10 +62,31 @@ def fetch_and_clean_real_dataset():
 
     df['location'] = df.apply(map_hub, axis=1)
 
-    # Standardize parking & house age
+    # Standardize parking & house age across 50 years of Sri Lankan housing (1976 - 2026)
     df['parking'] = np.clip(np.round(df['Beds'] / 2).astype(int), 1, 4)
     np.random.seed(42)
-    df['house_age'] = np.clip(np.random.geometric(p=0.18, size=len(df)), 1, 20)
+    # 50-year realistic distribution:
+    # 45% modern (1-10 yrs), 30% mid-age (11-25 yrs), 15% mature (26-40 yrs), 10% heritage/vintage (41-50 yrs)
+    ages = []
+    for loc in df['location']:
+        r = np.random.rand()
+        if loc in ['Colombo', 'Galle'] and r < 0.12:
+            # Heritage / vintage / colonial properties in prime historic zones (Colombo 7, Galle Fort)
+            age = np.random.randint(40, 51)
+        elif r < 0.45:
+            # Modern construction (1 - 10 years)
+            age = np.random.randint(1, 11)
+        elif r < 0.75:
+            # Established residential (11 - 25 years)
+            age = np.random.randint(11, 26)
+        elif r < 0.90:
+            # Mature homes (26 - 40 years)
+            age = np.random.randint(26, 41)
+        else:
+            # 41 - 50 years historic properties
+            age = np.random.randint(41, 51)
+        ages.append(age)
+    df['house_age'] = ages
 
     # Final clean dataframe
     clean_df = pd.DataFrame({
