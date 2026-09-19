@@ -5,8 +5,8 @@ Trains and evaluates multiple regression models on the house price dataset.
 Selects the best model based on R2 score on the test set.
 Saves the full sklearn Pipeline (preprocessing + model) using joblib.
 
-Dataset: Synthetic augmented dataset (100 rows) based on Sri Lanka real estate features.
-NOTE: This dataset is synthetic and should not be interpreted as real market data.
+Dataset: Authentic Sri Lanka real estate market data (14,833 real listings from Kaggle)
+         covering all 23 districts across 7 provinces.
 """
 
 import os
@@ -34,8 +34,27 @@ METADATA_PATH = os.path.join(MODELS_DIR, "model_metadata.json")
 NUMERIC_FEATURES = ["area", "bedrooms", "bathrooms", "house_age", "parking"]
 CATEGORICAL_FEATURES = ["location"]
 TARGET = "price"
-LOCATIONS = ["Colombo", "Kandy", "Galle", "Negombo"]
-DATASET_VERSION = "v3.0-authentic-sl-real-estate-14937rows"
+LOCATIONS = [
+    # Western Province
+    "Colombo", "Gampaha", "Kalutara",
+    # Central Province
+    "Kandy", "Matale", "Nuwara Eliya",
+    # Southern Province
+    "Galle", "Matara", "Hambantota",
+    # Northern Province
+    "Jaffna", "Kilinochchi", "Mannar", "Vavuniya", "Mullativu",
+    # Eastern Province
+    "Trincomalee", "Batticaloa", "Ampara",
+    # North Western Province
+    "Kurunegala", "Puttalam",
+    # North Central Province
+    "Anuradhapura", "Polonnaruwa",
+    # Uva Province
+    "Badulla", "Monaragala",
+    # Sabaragamuwa Province
+    "Ratnapura", "Kegalle",
+]
+DATASET_VERSION = "v4.0-authentic-sl-all-23-districts-14833rows"
 MODEL_VERSION_PREFIX = {
     "LinearRegression": "LR",
     "DecisionTreeRegressor": "DT",

@@ -5,7 +5,26 @@ Pydantic schemas for the RealEstateIQ ML service.
 from typing import Dict, Optional
 from pydantic import BaseModel, Field, field_validator
 
-VALID_LOCATIONS = {"Colombo", "Kandy", "Galle", "Negombo"}
+VALID_LOCATIONS = {
+    # Western Province
+    "Colombo", "Gampaha", "Kalutara",
+    # Central Province
+    "Kandy", "Matale", "Nuwara Eliya",
+    # Southern Province
+    "Galle", "Matara", "Hambantota",
+    # Northern Province
+    "Jaffna", "Kilinochchi", "Mannar", "Vavuniya", "Mullativu",
+    # Eastern Province
+    "Trincomalee", "Batticaloa", "Ampara",
+    # North Western Province
+    "Kurunegala", "Puttalam",
+    # North Central Province
+    "Anuradhapura", "Polonnaruwa",
+    # Uva Province
+    "Badulla", "Monaragala",
+    # Sabaragamuwa Province
+    "Ratnapura", "Kegalle",
+}
 
 
 class PredictRequest(BaseModel):
@@ -15,7 +34,7 @@ class PredictRequest(BaseModel):
     bedrooms: int = Field(..., ge=1, le=20, description="Number of bedrooms")
     bathrooms: int = Field(..., ge=1, le=20, description="Number of bathrooms")
     location: str = Field(
-        ..., description="Location: Colombo, Kandy, Galle, or Negombo"
+        ..., description="Sri Lanka district (any of the 25 districts)"
     )
     house_age: int = Field(..., ge=0, le=150, description="Age of the house in years")
     parking: int = Field(..., ge=0, le=20, description="Number of parking spaces")
