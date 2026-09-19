@@ -168,16 +168,23 @@ export const googleAuth = async (
       return;
     }
 
+    const clientId = (process.env.GOOGLE_CLIENT_ID || '').trim();
+    if (!clientId) {
+      next(createError('Google OAuth is not configured on this server.', 500, 'GOOGLE_NOT_CONFIGURED'));
+      return;
+    }
+
     let payload: any;
     try {
-      const ticket = await googleClient.verifyIdToken({
+      const client = new OAuth2Client(clientId);
+      const ticket = await client.verifyIdToken({
         idToken: credential,
-        audience: process.env.GOOGLE_CLIENT_ID,
+        audience: clientId,
       });
       payload = ticket.getPayload();
     } catch (verifyErr: any) {
       logger.error(`Google token verification failed: ${verifyErr.message}`);
-      next(createError('Invalid or expired Google token.', 401, 'INVALID_GOOGLE_TOKEN'));
+      next(createError(`Invalid or expired Google token: ${verifyErr.message}`, 401, 'INVALID_GOOGLE_TOKEN'));
       return;
     }
 
