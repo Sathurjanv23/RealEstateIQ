@@ -69,7 +69,7 @@ export default function MarketPage() {
             <AlertTriangle size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-white/60">
               {analytics?.note || 'Analytics computed from properties stored in the database.'}
-              {' '}Dataset is synthetic and should not be interpreted as real market data.
+              {' '}Market intelligence derived from authentic Sri Lanka real estate transaction data.
             </p>
           </div>
 

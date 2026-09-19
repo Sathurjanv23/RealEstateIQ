@@ -268,10 +268,10 @@ export const getModelInfo = async (
     res.json({
       success: true,
       data: {
-        model_version: 'LR-v1.0',
-        algorithm: 'LinearRegression',
-        dataset_version: 'v1.0-synthetic-100rows',
-        metrics: { r2: 0.9965, mae: 8126.70, rmse: 11157.90 },
+        model_version: 'GB-v1.0',
+        algorithm: 'GradientBoostingRegressor',
+        dataset_version: 'v3.0-authentic-sl-real-estate-14937rows',
+        metrics: { r2: 0.366, mae: 13107389.8, rmse: 28877759.07 },
       },
     });
   } catch (err) {

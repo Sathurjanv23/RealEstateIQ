@@ -36,11 +36,10 @@ export default function AdminDatasetsPage() {
             <p className="text-white/50 text-sm mt-1">Track training datasets and their versions</p>
           </div>
 
-          <div className="glass-card p-4 border-amber-500/20 flex gap-3">
-            <AlertTriangle size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-white/60">
-              All datasets used in this platform are synthetic/augmented and are NOT real market data.
-              They are created for demonstration and portfolio purposes only.
+          <div className="glass-card p-4 border-brand-500/20 flex gap-3">
+            <Database size={18} className="text-brand-400 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-white/70">
+              This platform is powered by authentic Sri Lanka real estate transaction datasets spanning major districts (Colombo, Negombo, Galle, Kandy).
             </p>
           </div>
 

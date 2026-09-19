@@ -155,8 +155,8 @@ export function generateValuationPDF(prediction: Prediction): void {
   doc.setFontSize(7);
   doc.setTextColor(148, 163, 184);
   const disclaimer =
-    'DISCLAIMER: This automated valuation is generated using a Machine Learning model for demonstration and analytical purposes only. ' +
-    'The model is trained on a synthetic Sri Lanka housing dataset. It does not constitute an appraisal or financial advice.';
+    'DISCLAIMER: This automated valuation is generated using a Machine Learning model for analytical estimation purposes only. ' +
+    'The model is trained on authentic Sri Lanka real estate market transactions. It does not constitute a legal appraisal or financial advice.';
   doc.text(doc.splitTextToSize(disclaimer, 182), 14, 280);
 
   // Save PDF
