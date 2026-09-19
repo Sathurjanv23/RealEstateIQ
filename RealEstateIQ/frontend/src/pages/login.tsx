@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { Building2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
+import { BrandLogo } from '../components/ui/BrandLogo';
 import { authService } from '../services/services';
 import { useAuth } from '../context/AuthContext';
 
@@ -72,16 +73,13 @@ export default function LoginPage() {
 
         <div className="w-full max-w-md relative">
           {/* Logo */}
+          {/* Logo */}
           <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-                <Building2 size={20} className="text-white" />
-              </div>
-              <span className="font-bold text-xl text-gradient">RealEstateIQ</span>
-            </Link>
-            <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
-            <p className="text-white/50">Sign in to your account to continue</p>
+            <div className="flex justify-center mb-5">
+              <BrandLogo size="lg" showText={true} />
+            </div>
+            <h1 className="text-2xl font-black text-white tracking-tight mb-2">Welcome Back</h1>
+            <p className="text-slate-400 text-sm">Sign in to access your Sri Lanka property portfolio</p>
           </div>
 
           {/* Form */}

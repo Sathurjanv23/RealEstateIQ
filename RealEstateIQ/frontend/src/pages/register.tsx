@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { Building2, Mail, Lock, User, Eye, EyeOff, KeyRound, ArrowLeft, RefreshCw } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
+import { BrandLogo } from '../components/ui/BrandLogo';
 import { authService } from '../services/services';
 import { useAuth } from '../context/AuthContext';
 
@@ -140,22 +141,16 @@ export default function RegisterPage() {
 
         <div className="w-full max-w-md relative">
           <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-2 mb-6">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
-              >
-                <Building2 size={20} className="text-white" />
-              </div>
-              <span className="font-bold text-xl text-gradient">RealEstateIQ</span>
-            </Link>
-            <h1 className="text-3xl font-bold text-white mb-2">
-              {step === 'details' ? 'Create account' : 'Verify Email'}
+            <div className="flex justify-center mb-5">
+              <BrandLogo size="lg" showText={true} />
+            </div>
+            <h1 className="text-2xl font-black text-white tracking-tight mb-2">
+              {step === 'details' ? 'Create Account' : 'Verify Email Address'}
             </h1>
-            <p className="text-white/50">
+            <p className="text-slate-400 text-sm">
               {step === 'details'
-                ? 'Start making data-driven property decisions'
-                : `We sent a 6-digit verification code to ${email}`}
+                ? 'Join Sri Lanka’s premier property valuation network'
+                : `Enter the 6-digit verification code sent to ${email}`}
             </p>
           </div>
 
