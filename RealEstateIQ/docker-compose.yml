@@ -1,20 +1,6 @@
 version: '3.9'
 
 services:
-  # ── MongoDB ──────────────────────────────────────────────────────────────────
-  mongodb:
-    image: mongo:7
-    container_name: realestate_iq_mongodb
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_DATABASE: realestate_iq
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-    networks:
-      - realestate_net
-
   # ── Python ML Service ────────────────────────────────────────────────────────
   ml-service:
     build:
@@ -48,14 +34,26 @@ services:
     environment:
       NODE_ENV: production
       PORT: "5000"
-      MONGO_URI: "mongodb://mongodb:27017/realestate_iq"
-      MONGODB_URI: "${MONGODB_URI:-mongodb://mongodb:27017/realestate_iq}"
+      MONGO_URI: "${MONGO_URI:-mongodb://localhost:27017/realestate_iq}"
       ML_SERVICE_URL: "http://ml-service:8000"
       JWT_SECRET: "${JWT_SECRET:-change-this-in-production}"
       JWT_EXPIRES_IN: "7d"
-      CORS_ORIGIN: "http://localhost:3000"
+      CORS_ORIGIN: "${CORS_ORIGIN:-http://localhost:3000}"
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+      # SMTP — set in .env file or CI/CD secrets
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_USER: "${SMTP_USER:-}"
+      SMTP_PASS: "${SMTP_PASS:-}"
+      NOTIFICATION_EMAIL: "${NOTIFICATION_EMAIL:-}"
+      # Cloudinary — set in .env file or CI/CD secrets
+      CLOUDINARY_CLOUD_NAME: "${CLOUDINARY_CLOUD_NAME:-}"
+      CLOUDINARY_API_KEY: "${CLOUDINARY_API_KEY:-}"
+      CLOUDINARY_API_SECRET: "${CLOUDINARY_API_SECRET:-}"
+    volumes:
+      # Persist local uploads when Cloudinary is NOT configured (dev only)
+      - backend_uploads:/app/uploads
     depends_on:
-      - mongodb
       - ml-service
     networks:
       - realestate_net
@@ -70,19 +68,21 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "${NEXT_PUBLIC_API_URL:-http://localhost:5000}"
     container_name: realestate_iq_frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_API_URL: "http://localhost:5000"
+      NEXT_PUBLIC_API_URL: "${NEXT_PUBLIC_API_URL:-http://localhost:5000}"
     depends_on:
       - backend
     networks:
       - realestate_net
 
 volumes:
-  mongodb_data:
+  backend_uploads:
 
 networks:
   realestate_net:

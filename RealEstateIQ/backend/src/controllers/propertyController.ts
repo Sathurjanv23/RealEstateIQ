@@ -342,12 +342,16 @@ export const uploadPropertyImage = async (
       return;
     }
 
-    const imageUrl = `/uploads/${req.file.filename}`;
+    // Cloudinary returns `path` (public URL); disk storage returns `filename`.
+    const imageUrl: string =
+      (req.file as any).path ||          // Cloudinary URL
+      `/uploads/${req.file.filename}`;    // local fallback
+
     res.status(201).json({
       success: true,
       data: {
         url: imageUrl,
-        filename: req.file.filename,
+        filename: req.file.filename || imageUrl.split('/').pop(),
         size: req.file.size,
         mimetype: req.file.mimetype,
       },
