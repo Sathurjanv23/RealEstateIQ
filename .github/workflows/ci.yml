@@ -77,8 +77,9 @@ jobs:
           JWT_SECRET: ci-test-secret-123456789
           JWT_EXPIRES_IN: 7d
           NODE_ENV: test
-          GOOGLE_CLIENT_ID: ""
-          GOOGLE_CLIENT_SECRET: ""
+          # Dummy client ID so Google auth attempts verification (→ 401) instead of short-circuit (→ 500)
+          GOOGLE_CLIENT_ID: "000000000000-ci-test-dummy.apps.googleusercontent.com"
+          GOOGLE_CLIENT_SECRET: "dummy-secret-ci"
           # SMTP left empty — emailService falls back to log transport in tests
           SMTP_HOST: ""
           SMTP_PORT: "587"
