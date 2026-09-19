@@ -81,5 +81,39 @@ describe('Auth Endpoints', () => {
     expect(res.status).toBe(401);
     expect(res.body.success).toBe(false);
   });
+
+  it('POST /api/auth/send-otp should reject already registered email', async () => {
+    const res = await request(app)
+      .post('/api/auth/send-otp')
+      .send({ email: 'demo@realestate-iq.com', name: 'Demo User' });
+
+    expect(res.status).toBe(409);
+    expect(res.body.success).toBe(false);
+  });
+
+  it('POST /api/auth/send-otp should send OTP code for new email', async () => {
+    const res = await request(app)
+      .post('/api/auth/send-otp')
+      .send({ email: 'newotpuser@example.com', name: 'New OTP User' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.message).toContain('6-digit');
+  });
+
+  it('POST /api/auth/verify-register should reject incorrect OTP', async () => {
+    const res = await request(app)
+      .post('/api/auth/verify-register')
+      .send({
+        name: 'New OTP User',
+        email: 'newotpuser@example.com',
+        password: 'Password@123',
+        otp: '000000',
+      });
+
+    expect(res.status).toBe(400);
+    expect(res.body.success).toBe(false);
+  });
 });
+
 
