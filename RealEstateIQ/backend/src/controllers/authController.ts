@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 import { User } from '../models/User';
 import { audit } from '../utils/auditLogger';
 import { createError } from '../middleware/errorHandler';
@@ -8,6 +9,7 @@ import { AuthRequest } from '../middleware/auth';
 import { logger } from '../utils/logger';
 
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 function generateToken(userId: string): string {
   const secret = process.env.JWT_SECRET!;
@@ -143,6 +145,7 @@ export const getMe = async (
         name: req.user.name,
         email: req.user.email,
         role: req.user.role,
+        avatar: req.user.avatar,
         createdAt: req.user.createdAt,
       },
     });
@@ -150,5 +153,104 @@ export const getMe = async (
     next(err);
   }
 };
+
+export const googleAuth = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { credential } = req.body;
+    if (!credential) {
+      next(createError('Google credential token is required.', 400, 'MISSING_CREDENTIAL'));
+      return;
+    }
+
+    let payload: any;
+    try {
+      const ticket = await googleClient.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      payload = ticket.getPayload();
+    } catch (verifyErr: any) {
+      logger.error(`Google token verification failed: ${verifyErr.message}`);
+      next(createError('Invalid or expired Google token.', 401, 'INVALID_GOOGLE_TOKEN'));
+      return;
+    }
+
+    if (!payload || !payload.email) {
+      next(createError('Unable to extract user profile from Google token.', 400, 'INVALID_GOOGLE_PAYLOAD'));
+      return;
+    }
+
+    const { sub: googleId, email, name, picture } = payload;
+
+    // Find existing user by googleId or email
+    let user = await User.findOne({
+      $or: [{ googleId }, { email: email.toLowerCase() }],
+    });
+
+    if (user) {
+      let modified = false;
+      if (!user.googleId) {
+        user.googleId = googleId;
+        modified = true;
+      }
+      if (!user.avatar && picture) {
+        user.avatar = picture;
+        modified = true;
+      }
+      if (modified) {
+        await user.save();
+      }
+    } else {
+      user = await User.create({
+        name: name || email.split('@')[0],
+        email: email.toLowerCase(),
+        googleId,
+        avatar: picture || '',
+        role: 'USER',
+      });
+
+      await audit({
+        userId: user._id.toString(),
+        action: 'USER_REGISTER',
+        resource: 'users',
+        resourceId: user._id.toString(),
+        metadata: { provider: 'google' },
+        ipAddress: req.ip as string | undefined,
+      });
+    }
+
+    await audit({
+      userId: user._id.toString(),
+      action: 'USER_LOGIN',
+      resource: 'auth',
+      metadata: { provider: 'google' },
+      ipAddress: req.ip as string | undefined,
+    });
+
+    const token = generateToken(user._id.toString());
+    logger.info(`User logged in via Google OAuth: ${email}`);
+
+    res.json({
+      success: true,
+      data: {
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          avatar: user.avatar,
+        },
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 

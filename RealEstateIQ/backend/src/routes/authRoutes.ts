@@ -1,10 +1,17 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { register, login, logout, getMe } from '../controllers/authController';
+import { register, login, logout, getMe, googleAuth } from '../controllers/authController';
 import { requireAuth } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 
 const router = Router();
+
+router.post(
+  '/google',
+  [body('credential').notEmpty().withMessage('Google credential token is required.')],
+  validate,
+  googleAuth
+);
 
 router.post(
   '/register',

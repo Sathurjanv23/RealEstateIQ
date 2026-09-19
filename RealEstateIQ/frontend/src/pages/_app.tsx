@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '../context/AuthContext';
 import '../styles/globals.css';
@@ -14,29 +15,41 @@ const queryClient = new QueryClient({
   },
 });
 
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
+
 export default function App({ Component, pageProps }: AppProps) {
+  const content = (
+    <AuthProvider>
+      <Component {...pageProps} />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: '#1e1e38',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: '12px',
+          },
+          success: {
+            iconTheme: { primary: '#10b981', secondary: '#fff' },
+          },
+          error: {
+            iconTheme: { primary: '#f43f5e', secondary: '#fff' },
+          },
+        }}
+      />
+    </AuthProvider>
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Component {...pageProps} />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: '#1e1e38',
-              color: '#fff',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px',
-            },
-            success: {
-              iconTheme: { primary: '#10b981', secondary: '#fff' },
-            },
-            error: {
-              iconTheme: { primary: '#f43f5e', secondary: '#fff' },
-            },
-          }}
-        />
-      </AuthProvider>
+      {GOOGLE_CLIENT_ID ? (
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+          {content}
+        </GoogleOAuthProvider>
+      ) : (
+        content
+      )}
     </QueryClientProvider>
   );
 }

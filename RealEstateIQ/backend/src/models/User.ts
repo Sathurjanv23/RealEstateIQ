@@ -6,7 +6,9 @@ export type UserRole = 'USER' | 'ADMIN';
 export interface IUser extends Document {
   name: string;
   email: string;
-  passwordHash: string;
+  passwordHash?: string;
+  googleId?: string;
+  avatar?: string;
   role: UserRole;
   createdAt: Date;
   updatedAt: Date;
@@ -32,8 +34,19 @@ const userSchema = new Schema<IUser>(
     },
     passwordHash: {
       type: String,
-      required: true,
-      select: false, // Never return password hash in queries by default
+      required: function (this: any) {
+        return !this.googleId;
+      },
+      select: false,
+    },
+    googleId: {
+      type: String,
+      sparse: true,
+      index: true,
+    },
+    avatar: {
+      type: String,
+      default: '',
     },
     role: {
       type: String,
@@ -48,6 +61,7 @@ const userSchema = new Schema<IUser>(
 userSchema.methods.comparePassword = async function (
   password: string
 ): Promise<boolean> {
+  if (!this.passwordHash) return false;
   return bcrypt.compare(password, this.passwordHash);
 };
 

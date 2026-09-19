@@ -6,6 +6,7 @@ export interface RegisterPayload { name: string; email: string; password: string
 export const authService = {
   login: (data: LoginPayload) => api.post('/api/auth/login', data),
   register: (data: RegisterPayload) => api.post('/api/auth/register', data),
+  googleLogin: (credential: string) => api.post('/api/auth/google', { credential }),
   logout: () => api.post('/api/auth/logout'),
   getMe: () => api.get('/api/auth/me'),
 };
