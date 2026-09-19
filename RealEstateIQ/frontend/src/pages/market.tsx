@@ -123,14 +123,36 @@ export default function MarketPage() {
                   <h3 className="font-semibold text-white mb-5 flex items-center gap-2">
                     <Home size={18} className="text-brand-400" /> Properties by Type
                   </h3>
-                  <ResponsiveContainer width="100%" height={220}>
+                  <ResponsiveContainer width="100%" height={260}>
                     <PieChart>
-                      <Pie data={analytics.byPropertyType} dataKey="count" nameKey="_id" cx="50%" cy="50%" outerRadius={80} label={({ _id, count }) => `${_id}: ${count}`}>
+                      <Pie
+                        data={analytics.byPropertyType}
+                        dataKey="count"
+                        nameKey="_id"
+                        cx="50%"
+                        cy="45%"
+                        innerRadius={45}
+                        outerRadius={75}
+                        paddingAngle={3}
+                      >
                         {analytics.byPropertyType.map((_, i) => (
                           <Cell key={i} fill={COLORS[i % COLORS.length]} />
                         ))}
                       </Pie>
-                      <Tooltip contentStyle={{ background: '#1e1e38', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }} />
+                      <Tooltip
+                        contentStyle={{
+                          background: '#1e1e38',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '12px',
+                          color: '#fff',
+                        }}
+                      />
+                      <Legend
+                        verticalAlign="bottom"
+                        height={36}
+                        iconType="circle"
+                        wrapperStyle={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', paddingTop: '10px' }}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -141,30 +163,33 @@ export default function MarketPage() {
           {/* Price by location table */}
           {analytics && analytics.byLocation.length > 0 && (
             <div className="glass-card overflow-hidden">
-              <div className="px-6 py-4 border-b border-white/5">
+              <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
                 <h3 className="font-semibold text-white flex items-center gap-2">
                   <BarChart3 size={18} className="text-brand-400" /> Location Breakdown
                 </h3>
+                <span className="text-xs text-brand-400 font-medium md:hidden">Scroll sideways →</span>
               </div>
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Location</th><th>Properties</th><th>Avg Price</th><th>Min Price</th><th>Max Price</th><th>Avg Area</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {analytics.byLocation.map((loc) => (
-                    <tr key={loc._id}>
-                      <td className="font-medium">{loc._id}</td>
-                      <td>{loc.count}</td>
-                      <td className="text-brand-400">Rs. {Math.round(loc.avgPrice).toLocaleString()}</td>
-                      <td className="text-white/60">Rs. {loc.minPrice?.toLocaleString() || '—'}</td>
-                      <td className="text-white/60">Rs. {loc.maxPrice?.toLocaleString() || '—'}</td>
-                      <td className="text-white/60">{loc.avgArea ? `${Math.round(loc.avgArea).toLocaleString()} sqft` : '—'}</td>
+              <div className="overflow-x-auto w-full">
+                <table className="data-table min-w-[620px]">
+                  <thead>
+                    <tr>
+                      <th>Location</th><th>Properties</th><th>Avg Price</th><th>Min Price</th><th>Max Price</th><th>Avg Area</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {analytics.byLocation.map((loc) => (
+                      <tr key={loc._id}>
+                        <td className="font-medium text-white">{loc._id}</td>
+                        <td>{loc.count}</td>
+                        <td className="text-brand-400 font-semibold">Rs. {Math.round(loc.avgPrice).toLocaleString()}</td>
+                        <td className="text-white/60">Rs. {loc.minPrice?.toLocaleString() || '—'}</td>
+                        <td className="text-white/60">Rs. {loc.maxPrice?.toLocaleString() || '—'}</td>
+                        <td className="text-white/60">{loc.avgArea ? `${Math.round(loc.avgArea).toLocaleString()} sqft` : '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
 

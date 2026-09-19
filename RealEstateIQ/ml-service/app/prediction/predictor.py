@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 METADATA_PATH = os.path.join(MODELS_DIR, "model_metadata.json")
 
-NUMERIC_FEATURES = ["area", "bedrooms", "bathrooms", "house_age", "parking"]
+NUMERIC_FEATURES = ["area", "bedrooms", "bathrooms", "house_age", "parking", "district_rate"]
 CATEGORICAL_FEATURES = ["location"]
 
 
@@ -75,6 +75,7 @@ class Predictor:
         self.pipeline = joblib.load(model_path)
         self.model_version = selected["version"]
         self.feature_importance = selected.get("feature_importance", {})
+        self.district_rates = selected.get("district_rates", {})
         self.algorithm = selected["algorithm"]
         self.metrics = selected["metrics"]
         self.dataset_version = selected["dataset_version"]
@@ -95,7 +96,7 @@ class Predictor:
             area: Area in square feet
             bedrooms: Number of bedrooms
             bathrooms: Number of bathrooms
-            location: One of Colombo, Kandy, Galle, Negombo
+            location: One of 23 Sri Lanka districts
             house_age: Age of the house in years
             parking: Number of parking spaces
 
@@ -105,6 +106,14 @@ class Predictor:
         if self.pipeline is None:
             raise ModelNotFoundError("Pipeline not loaded.")
 
+        # Benchmark rate for district (or national average if unknown)
+        d_rate = float(
+            self.district_rates.get(
+                str(location),
+                self.district_rates.get("national_avg", 10000.0)
+            )
+        )
+
         # Build input DataFrame matching training feature order
         input_df = pd.DataFrame(
             {
@@ -113,11 +122,14 @@ class Predictor:
                 "bathrooms": [int(bathrooms)],
                 "house_age": [int(house_age)],
                 "parking": [int(parking)],
+                "district_rate": [d_rate],
                 "location": [str(location)],
             }
         )[NUMERIC_FEATURES + CATEGORICAL_FEATURES]
 
         predicted_price = float(self.pipeline.predict(input_df)[0])
+        # Safeguard lower bound (minimum realistic home in SL)
+        predicted_price = max(1000000.0, predicted_price)
         price_per_sqft = round(predicted_price / area, 2) if area > 0 else None
 
         return {

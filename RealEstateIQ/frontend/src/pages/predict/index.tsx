@@ -107,7 +107,7 @@ export default function PredictPage() {
             </div>
           </div>
 
-          <div className="glass-card p-8">
+          <div className="glass-card p-5 sm:p-8">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center"
                 style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>

@@ -1,56 +1,83 @@
 {
   "selected_model": {
-    "model_name": "GradientBoostingRegressor",
-    "version": "GB-v1.0",
-    "algorithm": "GradientBoostingRegressor",
+    "model_name": "RandomForestRegressor",
+    "version": "RF-v1.0",
+    "algorithm": "RandomForestRegressor",
     "metrics": {
-      "mae": 11994327.19,
-      "rmse": 24245007.92,
-      "r2": 0.4134,
-      "cv_r2_mean": 0.415,
-      "cv_r2_std": 0.0289
+      "mae": 10430635.46,
+      "rmse": 23631793.45,
+      "r2": 0.4427
     },
     "feature_importance": {
-      "area": 0.751312,
-      "bedrooms": 0.030396,
-      "bathrooms": 0.154799,
-      "house_age": 0.002794,
-      "parking": 0.001488,
-      "location_Gampaha": 0.034891,
-      "location_Kalutara": 0.001195,
-      "location_Kandy": 0.001185,
-      "location_Matale": 0.0,
-      "location_Nuwara Eliya": 0.0,
-      "location_Galle": 0.001391,
-      "location_Matara": 0.000327,
-      "location_Hambantota": 0.0,
-      "location_Jaffna": 0.0,
+      "area": 0.614305,
+      "bedrooms": 0.030368,
+      "bathrooms": 0.237096,
+      "house_age": 0.050971,
+      "parking": 0.006739,
+      "district_rate": 0.041648,
+      "location_Colombo": 0.007907,
+      "location_Gampaha": 0.002525,
+      "location_Kalutara": 0.00149,
+      "location_Kandy": 0.001128,
+      "location_Matale": 0.000101,
+      "location_Nuwara Eliya": 6.2e-05,
+      "location_Galle": 0.001817,
+      "location_Matara": 0.00043,
+      "location_Hambantota": 5e-05,
+      "location_Jaffna": 0.000112,
       "location_Kilinochchi": 0.0,
-      "location_Mannar": 0.001936,
+      "location_Mannar": 0.0,
       "location_Vavuniya": 0.0,
       "location_Mullativu": 0.0,
-      "location_Trincomalee": 0.0,
-      "location_Batticaloa": 9.5e-05,
-      "location_Ampara": 3.8e-05,
-      "location_Kurunegala": 0.001476,
-      "location_Puttalam": 0.000937,
-      "location_Anuradhapura": 0.002847,
-      "location_Polonnaruwa": 0.0,
-      "location_Badulla": 0.000319,
-      "location_Monaragala": 0.000547,
-      "location_Ratnapura": 0.000128,
-      "location_Kegalle": 0.011899
+      "location_Trincomalee": 3e-06,
+      "location_Batticaloa": 2.2e-05,
+      "location_Ampara": 5e-06,
+      "location_Kurunegala": 0.001481,
+      "location_Puttalam": 2.5e-05,
+      "location_Anuradhapura": 0.000498,
+      "location_Polonnaruwa": 4e-06,
+      "location_Badulla": 0.000271,
+      "location_Monaragala": 3e-05,
+      "location_Ratnapura": 0.000341,
+      "location_Kegalle": 0.000573
+    },
+    "district_rates": {
+      "Ampara": 4519.392005192838,
+      "Anuradhapura": 7033.278653085619,
+      "Badulla": 5724.265508485287,
+      "Batticaloa": 5718.524512779014,
+      "Colombo": 13782.004547423368,
+      "Galle": 8542.414399338946,
+      "Gampaha": 9431.570238901237,
+      "Hambantota": 6659.360309174285,
+      "Jaffna": 14255.622991788647,
+      "Kalutara": 8672.876318281984,
+      "Kandy": 10503.880820482109,
+      "Kegalle": 11134.428780666423,
+      "Kurunegala": 8991.778270448338,
+      "Mannar": 30751.088534107403,
+      "Matale": 7532.625650951657,
+      "Matara": 6728.8461528458665,
+      "Monaragala": 2989.771833202203,
+      "Mullativu": 5692.307692307692,
+      "Nuwara Eliya": 11040.882213438736,
+      "Polonnaruwa": 7469.512195121952,
+      "Puttalam": 5575.730807609887,
+      "Ratnapura": 8212.238463743193,
+      "Trincomalee": 3611.1111111111113,
+      "national_avg": 12700.825117442262
     },
     "dataset_version": "v4.0-authentic-sl-all-23-districts-14833rows",
-    "training_date": "2026-09-19T06:15:33.655592Z",
+    "training_date": "2026-09-19T13:42:28.452954Z",
     "status": "production",
-    "model_file": "pipeline_gb_v1.0.joblib",
+    "model_file": "pipeline_rf_v1.0.joblib",
     "numeric_features": [
       "area",
       "bedrooms",
       "bathrooms",
       "house_age",
-      "parking"
+      "parking",
+      "district_rate"
     ],
     "categorical_features": [
       "location"
@@ -89,35 +116,27 @@
   "all_model_results": [
     {
       "model_name": "LinearRegression",
-      "mae": 13985029.22,
-      "rmse": 25731581.83,
-      "r2": 0.3392,
-      "cv_r2_mean": 0.3375,
-      "cv_r2_std": 0.0215
+      "mae": 12293683.84,
+      "rmse": 25800486.79,
+      "r2": 0.3357
     },
     {
       "model_name": "DecisionTreeRegressor",
-      "mae": 13962054.69,
-      "rmse": 31932113.42,
-      "r2": -0.0176,
-      "cv_r2_mean": 0.0031,
-      "cv_r2_std": 0.0878
+      "mae": 10914201.89,
+      "rmse": 24604900.7,
+      "r2": 0.3958
     },
     {
       "model_name": "RandomForestRegressor",
-      "mae": 12740719.5,
-      "rmse": 26051145.22,
-      "r2": 0.3227,
-      "cv_r2_mean": 0.3127,
-      "cv_r2_std": 0.0626
+      "mae": 10430635.46,
+      "rmse": 23631793.45,
+      "r2": 0.4427
     },
     {
       "model_name": "GradientBoostingRegressor",
-      "mae": 11994327.19,
-      "rmse": 24245007.92,
-      "r2": 0.4134,
-      "cv_r2_mean": 0.415,
-      "cv_r2_std": 0.0289
+      "mae": 10425226.73,
+      "rmse": 23882918.04,
+      "r2": 0.4308
     }
   ]
 }
