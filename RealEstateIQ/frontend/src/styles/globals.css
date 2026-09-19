@@ -44,8 +44,8 @@
 @layer components {
   /* Glass card */
   .glass-card {
-    @apply bg-surface-800 border border-white/5 rounded-2xl backdrop-blur-sm;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    @apply bg-[#0c1220]/80 border border-indigo-500/15 rounded-2xl backdrop-blur-md;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
   .glass-card-hover {
@@ -53,9 +53,32 @@
   }
 
   .glass-card-hover:hover {
-    @apply border-brand-500/30;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.1), inset 0 1px 0 rgba(255,255,255,0.08);
+    @apply border-indigo-500/35 bg-[#0e1628]/90;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(99, 102, 241, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
+  }
+
+  /* Luxury Real Estate Card */
+  .luxury-glass {
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.85) 0%, rgba(10, 15, 29, 0.9) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+  }
+
+  /* Gold Luxury Accent Text */
+  .gold-gradient-text {
+    background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Sri Lanka Real Estate Badge */
+  .lkr-pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
   }
 
   /* Gradient text */

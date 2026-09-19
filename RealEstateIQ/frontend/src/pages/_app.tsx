@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app';
+import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Toaster } from 'react-hot-toast';
@@ -18,6 +19,17 @@ const queryClient = new QueryClient({
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .catch((err) => {
+            console.warn('RealEstateIQ ServiceWorker error:', err);
+          });
+      });
+    }
+  }, []);
   const content = (
     <AuthProvider>
       <Component {...pageProps} />
