@@ -28,10 +28,12 @@ class EmailService {
       this.transporter = nodemailer.createTransport({
         host,
         port,
-        secure: port === 465,
+        secure: port === 465, // true for SSL (465), false for TLS (587)
         auth: { user, pass },
+        tls: { rejectUnauthorized: false }, // allow self-signed in dev
       });
-      logger.info(`EmailService: Configured with SMTP host ${host}:${port}`);
+      const provider = host.includes('sendgrid') ? 'SendGrid' : 'Gmail/SMTP';
+      logger.info(`EmailService: Configured via ${provider} (${host}:${port})`);
     } else {
       logger.warn('EmailService: SMTP credentials not set in .env. Falling back to log transport mode.');
     }

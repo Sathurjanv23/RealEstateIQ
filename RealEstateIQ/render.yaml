@@ -1,0 +1,63 @@
+# render.yaml — RealEstateIQ production services on Render.com
+# Deploy: https://dashboard.render.com → New → Blueprint → point to this repo
+
+services:
+  # ── Node.js Backend API ─────────────────────────────────────────────────────
+  - type: web
+    name: realestate-iq-backend
+    env: node
+    region: singapore
+    plan: starter
+    buildCommand: cd RealEstateIQ/backend && npm ci && npm run build
+    startCommand: cd RealEstateIQ/backend && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+      - key: MONGO_URI
+        sync: false          # Set via Render dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: "7d"
+      - key: ML_SERVICE_URL
+        sync: false          # Set to ML service URL after deploying ml-service
+      - key: CORS_ORIGIN
+        sync: false          # Set to your Vercel frontend URL
+      - key: LOG_LEVEL
+        value: "info"
+      # --- SMTP (Gmail / SendGrid) ---
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: NOTIFICATION_EMAIL
+        sync: false
+      # --- Cloudinary ---
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  # ── Python FastAPI ML Service ────────────────────────────────────────────────
+  - type: web
+    name: realestate-iq-ml
+    env: python
+    region: singapore
+    plan: starter
+    buildCommand: cd RealEstateIQ/ml-service && pip install -r requirements.txt
+    startCommand: cd RealEstateIQ/ml-service && python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: ALLOWED_ORIGINS
+        sync: false           # Set to backend Render URL

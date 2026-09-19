@@ -54,6 +54,13 @@ jobs:
           MONGO_URI: mongodb://localhost:27017/realestate_iq
           JWT_SECRET: ci-test-secret-123456789
           NODE_ENV: test
+          # SMTP / Cloudinary left empty → services use log/disk fallback in tests
+          SMTP_HOST: ""
+          SMTP_USER: ""
+          SMTP_PASS: ""
+          CLOUDINARY_CLOUD_NAME: ""
+          CLOUDINARY_API_KEY: ""
+          CLOUDINARY_API_SECRET: ""
         run: npm test
 
   # ── ML Service CI: Python Dependencies & Model Tests ──────────────
