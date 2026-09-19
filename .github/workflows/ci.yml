@@ -21,6 +21,11 @@ jobs:
         image: mongo:7
         ports:
           - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand(\"ping\").ok'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Checkout repository
@@ -40,7 +45,8 @@ jobs:
       - name: Seed Test MongoDB
         working-directory: RealEstateIQ/backend
         env:
-          MONGO_URI: mongodb://localhost:27017/realestate_iq
+          MONGODB_URI: mongodb://127.0.0.1:27017/realestate_iq
+          MONGO_URI: mongodb://127.0.0.1:27017/realestate_iq
           JWT_SECRET: ci-test-secret-123456789
         run: npm run seed
 
@@ -51,7 +57,8 @@ jobs:
       - name: Run Backend Tests (Jest)
         working-directory: RealEstateIQ/backend
         env:
-          MONGO_URI: mongodb://localhost:27017/realestate_iq
+          MONGODB_URI: mongodb://127.0.0.1:27017/realestate_iq
+          MONGO_URI: mongodb://127.0.0.1:27017/realestate_iq
           JWT_SECRET: ci-test-secret-123456789
           NODE_ENV: test
           # SMTP / Cloudinary left empty → services use log/disk fallback in tests
