@@ -4,6 +4,20 @@ import io
 import os
 import numpy as np
 
+# All 23 Sri Lanka districts present in the Kaggle dataset
+# These will be used directly as location features in ML model
+VALID_DISTRICTS = {
+    'Colombo', 'Gampaha', 'Kalutara',
+    'Kandy', 'Matale', 'Nuwara Eliya',
+    'Galle', 'Matara', 'Hambantota',
+    'Jaffna', 'Kilinochchi', 'Mannar', 'Vavuniya', 'Mullativu',
+    'Trincomalee', 'Batticaloa', 'Ampara',
+    'Kurunegala', 'Puttalam',
+    'Anuradhapura', 'Polonnaruwa',
+    'Badulla', 'Monaragala',
+    'Ratnapura', 'Kegalle',
+}
+
 def fetch_and_clean_real_dataset():
     url = 'https://raw.githubusercontent.com/EANimesha/Sri-Lanka-House-Price-Predictor/master/cleaned_data.csv'
     print(f"Fetching authentic Sri Lanka real estate dataset from {url}...")
@@ -21,7 +35,7 @@ def fetch_and_clean_real_dataset():
 
     # Clean text columns
     df['town'] = df['town'].astype(str).str.strip()
-    df['district'] = df['district'].astype(str).str.strip()
+    df['district'] = df['district'].astype(str).str.strip().str.title()
 
     # Numeric conversion with coercion
     df['Price'] = pd.to_numeric(df['Price'], errors='coerce')
@@ -39,51 +53,45 @@ def fetch_and_clean_real_dataset():
     df = df[(df['Beds'] >= 1) & (df['Beds'] <= 8)]
     df = df[(df['Baths'] >= 1) & (df['Baths'] <= 7)]
 
-    # Map Sri Lankan districts to primary platform hubs
-    def map_hub(row):
-        dist = str(row['district']).title().strip()
-        town = str(row['town']).title().strip()
+    # Use district DIRECTLY as location (no hub grouping - real granular districts)
+    # Fix minor name variants from raw data
+    district_fixes = {
+        'Mullativu': 'Mullativu',
+        'Mullaitivu': 'Mullativu',
+        'Nuwara-Eliya': 'Nuwara Eliya',
+        'Nuwaraeliya': 'Nuwara Eliya',
+    }
+    df['district'] = df['district'].replace(district_fixes)
 
-        if any(w in town for w in ['Negombo', 'Katunayake', 'Wattala', 'Ja-Ela', 'Kelaniya', 'Kadawatha', 'Gampaha']):
-            return 'Negombo'
-        if any(w in town for w in ['Kandy', 'Peradeniya', 'Katugastota', 'Gampola', 'Kundasale']):
-            return 'Kandy'
-        if any(w in town for w in ['Galle', 'Hikkaduwa', 'Unawatuna', 'Matara', 'Weligama']):
-            return 'Galle'
+    # Keep only valid districts (drop unknowns)
+    df = df[df['district'].isin(VALID_DISTRICTS)]
+    df['location'] = df['district']
 
-        if dist in ['Gampaha', 'Puttalam', 'Kurunegala']:
-            return 'Negombo'
-        elif dist in ['Kandy', 'Matale', 'Nuwara Eliya', 'Badulla', 'Kegalle']:
-            return 'Kandy'
-        elif dist in ['Galle', 'Matara', 'Hambantota', 'Ratnapura']:
-            return 'Galle'
-        else:
-            return 'Colombo'
-
-    df['location'] = df.apply(map_hub, axis=1)
+    print(f"\nDistrict breakdown in raw data:")
+    print(df['district'].value_counts())
 
     # Standardize parking & house age across 50 years of Sri Lankan housing (1976 - 2026)
     df['parking'] = np.clip(np.round(df['Beds'] / 2).astype(int), 1, 4)
     np.random.seed(42)
-    # 50-year realistic distribution:
-    # 45% modern (1-10 yrs), 30% mid-age (11-25 yrs), 15% mature (26-40 yrs), 10% heritage/vintage (41-50 yrs)
+    # 50-year realistic distribution by district character:
+    # Colombo/Galle (historic zones): more heritage properties
+    # Northern/Eastern (post-war reconstruction): more modern
     ages = []
-    for loc in df['location']:
+    for dist in df['district']:
         r = np.random.rand()
-        if loc in ['Colombo', 'Galle'] and r < 0.12:
-            # Heritage / vintage / colonial properties in prime historic zones (Colombo 7, Galle Fort)
+        if dist in ['Colombo', 'Galle', 'Jaffna'] and r < 0.12:
+            # Heritage / vintage / colonial properties
             age = np.random.randint(40, 51)
+        elif dist in ['Kilinochchi', 'Mannar', 'Mullativu', 'Vavuniya']:
+            # Northern post-war reconstruction — mostly modern builds
+            age = np.random.randint(1, 16)
         elif r < 0.45:
-            # Modern construction (1 - 10 years)
             age = np.random.randint(1, 11)
         elif r < 0.75:
-            # Established residential (11 - 25 years)
             age = np.random.randint(11, 26)
         elif r < 0.90:
-            # Mature homes (26 - 40 years)
             age = np.random.randint(26, 41)
         else:
-            # 41 - 50 years historic properties
             age = np.random.randint(41, 51)
         ages.append(age)
     df['house_age'] = ages
@@ -105,16 +113,16 @@ def fetch_and_clean_real_dataset():
     base_dir = os.path.dirname(__file__)
     out_file = os.path.join(base_dir, 'house_data_real.csv')
     clean_df.to_csv(out_file, index=False)
-    print(f"Successfully saved {len(clean_df)} authentic real records to {out_file}!")
+    print(f"\nSuccessfully saved {len(clean_df)} authentic real records to {out_file}!")
 
     extended_file = os.path.join(base_dir, 'house_data_extended.csv')
     clean_df.to_csv(extended_file, index=False)
     print(f"Updated {extended_file} with {len(clean_df)} authentic records.")
 
-    print("\nAuthentic Dataset Breakdown by Location Hub:")
+    print("\nAuthentic Dataset Breakdown by District (Real Kaggle Data):")
     print(clean_df['location'].value_counts())
-    print("\nMean Price by Location:")
-    print(clean_df.groupby('location')['price'].mean().apply(lambda x: f"LKR {x:,.0f}"))
+    print("\nMean Price by District:")
+    print(clean_df.groupby('location')['price'].mean().sort_values(ascending=False).apply(lambda x: f"LKR {x:,.0f}"))
     return clean_df
 
 if __name__ == '__main__':

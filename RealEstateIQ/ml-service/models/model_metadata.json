@@ -4,24 +4,45 @@
     "version": "GB-v1.0",
     "algorithm": "GradientBoostingRegressor",
     "metrics": {
-      "mae": 12091558.91,
-      "rmse": 27595653.21,
-      "r2": 0.3601,
-      "cv_r2_mean": 0.419,
-      "cv_r2_std": 0.0419
+      "mae": 11994327.19,
+      "rmse": 24245007.92,
+      "r2": 0.4134,
+      "cv_r2_mean": 0.415,
+      "cv_r2_std": 0.0289
     },
     "feature_importance": {
-      "area": 0.768572,
-      "bedrooms": 0.024922,
-      "bathrooms": 0.147346,
-      "house_age": 0.007611,
-      "parking": 0.005031,
-      "location_Kandy": 0.001406,
-      "location_Galle": 0.002168,
-      "location_Negombo": 0.042943
+      "area": 0.751312,
+      "bedrooms": 0.030396,
+      "bathrooms": 0.154799,
+      "house_age": 0.002794,
+      "parking": 0.001488,
+      "location_Gampaha": 0.034891,
+      "location_Kalutara": 0.001195,
+      "location_Kandy": 0.001185,
+      "location_Matale": 0.0,
+      "location_Nuwara Eliya": 0.0,
+      "location_Galle": 0.001391,
+      "location_Matara": 0.000327,
+      "location_Hambantota": 0.0,
+      "location_Jaffna": 0.0,
+      "location_Kilinochchi": 0.0,
+      "location_Mannar": 0.001936,
+      "location_Vavuniya": 0.0,
+      "location_Mullativu": 0.0,
+      "location_Trincomalee": 0.0,
+      "location_Batticaloa": 9.5e-05,
+      "location_Ampara": 3.8e-05,
+      "location_Kurunegala": 0.001476,
+      "location_Puttalam": 0.000937,
+      "location_Anuradhapura": 0.002847,
+      "location_Polonnaruwa": 0.0,
+      "location_Badulla": 0.000319,
+      "location_Monaragala": 0.000547,
+      "location_Ratnapura": 0.000128,
+      "location_Kegalle": 0.011899
     },
-    "dataset_version": "v3.0-authentic-sl-real-estate-14937rows",
-    "training_date": "2026-09-19T05:51:21.577878Z",
+    "dataset_version": "v4.0-authentic-sl-all-23-districts-14833rows",
+    "training_date": "2026-09-19T06:15:33.655592Z",
     "status": "production",
     "model_file": "pipeline_gb_v1.0.joblib",
     "numeric_features": [
@@ -36,46 +57,67 @@
     ],
     "locations": [
       "Colombo",
+      "Gampaha",
+      "Kalutara",
       "Kandy",
+      "Matale",
+      "Nuwara Eliya",
       "Galle",
-      "Negombo"
+      "Matara",
+      "Hambantota",
+      "Jaffna",
+      "Kilinochchi",
+      "Mannar",
+      "Vavuniya",
+      "Mullativu",
+      "Trincomalee",
+      "Batticaloa",
+      "Ampara",
+      "Kurunegala",
+      "Puttalam",
+      "Anuradhapura",
+      "Polonnaruwa",
+      "Badulla",
+      "Monaragala",
+      "Ratnapura",
+      "Kegalle"
     ],
     "target": "price",
-    "train_size": 10704,
-    "test_size": 2676
+    "train_size": 10719,
+    "test_size": 2680
   },
   "all_model_results": [
     {
       "model_name": "LinearRegression",
-      "mae": 14067066.37,
-      "rmse": 29189881.27,
-      "r2": 0.2841,
-      "cv_r2_mean": 0.3339,
-      "cv_r2_std": 0.0274
+      "mae": 13985029.22,
+      "rmse": 25731581.83,
+      "r2": 0.3392,
+      "cv_r2_mean": 0.3375,
+      "cv_r2_std": 0.0215
     },
     {
       "model_name": "DecisionTreeRegressor",
-      "mae": 14548524.24,
-      "rmse": 35412717.18,
-      "r2": -0.0537,
-      "cv_r2_mean": -0.0573,
-      "cv_r2_std": 0.0614
+      "mae": 13962054.69,
+      "rmse": 31932113.42,
+      "r2": -0.0176,
+      "cv_r2_mean": 0.0031,
+      "cv_r2_std": 0.0878
     },
     {
       "model_name": "RandomForestRegressor",
-      "mae": 12854453.89,
-      "rmse": 29412341.04,
-      "r2": 0.2731,
-      "cv_r2_mean": 0.3024,
-      "cv_r2_std": 0.0291
+      "mae": 12740719.5,
+      "rmse": 26051145.22,
+      "r2": 0.3227,
+      "cv_r2_mean": 0.3127,
+      "cv_r2_std": 0.0626
     },
     {
       "model_name": "GradientBoostingRegressor",
-      "mae": 12091558.91,
-      "rmse": 27595653.21,
-      "r2": 0.3601,
-      "cv_r2_mean": 0.419,
-      "cv_r2_std": 0.0419
+      "mae": 11994327.19,
+      "rmse": 24245007.92,
+      "r2": 0.4134,
+      "cv_r2_mean": 0.415,
+      "cv_r2_std": 0.0289
     }
   ]
 }
