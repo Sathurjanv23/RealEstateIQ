@@ -42,13 +42,28 @@ jobs:
         working-directory: RealEstateIQ/backend
         run: npm ci --legacy-peer-deps
 
+      - name: Wait for MongoDB to be healthy
+        run: |
+          echo "Waiting for MongoDB..."
+          for i in $(seq 1 30); do
+            if mongosh --quiet --eval "db.runCommand('ping').ok" mongodb://127.0.0.1:27017 | grep -q 1; then
+              echo "MongoDB is ready!"
+              break
+            fi
+            echo "Attempt $i: MongoDB not ready yet..."
+            sleep 2
+          done
+
       - name: Seed Test MongoDB
         working-directory: RealEstateIQ/backend
         env:
           MONGODB_URI: mongodb://127.0.0.1:27017/realestate_iq
           MONGO_URI: mongodb://127.0.0.1:27017/realestate_iq
           JWT_SECRET: ci-test-secret-123456789
-        run: npm run seed
+        run: |
+          echo "Running seed script..."
+          npm run seed
+          echo "Seed completed with exit code: $?"
 
       - name: Build Backend (TypeScript)
         working-directory: RealEstateIQ/backend
@@ -60,11 +75,16 @@ jobs:
           MONGODB_URI: mongodb://127.0.0.1:27017/realestate_iq
           MONGO_URI: mongodb://127.0.0.1:27017/realestate_iq
           JWT_SECRET: ci-test-secret-123456789
+          JWT_EXPIRES_IN: 7d
           NODE_ENV: test
-          # SMTP / Cloudinary left empty → services use log/disk fallback in tests
+          GOOGLE_CLIENT_ID: ""
+          GOOGLE_CLIENT_SECRET: ""
+          # SMTP left empty — emailService falls back to log transport in tests
           SMTP_HOST: ""
+          SMTP_PORT: "587"
           SMTP_USER: ""
           SMTP_PASS: ""
+          NOTIFICATION_EMAIL: ""
           CLOUDINARY_CLOUD_NAME: ""
           CLOUDINARY_API_KEY: ""
           CLOUDINARY_API_SECRET: ""
