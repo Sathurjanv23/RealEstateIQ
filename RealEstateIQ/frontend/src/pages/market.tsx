@@ -8,9 +8,9 @@ import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 import { marketService } from '../services/services';
 import { MarketAnalytics } from '../types';
+import { SL_LOCATIONS_GROUPED } from '../utils/sriLankaLocations';
 
 const COLORS = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#f43f5e'];
-const LOCATIONS = ['', 'Colombo', 'Kandy', 'Galle', 'Negombo'];
 const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -54,7 +54,13 @@ export default function MarketPage() {
               <select value={filters.location} onChange={(e) => setFilters({ ...filters, location: e.target.value })}
                 className="input-dark text-sm py-2">
                 <option value="">All Locations</option>
-                {LOCATIONS.filter(Boolean).map(l => <option key={l} value={l}>{l}</option>)}
+                {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
+                  <optgroup key={province} label={`— ${province}`}>
+                    {locs.map(loc => (
+                      <option key={loc.value} value={loc.value}>{loc.label}</option>
+                    ))}
+                  </optgroup>
+                ))}
               </select>
               <select value={filters.propertyType} onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })}
                 className="input-dark text-sm py-2">
