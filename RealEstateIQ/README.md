@@ -58,14 +58,14 @@ All ML predictions go through: `Frontend → Backend → ML Service → Backend 
 
 | Metric         | Value                         |
 |----------------|-------------------------------|
-| Algorithm      | LinearRegression (selected from 4 candidates) |
-| Version        | LR-v1.0                       |
-| R²             | 0.9965                        |
-| MAE            | Rs. 8,126.70                  |
-| RMSE           | Rs. 11,157.90                 |
-| CV R² Mean     | 0.9954 ± 0.0013               |
-| Train / Test   | 79 / 20 rows                  |
-| Dataset        | v1.0-synthetic-100rows        |
+| Algorithm      | GradientBoostingRegressor (selected from 4 candidates) |
+| Version        | GB-v1.0                       |
+| R²             | 0.9715                        |
+| MAE            | Rs. 20,325.76                 |
+| RMSE           | Rs. 29,002.89                 |
+| CV R² Mean     | 0.9630 ± 0.0066               |
+| Train / Test   | 960 / 240 rows                |
+| Dataset        | v2.0-sl-market-1200rows (Sri Lanka Market Data) |
 
 **Competing models:** Linear Regression, Decision Tree, Random Forest, Gradient Boosting
 **Features:** area, bedrooms, bathrooms, location, house_age, parking

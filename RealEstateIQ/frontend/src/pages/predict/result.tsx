@@ -72,17 +72,25 @@ export default function PredictionResultPage() {
             </h1>
 
             {/* 95% Confidence Interval badge & range */}
-            <div className="mt-4 inline-flex flex-col items-center p-3.5 px-6 rounded-2xl bg-brand-500/10 border border-brand-500/20 max-w-lg mx-auto">
-              <span className="text-[11px] uppercase tracking-wider text-brand-300 font-semibold mb-1">
-                95% Valuation Confidence Interval
-              </span>
-              <span className="text-base sm:text-lg font-bold text-white">
-                Rs. {Math.max(0, Math.round(predictedPrice - 8126.7 * 1.96)).toLocaleString()} – Rs. {Math.round(predictedPrice + 8126.7 * 1.96).toLocaleString()}
-              </span>
-              <span className="text-[10px] sm:text-[11px] text-white/40 mt-0.5">
-                Model Margin: ± Rs. {Math.round(8126.7 * 1.96).toLocaleString()} (Linear Regression MAE: Rs. 8,127)
-              </span>
-            </div>
+            {(() => {
+              const mae = prediction.algorithm === 'LinearRegression' ? 8126.7 : 20325.76;
+              const margin = Math.round(mae * 1.96);
+              const low = Math.max(0, Math.round(predictedPrice - margin));
+              const high = Math.round(predictedPrice + margin);
+              return (
+                <div className="mt-4 inline-flex flex-col items-center p-3.5 px-6 rounded-2xl bg-brand-500/10 border border-brand-500/20 max-w-lg mx-auto">
+                  <span className="text-[11px] uppercase tracking-wider text-brand-300 font-semibold mb-1">
+                    95% Valuation Confidence Interval
+                  </span>
+                  <span className="text-base sm:text-lg font-bold text-white">
+                    Rs. {low.toLocaleString()} – Rs. {high.toLocaleString()}
+                  </span>
+                  <span className="text-[10px] sm:text-[11px] text-white/40 mt-0.5">
+                    Model Margin: ± Rs. {margin.toLocaleString()} ({prediction.algorithm || 'Model'} MAE: Rs. {Math.round(mae).toLocaleString()})
+                  </span>
+                </div>
+              );
+            })()}
 
             <div className="mt-6 flex justify-center">
               <button
