@@ -63,4 +63,23 @@ describe('Auth Endpoints', () => {
     expect(res.body.data.token).toBeDefined();
     expect(res.body.data.user.email).toBe('demo@realestate-iq.com');
   });
+
+  it('POST /api/auth/google should reject empty credential', async () => {
+    const res = await request(app)
+      .post('/api/auth/google')
+      .send({});
+
+    expect(res.status).toBe(400);
+    expect(res.body.success).toBe(false);
+  });
+
+  it('POST /api/auth/google should reject invalid google credential token', async () => {
+    const res = await request(app)
+      .post('/api/auth/google')
+      .send({ credential: 'invalid.dummy.token' });
+
+    expect(res.status).toBe(401);
+    expect(res.body.success).toBe(false);
+  });
 });
+
