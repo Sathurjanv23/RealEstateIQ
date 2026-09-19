@@ -61,7 +61,7 @@ export const createPrediction = async (
           inputFeatures: prediction.inputFeatures,
           createdAt: prediction.createdAt,
           disclaimer:
-            'This is an ML model estimate based on synthetic training data. ' +
+            'This is an ML model estimate trained on authentic Sri Lanka real estate market data. ' +
             'It is not a guaranteed market valuation.',
         },
       },

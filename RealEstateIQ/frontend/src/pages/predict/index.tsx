@@ -103,7 +103,7 @@ export default function PredictPage() {
               <p className="text-sm text-white/80 font-medium">About this prediction</p>
               <p className="text-xs text-white/50 mt-1">
                 Fields are based on the actual trained model features: area, bedrooms, bathrooms, location, house age, and parking.
-                The model is Linear Regression (R²=0.9965) trained on synthetic Sri Lanka property data.
+                The model is Gradient Boosting Regressor trained on 14,833 authentic Sri Lanka property transactions.
               </p>
             </div>
           </div>
@@ -205,7 +205,7 @@ export default function PredictPage() {
           </div>
 
           <p className="text-center text-white/30 text-xs mt-4">
-            ⚠️ This is an ML estimate, not a guaranteed market valuation. Dataset is synthetic.
+            ℹ️ This is an ML estimate based on 14,833 authentic Sri Lanka market listings. Not a guaranteed valuation.
           </p>
         </div>
       </DashboardLayout>

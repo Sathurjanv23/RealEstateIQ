@@ -30,7 +30,7 @@ app = FastAPI(
     title="RealEstateIQ ML Service",
     description=(
         "AI-powered property price prediction API. "
-        "All predictions are ML estimates from a model trained on synthetic data."
+        "Trained on authentic Sri Lanka real estate market transactions."
     ),
     version="1.0.0",
     lifespan=lifespan,

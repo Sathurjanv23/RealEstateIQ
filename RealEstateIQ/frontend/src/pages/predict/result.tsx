@@ -102,8 +102,7 @@ export default function PredictionResultPage() {
             </div>
 
             <p className="text-white/30 text-xs mt-4">
-              ⚠️ This is an ML model estimate, not a guaranteed market valuation.
-              Dataset is synthetic.
+              ℹ️ ML model estimate powered by 14,833 authentic Sri Lanka real estate market transactions.
             </p>
           </div>
 

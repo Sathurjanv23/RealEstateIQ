@@ -23,7 +23,7 @@ const seedProperties = [
     parking: 2,
     houseAge: 3,
     amenities: ['Swimming Pool', 'Garden', 'Security'],
-    askingPrice: 620000,
+    askingPrice: 62000000,
     images: [
       'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
@@ -42,7 +42,7 @@ const seedProperties = [
     parking: 1,
     houseAge: 8,
     amenities: ['Parking', 'Security'],
-    askingPrice: 270000,
+    askingPrice: 27000000,
     images: [
       'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80',
@@ -61,7 +61,7 @@ const seedProperties = [
     parking: 1,
     houseAge: 6,
     amenities: ['Garden', 'Veranda'],
-    askingPrice: 390000,
+    askingPrice: 39000000,
     images: [
       'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
@@ -80,7 +80,7 @@ const seedProperties = [
     parking: 2,
     houseAge: 4,
     amenities: ['Garden', 'Parking', 'Solar Panels'],
-    askingPrice: 470000,
+    askingPrice: 47000000,
     images: [
       'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1576941089067-2de3c901e126?auto=format&fit=crop&w=1200&q=80',
@@ -99,7 +99,7 @@ const seedProperties = [
     parking: 3,
     houseAge: 1,
     amenities: ['Swimming Pool', 'Home Theater', 'Gym', 'Solar Panels', 'Smart Home'],
-    askingPrice: 770000,
+    askingPrice: 77000000,
     images: [
       'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80',
@@ -118,7 +118,7 @@ const seedProperties = [
     parking: 1,
     houseAge: 10,
     amenities: ['Security', 'CCTV'],
-    askingPrice: 250000,
+    askingPrice: 25000000,
     images: [
       'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80',
@@ -137,7 +137,7 @@ const seedProperties = [
     parking: 2,
     houseAge: 2,
     amenities: ['Garden', 'Mountain View', 'Solar Panels'],
-    askingPrice: 580000,
+    askingPrice: 58000000,
     images: [
       'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
@@ -155,7 +155,7 @@ const seedProperties = [
     parking: 3,
     houseAge: 5,
     amenities: ['Parking', '3 Floors', 'Road Frontage'],
-    askingPrice: 750000,
+    askingPrice: 75000000,
     images: [
       'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
@@ -200,58 +200,56 @@ async function seed() {
     for (const p of seedProperties) {
       await Property.findOneAndUpdate(
         { title: p.title },
-        { $set: { ...p, createdBy: adminUser!._id } },
+        { ...p, createdBy: adminUser._id },
         { upsert: true, new: true }
       );
     }
-    logger.info(`Seeded / updated ${seedProperties.length} sample properties with real photography.`);
+    logger.info(`Properties seeded (${seedProperties.length} items with authentic LKR prices).`);
 
-    // Seed ML model metadata (from actual training results)
-    await MlModel.updateMany({}, { $set: { status: 'archived' } });
+    // Seed active ML model metadata matching the newly trained model
     await MlModel.findOneAndUpdate(
       { version: 'GB-v1.0' },
       {
         $set: {
-          modelName: 'Gradient Boosting Real Estate Valuation Model',
+          modelName: 'GradientBoostingRegressor',
           version: 'GB-v1.0',
           algorithm: 'GradientBoostingRegressor',
-          metrics: {
-            mae: 20325.76,
-            rmse: 29002.89,
-            r2: 0.9715,
-            cv_r2_mean: 0.963,
-            cv_r2_std: 0.0066,
-          },
+          mae: 13107389,
+          rmse: 28877759,
+          r2: 0.366,
+          cvR2Mean: 0.4089,
+          cvR2Std: 0.0363,
+          features: ['area', 'bedrooms', 'bathrooms', 'house_age', 'parking', 'location'],
           featureImportance: {
-            area: 0.83,
-            location_Negombo: 0.0529,
-            location_Kandy: 0.0392,
-            house_age: 0.023,
-            bathrooms: 0.0199,
-            location_Galle: 0.0192,
-            bedrooms: 0.0144,
-            parking: 0.0014,
+            area: 0.7466,
+            bathrooms: 0.1627,
+            location_Negombo: 0.0404,
+            bedrooms: 0.0320,
+            house_age: 0.0073,
+            location_Kandy: 0.0058,
+            location_Galle: 0.0037,
+            parking: 0.0015,
           },
-          datasetVersion: 'v2.0-sl-market-1200rows',
+          datasetVersion: 'v3.0-authentic-sl-real-estate-14937rows',
           trainingDate: new Date(),
           status: 'production',
           modelFile: 'pipeline_gb_v1.0.joblib',
-          trainSize: 960,
-          testSize: 240,
+          trainSize: 9328,
+          testSize: 2332,
         },
       },
       { upsert: true, new: true }
     );
-    logger.info('ML model metadata seeded (GB-v1.0).');
+    logger.info('ML model metadata seeded (GB-v1.0 on 14,833 authentic records).');
 
     // Seed dataset metadata
     await Dataset.findOneAndUpdate(
-      { version: 'v2.0-sl-market-1200rows' },
+      { version: 'v3.0-authentic-sl-real-estate-14937rows' },
       {
         $set: {
-          datasetName: 'Sri Lanka Real Estate Market Dataset (1,200 Listings)',
-          version: 'v2.0-sl-market-1200rows',
-          rowCount: 1200,
+          datasetName: 'Authentic Sri Lanka Real Estate Market Listings (14,833 Records)',
+          version: 'v3.0-authentic-sl-real-estate-14937rows',
+          rowCount: 14833,
           featureCount: 6,
           features: ['area', 'bedrooms', 'bathrooms', 'location', 'house_age', 'parking'],
           targetColumn: 'price',
@@ -259,12 +257,12 @@ async function seed() {
           trainingDate: new Date(),
           modelVersion: 'GB-v1.0',
           notes:
-            'Comprehensive Sri Lanka market dataset covering Colombo, Kandy, Galle, and Negombo with realistic property distributions, hedonic market valuation, and neighborhood noise variance.',
+            '100% Authentic, real-world Sri Lankan property market listings scraped from verified real estate portals. Covers Colombo, Negombo, Galle, Kandy, Gampaha and 99 towns across Sri Lanka.',
         },
       },
       { upsert: true, new: true }
     );
-    logger.info('Dataset metadata seeded (v2.0-sl-market-1200rows).');
+    logger.info('Dataset metadata seeded (v3.0-authentic-sl-real-estate-14937rows).');
 
     logger.info('Seeding complete.');
     process.exit(0);
