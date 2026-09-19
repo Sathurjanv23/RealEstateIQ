@@ -1,6 +1,14 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { register, login, logout, getMe, googleAuth } from '../controllers/authController';
+import {
+  register,
+  login,
+  logout,
+  getMe,
+  googleAuth,
+  sendRegistrationOtp,
+  verifyOtpAndRegister,
+} from '../controllers/authController';
 import { requireAuth } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 
@@ -11,6 +19,28 @@ router.post(
   [body('credential').notEmpty().withMessage('Google credential token is required.')],
   validate,
   googleAuth
+);
+
+router.post(
+  '/send-otp',
+  [
+    body('email').isEmail().normalizeEmail().withMessage('Valid email is required.'),
+    body('name').optional().trim(),
+  ],
+  validate,
+  sendRegistrationOtp
+);
+
+router.post(
+  '/verify-register',
+  [
+    body('name').trim().isLength({ min: 2, max: 100 }).withMessage('Name must be 2–100 characters.'),
+    body('email').isEmail().normalizeEmail().withMessage('Valid email is required.'),
+    body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters.'),
+    body('otp').trim().isLength({ min: 6, max: 6 }).withMessage('6-digit verification code is required.'),
+  ],
+  validate,
+  verifyOtpAndRegister
 );
 
 router.post(

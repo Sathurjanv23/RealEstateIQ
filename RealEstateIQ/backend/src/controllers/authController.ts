@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { User } from '../models/User';
+import { Otp } from '../models/Otp';
+import { emailService } from '../services/emailService';
 import { audit } from '../utils/auditLogger';
 import { createError } from '../middleware/errorHandler';
 import { AuthRequest } from '../middleware/auth';
@@ -251,6 +253,142 @@ export const googleAuth = async (
     next(err);
   }
 };
+
+// ── Send Registration OTP ───────────────────────────────────────────────────
+export const sendRegistrationOtp = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { email, name } = req.body;
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const existing = await User.findOne({ email: normalizedEmail });
+    if (existing) {
+      next(createError('An account with this email already exists.', 409, 'EMAIL_EXISTS'));
+      return;
+    }
+
+    // Generate cryptographically random 6-digit numeric OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Delete any old OTPs for this email and save new one
+    await Otp.deleteMany({ email: normalizedEmail });
+    await Otp.create({
+      email: normalizedEmail,
+      otp,
+      expiresAt,
+    });
+
+    // Send email via emailService
+    await emailService.sendOtpEmail(normalizedEmail, otp, name);
+
+    res.json({
+      success: true,
+      data: {
+        message: 'A 6-digit verification code has been sent to your email.',
+        expiresInSeconds: 600,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ── Verify OTP and Complete Registration ────────────────────────────────────
+export const verifyOtpAndRegister = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { name, email, password, otp } = req.body;
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const existing = await User.findOne({ email: normalizedEmail });
+    if (existing) {
+      next(createError('An account with this email already exists.', 409, 'EMAIL_EXISTS'));
+      return;
+    }
+
+    const otpRecord = await Otp.findOne({ email: normalizedEmail });
+    if (!otpRecord) {
+      next(
+        createError(
+          'No verification code found or code has expired. Please request a new code.',
+          400,
+          'OTP_EXPIRED'
+        )
+      );
+      return;
+    }
+
+    if (new Date() > otpRecord.expiresAt) {
+      await Otp.deleteOne({ _id: otpRecord._id });
+      next(
+        createError(
+          'Verification code has expired. Please request a new code.',
+          400,
+          'OTP_EXPIRED'
+        )
+      );
+      return;
+    }
+
+    if (otpRecord.otp !== otp.trim()) {
+      next(
+        createError(
+          'Invalid verification code. Please check your email and try again.',
+          400,
+          'INVALID_OTP'
+        )
+      );
+      return;
+    }
+
+    // Delete used OTP
+    await Otp.deleteOne({ _id: otpRecord._id });
+
+    // Hash password & create user
+    const passwordHash = await bcrypt.hash(password, 12);
+    const user = await User.create({
+      name: name.trim(),
+      email: normalizedEmail,
+      passwordHash,
+      role: 'USER',
+    });
+
+    await audit({
+      userId: user._id.toString(),
+      action: 'USER_REGISTER',
+      resource: 'users',
+      resourceId: user._id.toString(),
+      metadata: { verificationMethod: 'email_otp' },
+      ipAddress: req.ip as string | undefined,
+    });
+
+    const token = generateToken(user._id.toString());
+    logger.info(`User registered with verified OTP: ${normalizedEmail}`);
+
+    res.status(201).json({
+      success: true,
+      data: {
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 
 

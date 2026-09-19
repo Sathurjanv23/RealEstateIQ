@@ -105,6 +105,59 @@ class EmailService {
       return false;
     }
   }
+
+  async sendOtpEmail(email: string, otp: string, userName?: string): Promise<boolean> {
+    const htmlBody = `
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b0f19; color: #f8fafc; padding: 40px 20px; border-radius: 16px; max-width: 550px; margin: 0 auto; border: 1px solid rgba(99,102,241,0.25);">
+        <div style="text-align: center; margin-bottom: 28px;">
+          <div style="display: inline-block; background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 12px 20px; border-radius: 12px; margin-bottom: 12px;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">RealEstateIQ</h1>
+          </div>
+          <p style="color: #94a3b8; font-size: 15px; margin: 4px 0 0;">Sri Lanka Real Estate Intelligence</p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.04); border-radius: 12px; padding: 24px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
+          <h2 style="color: #ffffff; font-size: 20px; margin: 0 0 12px;">Verify Your Email Address</h2>
+          <p style="color: #cbd5e1; font-size: 14px; margin: 0 0 24px; line-height: 1.6;">
+            Hello${userName ? ` <strong>${userName}</strong>` : ''}, thank you for registering with RealEstateIQ! Use the verification code below to complete your account setup:
+          </p>
+
+          <div style="background: rgba(99,102,241,0.12); border: 2px dashed #6366f1; border-radius: 12px; padding: 18px 24px; display: inline-block; margin-bottom: 20px;">
+            <span style="font-family: monospace; font-size: 36px; font-weight: 900; letter-spacing: 8px; color: #818cf8;">${otp}</span>
+          </div>
+
+          <p style="color: #94a3b8; font-size: 13px; margin: 0;">
+            This code is valid for <strong>10 minutes</strong>. Do not share this code with anyone.
+          </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 24px;">
+          <p style="font-size: 12px; color: #64748b; margin: 0;">
+            If you did not request this registration, you can safely ignore this email.
+          </p>
+        </div>
+      </div>
+    `;
+
+    try {
+      if (this.transporter) {
+        await this.transporter.sendMail({
+          from: `"RealEstateIQ Security" <${process.env.SMTP_USER}>`,
+          to: email,
+          subject: `${otp} is your RealEstateIQ Verification Code`,
+          html: htmlBody,
+        });
+        logger.info(`EmailService: OTP verification email sent successfully to ${email}`);
+        return true;
+      } else {
+        logger.info(`[EMAIL LOG TRANSPORT] OTP for ${email}: ${otp}`);
+        return true;
+      }
+    } catch (err: any) {
+      logger.error(`EmailService error sending OTP email: ${err.message}`);
+      return false;
+    }
+  }
 }
 
 export const emailService = new EmailService();
