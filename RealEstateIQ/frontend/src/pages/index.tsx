@@ -121,10 +121,10 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>RealIQestate — Sri Lanka Real Estate Intelligence Platform</title>
+        <title>RealEstateIQ — Sri Lanka Real Estate Intelligence Platform</title>
         <meta
           name="description"
-          content="Plan. Build. Design. List & invest. RealIQestate unifies 23-district AI valuation, 14,833 authentic market records, and marketplace listings."
+          content="Plan. Build. Design. List & invest. RealEstateIQ unifies 23-district AI valuation, 14,833 authentic market records, and marketplace listings."
         />
       </Head>
 
@@ -191,7 +191,7 @@ export default function LandingPage() {
 
             {/* Subtitle */}
             <p className="text-base sm:text-xl text-[#94A3B8] max-w-2xl mb-10 leading-relaxed font-normal">
-              RealIQestate unifies 23-district AI valuation, 14,833 verified market transactions,
+              RealEstateIQ unifies 23-district AI valuation, 14,833 verified market transactions,
               construction tracking, marketplace listings and REIT-grade investing — for every
               professional in the property value chain.
             </p>
@@ -400,7 +400,7 @@ export default function LandingPage() {
                 Build the future of real estate from one workspace.
               </h2>
               <p className="text-sm text-[#94A3B8] mb-8 leading-relaxed">
-                Spin up a RealIQestate workspace in seconds. Calibrated with 14,833 verified Sri Lanka transaction records.
+                Spin up a RealEstateIQ workspace in seconds. Calibrated with 14,833 verified Sri Lanka transaction records.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
@@ -467,7 +467,7 @@ export default function LandingPage() {
           </div>
 
           <div className="max-w-6xl mx-auto mt-12 pt-6 border-t border-[#142938] flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#64748B] gap-3">
-            <p>© {new Date().getFullYear()} RealIQestate Sri Lanka. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} RealEstateIQ Sri Lanka. All rights reserved.</p>
             <p>Institutional PropTech Infrastructure</p>
           </div>
         </footer>

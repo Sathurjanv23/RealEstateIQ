@@ -70,17 +70,14 @@ export function BrandLogo({
         </svg>
       </div>
 
-      {/* Brand Typography matching sample */}
+      {/* Brand Typography */}
       {showText && (
         <div className="flex items-center tracking-tight leading-none font-black">
           <span className={`${textColor} ${textSizes[size]}`}>
-            Real
+            RealEstate
           </span>
           <span className={`text-[#00DC82] ${textSizes[size]}`}>
             IQ
-          </span>
-          <span className={`${textColor} ${textSizes[size]}`}>
-            estate
           </span>
           <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded bg-[#00DC82]/10 text-[#00DC82] border border-[#00DC82]/30">
             LK
