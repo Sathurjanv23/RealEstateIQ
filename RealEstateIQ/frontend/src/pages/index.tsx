@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Brain,
@@ -104,8 +104,27 @@ const stakeholderPills = [
 ];
 
 export default function LandingPage() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+
+  // Auth guard — redirect to login if not signed in
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isLoading, isAuthenticated, router]);
+
+  // Show nothing while auth state is resolving
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#061017] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-2 border-[#00DC82] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[#64748B] text-xs font-medium">Loading workspace…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

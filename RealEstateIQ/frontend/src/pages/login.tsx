@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { Mail, Lock, Eye, EyeOff, ArrowLeft, Home } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
 import { BrandLogo } from '../components/ui/BrandLogo';
 import { authService } from '../services/services';
@@ -69,16 +69,6 @@ export default function LoginPage() {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#00DC82]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="w-full max-w-md relative z-10 animate-fade-in">
-          {/* Back to Home Page Link */}
-          <div className="flex justify-between items-center mb-6">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-[#94A3B8] hover:text-white transition-colors py-1.5 px-3 rounded-xl bg-[#0B1722] border border-[#162E40] hover:border-[#00DC82]"
-            >
-              <ArrowLeft size={14} className="text-[#00DC82]" />
-              <span>Back to Home Page</span>
-            </Link>
-          </div>
 
           {/* Logo Header */}
           <div className="text-center mb-8">
