@@ -25,6 +25,9 @@ import {
   Users,
   Briefcase,
   Search,
+  Github,
+  Linkedin,
+  Twitter,
 } from 'lucide-react';
 import { BrandLogo } from '../components/ui/BrandLogo';
 import { PwaInstallPrompt } from '../components/ui/PwaInstallPrompt';
@@ -330,13 +333,40 @@ export default function LandingPage() {
             <div className="md:col-span-2">
               <BrandLogo size="md" showText={true} />
               <p className="mt-4 text-xs leading-relaxed max-w-sm text-[#64748B]">
-                Real-Estate IQ — one professional workspace for AI valuation analysis,
+                RealEstateIQ — one professional workspace for AI valuation analysis,
                 interactive cartography, verified transaction data, and REIT-grade investing in Sri Lanka.
               </p>
               <div className="flex items-center gap-3 mt-5 text-[#64748B]">
-                <span className="p-2 rounded-lg bg-[#0B1722] border border-[#142938] hover:text-white transition-colors cursor-pointer">𝕏</span>
-                <span className="p-2 rounded-lg bg-[#0B1722] border border-[#142938] hover:text-white transition-colors cursor-pointer">in</span>
-                <span className="p-2 rounded-lg bg-[#0B1722] border border-[#142938] hover:text-white transition-colors cursor-pointer">⌥</span>
+                <a
+                  href="https://github.com/Sathurjanv23/RealEstateIQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub Repository"
+                  title="GitHub Repository"
+                  className="p-2.5 rounded-xl bg-[#0B1722] border border-[#142938] text-slate-400 hover:text-[#00DC82] hover:border-[#00DC82]/50 hover:bg-[#00DC82]/10 transition-all duration-300 shadow-sm flex items-center justify-center"
+                >
+                  <Github className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  title="LinkedIn"
+                  className="p-2.5 rounded-xl bg-[#0B1722] border border-[#142938] text-slate-400 hover:text-[#00DC82] hover:border-[#00DC82]/50 hover:bg-[#00DC82]/10 transition-all duration-300 shadow-sm flex items-center justify-center"
+                >
+                  <Linkedin className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://x.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Twitter / X"
+                  title="Twitter / X"
+                  className="p-2.5 rounded-xl bg-[#0B1722] border border-[#142938] text-slate-400 hover:text-[#00DC82] hover:border-[#00DC82]/50 hover:bg-[#00DC82]/10 transition-all duration-300 shadow-sm flex items-center justify-center"
+                >
+                  <Twitter className="w-4 h-4" />
+                </a>
               </div>
             </div>
 
