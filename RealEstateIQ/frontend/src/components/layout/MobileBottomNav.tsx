@@ -55,10 +55,10 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
   return (
     <nav
       aria-label="Mobile Navigation"
-      className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-[#08141F]/95 backdrop-blur-md border-t border-[#142938] px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.5)]"
-      style={{ paddingBottom: 'calc(0.4rem + env(safe-area-inset-bottom))' }}
+      className="fixed bottom-3 inset-x-3 sm:inset-x-auto sm:w-[440px] sm:left-1/2 sm:-translate-x-1/2 z-50 lg:hidden ios-glass-dock rounded-3xl p-2 transition-all duration-300"
+      style={{ marginBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="flex items-center justify-around max-w-md mx-auto relative">
+      <div className="flex items-center justify-around relative px-1">
         {navItems.map((item) => {
           const Icon = item.icon;
 
@@ -67,18 +67,19 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex flex-col items-center -mt-5 group focus:outline-none"
+                className="flex flex-col items-center -mt-7 group focus:outline-none z-10"
               >
                 <div
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transition-transform active:scale-95 duration-200 ${
+                  className={`w-13 h-13 rounded-2xl flex items-center justify-center text-[#061017] ios-glossy-btn active:scale-95 ${
                     item.isActive
-                      ? 'bg-[#00DC82] text-[#061017] scale-105 shadow-[#00DC82]/30'
-                      : 'bg-[#00DC82] text-[#061017] group-hover:scale-105'
+                      ? 'ring-4 ring-[#00DC82]/30 scale-110'
+                      : 'group-hover:scale-105'
                   }`}
+                  style={{ width: '50px', height: '50px' }}
                 >
-                  <Icon size={22} className="text-[#061017]" />
+                  <Icon size={24} className="text-[#061017] drop-shadow-sm" />
                 </div>
-                <span className="text-[10px] font-bold text-[#00DC82] mt-1 uppercase tracking-wider">
+                <span className="text-[10px] font-black text-[#00DC82] mt-1 uppercase tracking-wider drop-shadow-md">
                   {item.label}
                 </span>
               </Link>
@@ -89,19 +90,19 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-colors ${
+              className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-200 ${
                 item.isActive
-                  ? 'text-[#00DC82] font-bold'
-                  : 'text-[#94A3B8] hover:text-white'
+                  ? 'text-[#00DC82] bg-[#00DC82]/10 border border-[#00DC82]/25 font-bold shadow-[0_2px_10px_rgba(0,220,130,0.15)]'
+                  : 'text-[#94A3B8] hover:text-white hover:bg-white/5 border border-transparent'
               }`}
             >
               <div className="relative">
                 <Icon size={19} />
                 {item.isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#00DC82] rounded-full" />
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#00DC82] rounded-full shadow-[0_0_8px_#00DC82]" />
                 )}
               </div>
-              <span className="text-[10px] mt-1">{item.label}</span>
+              <span className="text-[10px] mt-1 font-medium">{item.label}</span>
             </Link>
           );
         })}
@@ -109,10 +110,10 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
         {/* Drawer Menu button */}
         <button
           onClick={onOpenMenu}
-          className="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-[#94A3B8] hover:text-white transition-colors"
+          className="flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl text-[#94A3B8] hover:text-white hover:bg-white/5 transition-all border border-transparent"
         >
           <Menu size={19} />
-          <span className="text-[10px] mt-1">Menu</span>
+          <span className="text-[10px] mt-1 font-medium">Menu</span>
         </button>
       </div>
     </nav>
