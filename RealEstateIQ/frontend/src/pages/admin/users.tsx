@@ -48,11 +48,11 @@ export default function AdminUsersPage() {
       <DashboardLayout title="Client Directory">
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div>
-            <h2 className="text-2xl font-black text-[#17231C]">Client & User Directory</h2>
-            <p className="text-[#718078] text-xs mt-1">{pagination?.total || 0} registered investors and administrators</p>
+            <h2 className="text-2xl font-black text-white">Client & User Directory</h2>
+            <p className="text-[#94A3B8] text-xs mt-1">{pagination?.total || 0} registered investors and administrators</p>
           </div>
 
-          <div className="card-premium overflow-hidden bg-white border border-[#E7E3DA]">
+          <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
             {loading ? (
               <div className="p-8 space-y-3">
                 {[...Array(5)].map((_, i) => (
@@ -72,31 +72,31 @@ export default function AdminUsersPage() {
                       <tr key={u.id}>
                         <td>
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white bg-[#123B2A] border border-[#C9A227]">
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-[#061017] bg-[#00DC82]">
                               {u.name?.charAt(0).toUpperCase()}
                             </div>
-                            <span className="font-bold text-[#17231C]">{u.name}</span>
+                            <span className="font-bold text-white">{u.name}</span>
                           </div>
                         </td>
-                        <td className="text-[#718078] text-xs font-mono">{u.email}</td>
+                        <td className="text-[#94A3B8] text-xs font-mono">{u.email}</td>
                         <td>
                           <span className={u.role === 'ADMIN' ? 'badge-gold' : 'badge-forest'}>{u.role}</span>
                         </td>
-                        <td className="text-[#718078] text-xs">{new Date(u.createdAt).toLocaleDateString()}</td>
+                        <td className="text-[#CBD5E1] text-xs">{new Date(u.createdAt).toLocaleDateString()}</td>
                         <td>
                           <div className="flex items-center gap-2">
                             {u.id !== currentUser?.id && (
                               <>
                                 <button
                                   onClick={() => roleMutation.mutate({ id: u.id, role: u.role === 'ADMIN' ? 'USER' : 'ADMIN' })}
-                                  className="p-1.5 rounded-lg text-[#718078] hover:text-[#8B6A14] hover:bg-[#FAF4DC] transition-all"
+                                  className="p-1.5 rounded-lg text-[#94A3B8] hover:text-[#00DC82] hover:bg-[#00DC82]/10 transition-all"
                                   title={u.role === 'ADMIN' ? 'Demote to Investor' : 'Promote to Admin'}
                                 >
                                   <ShieldCheck size={16} />
                                 </button>
                                 <button
                                   onClick={() => { if (confirm('Delete this user?')) deleteMutation.mutate(u.id); }}
-                                  className="p-1.5 rounded-lg text-[#718078] hover:text-[#C94C4C] hover:bg-[#FDF1F1] transition-all"
+                                  className="p-1.5 rounded-lg text-[#94A3B8] hover:text-rose-400 hover:bg-rose-500/10 transition-all"
                                   title="Delete User"
                                 >
                                   <Trash2 size={16} />
@@ -113,8 +113,8 @@ export default function AdminUsersPage() {
             )}
 
             {pagination && pagination.pages > 1 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-[#E7E3DA] bg-[#FAF9F6]">
-                <p className="text-xs text-[#718078] font-medium">Page {pagination.page} of {pagination.pages}</p>
+              <div className="flex items-center justify-between px-6 py-4 border-t border-[#162E40] bg-[#08141F]">
+                <p className="text-xs text-[#94A3B8] font-medium">Page {pagination.page} of {pagination.pages}</p>
                 <div className="flex gap-2">
                   <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
                     className="btn-secondary text-xs py-1.5 px-3 disabled:opacity-30">

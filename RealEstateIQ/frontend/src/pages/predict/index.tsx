@@ -96,27 +96,27 @@ export default function PredictPage() {
       <DashboardLayout title="Valuation Engine">
         <div className="max-w-2xl mx-auto animate-fade-in space-y-6">
           {/* Institutional Note Banner */}
-          <div className="card-premium p-4 border border-[#B8D9C5] bg-[#EAF4EE] flex gap-3.5 items-start">
-            <ShieldCheck size={20} className="text-[#3F7D58] shrink-0 mt-0.5" />
+          <div className="card-premium p-4 border border-[#00DC82]/30 bg-[#00DC82]/10 flex gap-3.5 items-start">
+            <ShieldCheck size={20} className="text-[#00DC82] shrink-0 mt-0.5" />
             <div>
-              <p className="text-xs font-bold text-[#123B2A] uppercase tracking-wide">
+              <p className="text-xs font-bold text-[#00DC82] uppercase tracking-wide">
                 Sri Lanka Benchmark Valuation Calibration
               </p>
-              <p className="text-xs text-[#2F6B4F] mt-0.5 leading-relaxed">
+              <p className="text-xs text-[#94A3B8] mt-0.5 leading-relaxed">
                 Trained on 14,833 verified market transactions across Western, Central, Southern, Northern, and Eastern provinces.
                 Outputs include 95% confidence bounds and bank-grade PDF certificate generation.
               </p>
             </div>
           </div>
 
-          {/* Form Container: Pure White with warm borders */}
-          <div className="card-premium p-6 sm:p-8 bg-white border border-[#E7E3DA]">
-            <div className="flex items-center justify-between pb-5 mb-6 border-b border-[#E7E3DA]">
+          {/* Form Container: Dark Slate with crisp borders */}
+          <div className="card-premium p-6 sm:p-8 bg-[#0B1722] border border-[#162E40] shadow-xl">
+            <div className="flex items-center justify-between pb-5 mb-6 border-b border-[#162E40]">
               <div>
-                <h2 className="text-lg font-bold text-[#17231C]">Enter Asset Parameters</h2>
-                <p className="text-xs text-[#718078]">Provide exact property specifications for accurate appraisal</p>
+                <h2 className="text-lg font-bold text-white">Enter Asset Parameters</h2>
+                <p className="text-xs text-[#94A3B8]">Provide exact property specifications for accurate appraisal</p>
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#FAF4DC] text-[#8B6A14] border border-[#ECD57F]">
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#00DC82]/15 text-[#00DC82] border border-[#00DC82]/30">
                 23 Districts
               </span>
             </div>
@@ -124,8 +124,8 @@ export default function PredictPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Location */}
               <div>
-                <label className="block text-xs font-bold text-[#17231C] mb-1.5">
-                  District / Location in Sri Lanka <span className="text-[#C94C4C]">*</span>
+                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1.5">
+                  District / Location in Sri Lanka <span className="text-[#F87171]">*</span>
                 </label>
                 <select
                   name="location"
@@ -144,7 +144,7 @@ export default function PredictPage() {
                     </optgroup>
                   ))}
                 </select>
-                <p className="text-[11px] text-[#718078] mt-1">
+                <p className="text-[11px] text-[#94A3B8] mt-1">
                   Calibrated to local land rates and transaction benchmarks.
                 </p>
               </div>
@@ -153,8 +153,8 @@ export default function PredictPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {fields.map((f) => (
                   <div key={f.name} className={f.name === 'area' ? 'sm:col-span-2' : ''}>
-                    <label className="block text-xs font-bold text-[#17231C] mb-1.5">
-                      {f.label} {f.name === 'area' && <span className="text-[#C94C4C]">*</span>}
+                    <label className="block text-xs font-semibold text-[#CBD5E1] mb-1.5">
+                      {f.label} {f.name === 'area' && <span className="text-[#F87171]">*</span>}
                     </label>
                     <input
                       type={f.type}
@@ -168,7 +168,7 @@ export default function PredictPage() {
                       required={f.name === 'area'}
                     />
                     {f.note && (
-                      <p className="text-[11px] text-[#2F6B4F] font-semibold mt-1">
+                      <p className="text-[11px] text-[#00DC82] font-semibold mt-1">
                         {f.note}
                       </p>
                     )}
@@ -176,16 +176,16 @@ export default function PredictPage() {
                 ))}
               </div>
 
-              {/* Submit Button: Deep Forest Green (#123B2A) */}
+              {/* Submit Button */}
               <div className="pt-3">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn-primary w-full py-3.5 text-sm"
+                  className="btn-primary w-full py-3.5 text-sm font-bold"
                 >
                   {loading ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-[#061017] border-t-transparent rounded-full animate-spin" />
                       Computing Valuation...
                     </>
                   ) : (

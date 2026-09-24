@@ -36,8 +36,8 @@ export default function HistoryPage() {
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-black text-[#17231C]">Property Valuation History</h2>
-              <p className="text-[#718078] text-xs mt-1">
+              <h2 className="text-2xl font-black text-white">Property Valuation History</h2>
+              <p className="text-[#94A3B8] text-xs mt-1">
                 {pagination?.total || 0} total valuations generated
               </p>
             </div>
@@ -46,7 +46,7 @@ export default function HistoryPage() {
             </Link>
           </div>
 
-          <div className="card-premium overflow-hidden bg-white border border-[#E7E3DA]">
+          <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
             {loading ? (
               <div className="p-8 space-y-4">
                 {[...Array(5)].map((_, i) => (
@@ -55,9 +55,9 @@ export default function HistoryPage() {
               </div>
             ) : predictions.length === 0 ? (
               <div className="p-16 text-center">
-                <History size={48} className="text-[#DCD6CB] mx-auto mb-4" />
-                <p className="text-[#17231C] text-base font-bold">No valuations recorded yet</p>
-                <p className="text-[#718078] text-xs mt-1">Run your first property appraisal to see audit records here.</p>
+                <History size={48} className="text-[#1E3A4E] mx-auto mb-4" />
+                <p className="text-white text-base font-bold">No valuations recorded yet</p>
+                <p className="text-[#94A3B8] text-xs mt-1">Run your first property appraisal to see audit records here.</p>
                 <Link href="/predict" className="btn-primary mt-6 inline-flex text-xs py-2.5 px-4">
                   <Brain size={15} /> Run Valuation Now
                 </Link>
@@ -80,18 +80,18 @@ export default function HistoryPage() {
                     <tbody>
                       {predictions.map((pred) => (
                         <tr key={pred._id}>
-                          <td className="text-[#718078] text-xs">
+                          <td className="text-[#94A3B8] text-xs">
                             {new Date(pred.createdAt).toLocaleDateString()}
                             <br />
-                            <span className="text-[10px] text-[#718078]/80">{new Date(pred.createdAt).toLocaleTimeString()}</span>
+                            <span className="text-[10px] text-[#64748B]">{new Date(pred.createdAt).toLocaleTimeString()}</span>
                           </td>
-                          <td className="font-bold text-[#17231C]">{pred.inputFeatures.location}</td>
-                          <td className="text-[#17231C]">{pred.inputFeatures.area.toLocaleString()} sqft</td>
-                          <td className="text-[#718078]">{pred.inputFeatures.bedrooms} Bed · {pred.inputFeatures.bathrooms} Bath</td>
-                          <td className="text-[#123B2A] font-black text-sm">
+                          <td className="font-bold text-white">{pred.inputFeatures.location}</td>
+                          <td className="text-white">{pred.inputFeatures.area.toLocaleString()} sqft</td>
+                          <td className="text-[#94A3B8]">{pred.inputFeatures.bedrooms} Bed · {pred.inputFeatures.bathrooms} Bath</td>
+                          <td className="text-[#00DC82] font-black text-sm">
                             Rs. {Math.round(pred.predictedPrice).toLocaleString()}
                           </td>
-                          <td className="text-[#718078]">
+                          <td className="text-[#CBD5E1]">
                             {pred.pricePerSqft ? `Rs. ${Math.round(pred.pricePerSqft).toLocaleString()}` : '—'}
                           </td>
                           <td>
@@ -105,8 +105,8 @@ export default function HistoryPage() {
 
                 {/* Pagination */}
                 {pagination && pagination.pages > 1 && (
-                  <div className="flex items-center justify-between px-6 py-4 border-t border-[#E7E3DA] bg-[#FAF9F6]">
-                    <p className="text-xs text-[#718078] font-medium">
+                  <div className="flex items-center justify-between px-6 py-4 border-t border-[#162E40] bg-[#08141F]">
+                    <p className="text-xs text-[#94A3B8] font-medium">
                       Page {pagination.page} of {pagination.pages}
                     </p>
                     <div className="flex gap-2">

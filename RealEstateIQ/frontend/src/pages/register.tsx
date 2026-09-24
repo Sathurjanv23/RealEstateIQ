@@ -131,32 +131,35 @@ export default function RegisterPage() {
         <title>Create Account — RealEstateIQ</title>
         <meta name="description" content="Create your RealEstateIQ account to access institutional property intelligence." />
       </Head>
-      <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#F7F5F0]">
-        <div className="w-full max-w-md relative animate-fade-in">
+      <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#061017] hero-grid-pattern relative overflow-hidden">
+        {/* Subtle emerald ambient aura */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#00DC82]/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="w-full max-w-md relative z-10 animate-fade-in">
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <BrandLogo size="lg" showText={true} />
             </div>
-            <h1 className="text-2xl font-black text-[#17231C] tracking-tight mb-1">
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
               {step === 'details' ? 'Create Client Account' : 'Verify Email Address'}
             </h1>
-            <p className="text-[#718078] text-xs">
+            <p className="text-[#94A3B8] text-xs">
               {step === 'details'
                 ? 'Join Sri Lanka’s premier real estate valuation network'
                 : `Enter the 6-digit verification code sent to ${email}`}
             </p>
           </div>
 
-          <div className="card-premium p-8 bg-white border border-[#E7E3DA] shadow-soft-lg">
+          <div className="card-premium p-8 bg-[#0B1722] border border-[#162E40] shadow-2xl rounded-2xl">
             {step === 'details' ? (
               <>
                 <form onSubmit={handleRequestOtp} className="space-y-4">
                   <div>
-                    <label htmlFor="name" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                    <label htmlFor="name" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
                       Full Name
                     </label>
                     <div className="relative">
-                      <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
+                      <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
                       <input
                         id="name"
                         type="text"
@@ -164,18 +167,18 @@ export default function RegisterPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Priyantha Jayasuriya"
-                        className="input-field pl-10"
+                        className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                    <label htmlFor="email" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
                       Email Address
                     </label>
                     <div className="relative">
-                      <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
+                      <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
                       <input
                         id="email"
                         type="email"
@@ -183,18 +186,18 @@ export default function RegisterPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="client@investor.lk"
-                        className="input-field pl-10"
+                        className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="password" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                    <label htmlFor="password" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
                       Password (min 8 characters)
                     </label>
                     <div className="relative">
-                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
+                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
                       <input
                         id="password"
                         type={showPassword ? 'text' : 'password'}
@@ -202,13 +205,13 @@ export default function RegisterPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="input-field pl-10 pr-10"
+                        className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 pr-11 text-sm outline-none transition-all"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#718078] hover:text-[#17231C]"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white transition-colors"
                       >
                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -216,11 +219,11 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="confirmPassword" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                    <label htmlFor="confirmPassword" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
                       Confirm Password
                     </label>
                     <div className="relative">
-                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
+                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
                       <input
                         id="confirmPassword"
                         type={showPassword ? 'text' : 'password'}
@@ -228,7 +231,7 @@ export default function RegisterPage() {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="input-field pl-10"
+                        className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
                         required
                       />
                     </div>
@@ -237,7 +240,7 @@ export default function RegisterPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-primary w-full py-3.5 text-sm mt-2 disabled:opacity-50"
+                    className="btn-primary w-full py-3.5 text-sm font-bold mt-2 disabled:opacity-50"
                   >
                     {loading ? 'Dispatching verification code...' : 'Continue & Verify Email'}
                   </button>
@@ -246,10 +249,10 @@ export default function RegisterPage() {
                 {/* Divider */}
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-[#E7E3DA]" />
+                    <div className="w-full border-t border-[#162E40]" />
                   </div>
                   <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
-                    <span className="bg-white px-3 text-[#718078]">Or continue with</span>
+                    <span className="bg-[#0B1722] px-3 text-[#64748B]">Or continue with</span>
                   </div>
                 </div>
 
@@ -260,7 +263,7 @@ export default function RegisterPage() {
                       <GoogleLogin
                         onSuccess={handleGoogleSuccess}
                         onError={() => toast.error('Google Sign-Up failed.')}
-                        theme="outline"
+                        theme="filled_black"
                         shape="pill"
                         size="large"
                         text="signup_with"
@@ -288,17 +291,17 @@ export default function RegisterPage() {
               /* Step 2: OTP Verification Form */
               <form onSubmit={handleVerifyOtp} className="space-y-5">
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-2xl bg-[#EBF3EE] border border-[#B8D1C4] text-[#123B2A] flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-[#00DC82]/10 border border-[#00DC82]/30 text-[#00DC82] flex items-center justify-center mx-auto mb-3">
                     <KeyRound size={22} />
                   </div>
-                  <p className="text-xs text-[#718078]">
+                  <p className="text-xs text-[#94A3B8]">
                     Enter the 6-digit verification code sent to <br />
-                    <strong className="text-[#17231C]">{email}</strong>
+                    <strong className="text-[#00DC82]">{email}</strong>
                   </p>
                 </div>
 
                 <div>
-                  <label htmlFor="otp" className="block text-xs font-bold text-[#17231C] uppercase tracking-wider mb-2 text-center">
+                  <label htmlFor="otp" className="block text-xs font-semibold text-[#CBD5E1] uppercase tracking-wider mb-2 text-center">
                     6-Digit Verification Code
                   </label>
                   <input
@@ -309,7 +312,7 @@ export default function RegisterPage() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                     placeholder="• • • • • •"
-                    className="input-field text-center font-mono text-2xl tracking-[0.5em] py-3 text-[#123B2A] font-bold"
+                    className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] text-center font-mono text-2xl tracking-[0.5em] py-3.5 rounded-xl text-[#00DC82] font-bold outline-none transition-all"
                     required
                   />
                 </div>
@@ -317,7 +320,7 @@ export default function RegisterPage() {
                 <button
                   type="submit"
                   disabled={loading || otp.length !== 6}
-                  className="btn-primary w-full py-3.5 text-sm disabled:opacity-50"
+                  className="btn-primary w-full py-3.5 text-sm font-bold disabled:opacity-50"
                 >
                   {loading ? 'Verifying...' : 'Verify & Complete Account'}
                 </button>
@@ -326,7 +329,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => setStep('details')}
-                    className="inline-flex items-center gap-1.5 text-[#718078] hover:text-[#123B2A] font-medium"
+                    className="inline-flex items-center gap-1.5 text-[#94A3B8] hover:text-white font-medium transition-colors"
                   >
                     <ArrowLeft size={14} /> Back to details
                   </button>
@@ -335,7 +338,7 @@ export default function RegisterPage() {
                     type="button"
                     onClick={handleResendOtp}
                     disabled={countdown > 0 || resending}
-                    className="inline-flex items-center gap-1.5 text-[#123B2A] hover:text-[#2F6B4F] disabled:text-[#718078]/50 disabled:cursor-not-allowed font-bold"
+                    className="inline-flex items-center gap-1.5 text-[#00DC82] hover:text-[#00DC82]/80 disabled:text-[#64748B] disabled:cursor-not-allowed font-bold"
                   >
                     <RefreshCw size={13} className={resending ? 'animate-spin' : ''} />
                     {countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'}
@@ -345,9 +348,9 @@ export default function RegisterPage() {
             )}
           </div>
 
-          <p className="text-center text-[#718078] text-xs mt-6">
+          <p className="text-center text-[#94A3B8] text-xs mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="text-[#123B2A] hover:text-[#2F6B4F] font-bold">
+            <Link href="/login" className="text-[#00DC82] hover:underline font-bold">
               Sign in
             </Link>
           </p>

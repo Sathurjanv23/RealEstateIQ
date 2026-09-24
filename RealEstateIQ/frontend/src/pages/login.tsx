@@ -64,26 +64,33 @@ export default function LoginPage() {
         <title>Sign In — RealEstateIQ</title>
         <meta name="description" content="Sign in to RealEstateIQ to access Sri Lankan real estate intelligence." />
       </Head>
-      <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#F7F5F0]">
-        <div className="w-full max-w-md relative animate-fade-in">
+      <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#061017] hero-grid-pattern relative overflow-hidden">
+        {/* Subtle emerald ambient aura */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#00DC82]/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="w-full max-w-md relative z-10 animate-fade-in">
           {/* Logo Header */}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <BrandLogo size="lg" showText={true} />
             </div>
-            <h1 className="text-2xl font-black text-[#17231C] tracking-tight mb-1">Client Portal Sign In</h1>
-            <p className="text-[#718078] text-xs">Access institutional real estate valuations and portfolio intelligence</p>
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
+              Client Portal Sign In
+            </h1>
+            <p className="text-[#94A3B8] text-xs">
+              Access institutional real estate valuations and portfolio intelligence
+            </p>
           </div>
 
-          {/* Form Card: Pure White with Soft Realistic Shadow */}
-          <div className="card-premium p-8 bg-white border border-[#E7E3DA] shadow-soft-lg">
-            <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Form Card: Dark Charcoal with crisp border */}
+          <div className="card-premium p-8 bg-[#0B1722] border border-[#162E40] shadow-2xl rounded-2xl">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label htmlFor="email" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                <label htmlFor="email" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
+                  <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
                   <input
                     id="email"
                     type="email"
@@ -91,18 +98,18 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="client@investor.lk"
-                    className="input-field pl-10"
+                    className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                <label htmlFor="password" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
+                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
                   <input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
@@ -110,13 +117,13 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="input-field pl-10 pr-10"
+                    className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 pr-11 text-sm outline-none transition-all"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#718078] hover:text-[#17231C]"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white transition-colors"
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -126,7 +133,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full py-3.5 text-sm mt-2 disabled:opacity-50"
+                className="btn-primary w-full py-3.5 text-sm font-bold mt-2 disabled:opacity-50"
               >
                 {loading ? 'Authenticating...' : 'Sign In to Portal'}
               </button>
@@ -135,10 +142,10 @@ export default function LoginPage() {
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#E7E3DA]" />
+                <div className="w-full border-t border-[#162E40]" />
               </div>
               <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
-                <span className="bg-white px-3 text-[#718078]">Or continue with</span>
+                <span className="bg-[#0B1722] px-3 text-[#64748B]">Or continue with</span>
               </div>
             </div>
 
@@ -149,7 +156,7 @@ export default function LoginPage() {
                   <GoogleLogin
                     onSuccess={handleGoogleSuccess}
                     onError={() => toast.error('Google Sign-In failed.')}
-                    theme="outline"
+                    theme="filled_black"
                     shape="pill"
                     size="large"
                     text="continue_with"
@@ -174,9 +181,9 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <p className="text-center text-[#718078] text-xs mt-6">
+          <p className="text-center text-[#94A3B8] text-xs mt-6">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-[#123B2A] hover:text-[#2F6B4F] font-bold">
+            <Link href="/register" className="text-[#00DC82] hover:underline font-bold">
               Register now
             </Link>
           </p>

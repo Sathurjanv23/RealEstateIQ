@@ -51,18 +51,18 @@ export function PwaInstallPrompt() {
 
   return (
     <div className="fixed bottom-20 lg:bottom-6 right-4 lg:right-6 z-50 max-w-sm w-[calc(100vw-2rem)] animate-slide-up">
-      <div className="relative p-4 rounded-2xl bg-white border border-[#E7E3DA] shadow-soft-xl">
+      <div className="relative p-4 rounded-2xl bg-[#0B1722] border border-[#162E40] shadow-2xl">
         <div className="flex items-start gap-3">
           <BrandLogo size="sm" showText={false} href="" />
 
           <div className="flex-1 min-w-0 pr-6">
-            <h4 className="text-sm font-bold text-[#17231C] flex items-center gap-1.5">
+            <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
               <span>Install RealEstateIQ</span>
-              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-[#FAF4DC] text-[#8B6A14] border border-[#ECD57F]">
+              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-[#00DC82]/10 text-[#00DC82] border border-[#00DC82]/25">
                 App
               </span>
             </h4>
-            <p className="text-xs text-[#718078] mt-1 leading-relaxed">
+            <p className="text-xs text-[#94A3B8] mt-1 leading-relaxed">
               Install on your device for instant offline access and property market valuations.
             </p>
 
@@ -77,7 +77,7 @@ export function PwaInstallPrompt() {
 
               <button
                 onClick={handleDismiss}
-                className="px-2.5 py-1.5 rounded-lg text-xs text-[#718078] hover:text-[#17231C] hover:bg-[#F7F5F0] transition-colors"
+                className="px-2.5 py-1.5 rounded-lg text-xs text-[#94A3B8] hover:text-white hover:bg-[#142938] transition-colors"
               >
                 Not now
               </button>
@@ -86,7 +86,7 @@ export function PwaInstallPrompt() {
 
           <button
             onClick={handleDismiss}
-            className="absolute top-3 right-3 text-[#718078] hover:text-[#17231C] transition-colors p-1"
+            className="absolute top-3 right-3 text-[#94A3B8] hover:text-white transition-colors p-1"
             aria-label="Close install prompt"
           >
             <X size={16} />

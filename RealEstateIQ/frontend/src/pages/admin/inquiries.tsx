@@ -89,11 +89,11 @@ export default function AdminInquiriesPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-black text-[#17231C] flex items-center gap-2.5">
-                <CalendarCheck className="text-[#123B2A]" size={24} />
+              <h2 className="text-2xl font-black text-white flex items-center gap-2.5">
+                <CalendarCheck className="text-[#00DC82]" size={24} />
                 Property Viewing Inquiries
               </h2>
-              <p className="text-[#718078] text-xs mt-1">
+              <p className="text-[#94A3B8] text-xs mt-1">
                 Manage schedule viewing requests and client inquiries received across all property listings.
               </p>
             </div>
@@ -109,45 +109,45 @@ export default function AdminInquiriesPage() {
 
           {/* Metric KPI cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="card-premium p-4 bg-white border border-[#E7E3DA] border-l-4 border-l-[#123B2A]">
-              <p className="text-[10px] text-[#718078] uppercase font-bold tracking-wider">Total Inquiries</p>
-              <p className="text-2xl font-black text-[#123B2A] mt-1">{counts.total}</p>
+            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] border-l-4 border-l-[#00DC82]">
+              <p className="text-[10px] text-[#94A3B8] uppercase font-bold tracking-wider">Total Inquiries</p>
+              <p className="text-2xl font-black text-white mt-1">{counts.total}</p>
             </div>
-            <div className="card-premium p-4 bg-white border border-[#E7E3DA] border-l-4 border-l-[#C9A227]">
-              <p className="text-[10px] text-[#718078] uppercase font-bold tracking-wider">Pending / New</p>
-              <p className="text-2xl font-black text-[#8B6A14] mt-1">{counts.new}</p>
+            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] border-l-4 border-l-[#F59E0B]">
+              <p className="text-[10px] text-[#94A3B8] uppercase font-bold tracking-wider">Pending / New</p>
+              <p className="text-2xl font-black text-[#FBBF24] mt-1">{counts.new}</p>
             </div>
-            <div className="card-premium p-4 bg-white border border-[#E7E3DA] border-l-4 border-l-[#2F6B4F]">
-              <p className="text-[10px] text-[#718078] uppercase font-bold tracking-wider">Contacted</p>
-              <p className="text-2xl font-black text-[#2F6B4F] mt-1">{counts.contacted}</p>
+            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] border-l-4 border-l-[#38BDF8]">
+              <p className="text-[10px] text-[#94A3B8] uppercase font-bold tracking-wider">Contacted</p>
+              <p className="text-2xl font-black text-[#38BDF8] mt-1">{counts.contacted}</p>
             </div>
-            <div className="card-premium p-4 bg-white border border-[#E7E3DA] border-l-4 border-l-[#3F7D58]">
-              <p className="text-[10px] text-[#718078] uppercase font-bold tracking-wider">Resolved</p>
-              <p className="text-2xl font-black text-[#3F7D58] mt-1">{counts.resolved}</p>
+            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] border-l-4 border-l-[#10B981]">
+              <p className="text-[10px] text-[#94A3B8] uppercase font-bold tracking-wider">Resolved</p>
+              <p className="text-2xl font-black text-[#34D399] mt-1">{counts.resolved}</p>
             </div>
           </div>
 
           {/* Controls: Search and Status Filter */}
-          <div className="card-premium p-4 bg-white border border-[#E7E3DA] flex flex-col sm:flex-row items-center gap-3">
+          <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] flex flex-col sm:flex-row items-center gap-3">
             <div className="relative flex-1 w-full">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" size={15} />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]" size={15} />
               <input
                 type="text"
                 placeholder="Search inquirer name, property, phone, or email..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="input-field pl-10 w-full text-xs"
+                className="input-field pl-10 w-full text-xs bg-[#08141F] border-[#162E40] text-white"
               />
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <Filter size={14} className="text-[#718078] hidden sm:block" />
+              <Filter size={14} className="text-[#94A3B8] hidden sm:block" />
               <select
                 value={statusFilter}
                 onChange={(e) => {
                   setStatusFilter(e.target.value);
                   setPage(1);
                 }}
-                className="input-field text-xs w-full sm:w-44 py-2"
+                className="input-field text-xs w-full sm:w-44 py-2 bg-[#08141F] border-[#162E40] text-white"
               >
                 <option value="all">All Statuses</option>
                 <option value="new">New (Pending)</option>
@@ -159,14 +159,14 @@ export default function AdminInquiriesPage() {
           </div>
 
           {/* Inquiries Table */}
-          <div className="card-premium overflow-hidden bg-white border border-[#E7E3DA]">
+          <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
             {loading ? (
-              <div className="text-center py-16 text-[#718078] text-sm">Loading inquiries...</div>
+              <div className="text-center py-16 text-[#94A3B8] text-sm">Loading inquiries...</div>
             ) : filteredInquiries.length === 0 ? (
               <div className="text-center py-16">
-                <CalendarCheck className="mx-auto text-[#DCD6CB] mb-3" size={40} />
-                <p className="text-[#17231C] font-bold text-sm">No client inquiries found</p>
-                <p className="text-[#718078] text-xs mt-1">
+                <CalendarCheck className="mx-auto text-[#1E3A4E] mb-3" size={40} />
+                <p className="text-white font-bold text-sm">No client inquiries found</p>
+                <p className="text-[#94A3B8] text-xs mt-1">
                   Viewing inquiries submitted through property pages will appear here.
                 </p>
               </div>
@@ -174,7 +174,7 @@ export default function AdminInquiriesPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-[#E7E3DA] text-[#718078] text-[10px] uppercase font-bold tracking-wider bg-[#FAF9F6]">
+                    <tr className="border-b border-[#162E40] text-[#94A3B8] text-[10px] uppercase font-bold tracking-wider bg-[#08141F]">
                       <th className="py-3.5 px-4">Client</th>
                       <th className="py-3.5 px-4">Property</th>
                       <th className="py-3.5 px-4">Preferred Date</th>
@@ -183,26 +183,26 @@ export default function AdminInquiriesPage() {
                       <th className="py-3.5 px-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E7E3DA]">
+                  <tbody className="divide-y divide-[#162E40]">
                     {filteredInquiries.map((inq) => (
-                      <tr key={inq._id} className="hover:bg-[#FAF9F6] transition-colors">
+                      <tr key={inq._id} className="hover:bg-white/[0.02] transition-colors">
                         {/* Inquirer Details */}
                         <td className="py-4 px-4">
-                          <p className="font-bold text-[#17231C]">{inq.name}</p>
-                          <div className="flex flex-col gap-1 mt-1 text-xs text-[#718078]">
+                          <p className="font-bold text-white">{inq.name}</p>
+                          <div className="flex flex-col gap-1 mt-1 text-xs text-[#94A3B8]">
                             <a
                               href={`tel:${inq.phone}`}
-                              className="inline-flex items-center gap-1.5 hover:text-[#123B2A] transition-colors font-mono"
+                              className="inline-flex items-center gap-1.5 hover:text-[#00DC82] transition-colors font-mono"
                             >
-                              <Phone size={12} className="text-[#2F6B4F]" />
+                              <Phone size={12} className="text-[#00DC82]" />
                               {inq.phone}
                             </a>
                             {inq.email && (
                               <a
                                 href={`mailto:${inq.email}`}
-                                className="inline-flex items-center gap-1.5 hover:text-[#123B2A] transition-colors"
+                                className="inline-flex items-center gap-1.5 hover:text-[#00DC82] transition-colors"
                               >
-                                <Mail size={12} className="text-[#2F6B4F]" />
+                                <Mail size={12} className="text-[#00DC82]" />
                                 {inq.email}
                               </a>
                             )}
@@ -213,27 +213,27 @@ export default function AdminInquiriesPage() {
                         <td className="py-4 px-4 max-w-xs">
                           <Link
                             href={`/properties/${inq.propertyId}`}
-                            className="font-bold text-[#17231C] hover:text-[#123B2A] transition-colors inline-flex items-center gap-1 group"
+                            className="font-bold text-white hover:text-[#00DC82] transition-colors inline-flex items-center gap-1 group"
                           >
                             <span className="truncate">{inq.propertyName}</span>
-                            <ArrowUpRight size={13} className="text-[#2F6B4F] shrink-0" />
+                            <ArrowUpRight size={13} className="text-[#00DC82] shrink-0" />
                           </Link>
                           {inq.propertyLocation && (
-                            <p className="text-[11px] text-[#718078] mt-0.5">{inq.propertyLocation}</p>
+                            <p className="text-[11px] text-[#94A3B8] mt-0.5">{inq.propertyLocation}</p>
                           )}
                         </td>
 
                         {/* Preferred Viewing Date */}
                         <td className="py-4 px-4 whitespace-nowrap">
                           {inq.preferredDate ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#FAF9F6] text-[#17231C] border border-[#E7E3DA] font-mono text-[11px]">
-                              <Clock size={11} className="text-[#123B2A]" />
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#08141F] text-white border border-[#162E40] font-mono text-[11px]">
+                              <Clock size={11} className="text-[#00DC82]" />
                               {inq.preferredDate}
                             </span>
                           ) : (
-                            <span className="text-[#718078] italic">Flexible</span>
+                            <span className="text-[#94A3B8] italic">Flexible</span>
                           )}
-                          <p className="text-[10px] text-[#718078] mt-1">
+                          <p className="text-[10px] text-[#64748B] mt-1">
                             {new Date(inq.createdAt).toLocaleDateString()}
                           </p>
                         </td>
@@ -241,11 +241,11 @@ export default function AdminInquiriesPage() {
                         {/* Inquirer Message */}
                         <td className="py-4 px-4 max-w-sm">
                           {inq.message ? (
-                            <p className="text-xs text-[#718078] line-clamp-2" title={inq.message}>
+                            <p className="text-xs text-[#CBD5E1] line-clamp-2" title={inq.message}>
                               {inq.message}
                             </p>
                           ) : (
-                            <span className="text-xs text-[#718078]/60 italic">No message provided</span>
+                            <span className="text-xs text-[#64748B] italic">No message provided</span>
                           )}
                         </td>
 
@@ -256,18 +256,18 @@ export default function AdminInquiriesPage() {
                             onChange={(e) => handleStatusChange(inq._id, e.target.value)}
                             className={`text-[11px] font-bold px-2.5 py-1 rounded-lg border cursor-pointer outline-none transition-colors ${
                               inq.status === 'new'
-                                ? 'bg-[#FAF4DC] text-[#8B6A14] border-[#ECD57F]'
+                                ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                                 : inq.status === 'contacted'
-                                ? 'bg-[#EBF3EE] text-[#123B2A] border-[#B8D1C4]'
+                                ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
                                 : inq.status === 'resolved'
-                                ? 'bg-[#EAF4EE] text-[#3F7D58] border-[#B8D9C5]'
-                                : 'bg-[#FDF1F1] text-[#C94C4C] border-[#FCA5A5]'
+                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
                             }`}
                           >
-                            <option value="new">New</option>
-                            <option value="contacted">Contacted</option>
-                            <option value="resolved">Resolved</option>
-                            <option value="cancelled">Cancelled</option>
+                            <option value="new" className="bg-[#08141F] text-white">New</option>
+                            <option value="contacted" className="bg-[#08141F] text-white">Contacted</option>
+                            <option value="resolved" className="bg-[#08141F] text-white">Resolved</option>
+                            <option value="cancelled" className="bg-[#08141F] text-white">Cancelled</option>
                           </select>
                         </td>
 
@@ -275,7 +275,7 @@ export default function AdminInquiriesPage() {
                         <td className="py-4 px-4 text-right whitespace-nowrap">
                           <button
                             onClick={() => handleDelete(inq._id, inq.name)}
-                            className="p-1.5 rounded-lg text-[#718078] hover:text-[#C94C4C] hover:bg-[#FDF1F1] transition-colors"
+                            className="p-1.5 rounded-lg text-[#94A3B8] hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
                             title="Delete inquiry"
                           >
                             <Trash2 size={15} />

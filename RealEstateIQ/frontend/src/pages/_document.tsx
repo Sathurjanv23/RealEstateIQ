@@ -18,7 +18,7 @@ export default function Document() {
         <meta name="apple-mobile-web-app-title" content="RealEstateIQ" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#123B2A" />
+        <meta name="theme-color" content="#061017" />
 
         {/* Typography */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,7 +32,7 @@ export default function Document() {
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="RealEstateIQ Sri Lanka" />
       </Head>
-      <body className="bg-[#F7F5F0] text-[#17231C] antialiased selection:bg-[#123B2A] selection:text-white">
+      <body className="bg-[#061017] text-[#F8FAFC] antialiased selection:bg-[#00DC82] selection:text-[#061017]">
         <Main />
         <NextScript />
       </body>

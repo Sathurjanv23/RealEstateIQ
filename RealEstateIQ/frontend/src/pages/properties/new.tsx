@@ -67,24 +67,24 @@ export default function NewPropertyPage() {
       <Head><title>Add Listing — RealEstateIQ</title></Head>
       <DashboardLayout title="Add Property Listing">
         <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
-          <Link href="/properties" className="inline-flex items-center gap-2 text-[#718078] hover:text-[#123B2A] text-sm font-semibold">
+          <Link href="/properties" className="inline-flex items-center gap-2 text-[#94A3B8] hover:text-[#00DC82] text-sm font-semibold transition-colors">
             <ArrowLeft size={16} /> Back to Properties
           </Link>
 
-          <div className="card-premium p-6 sm:p-8 bg-white border border-[#E7E3DA]">
-            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#E7E3DA]">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-[#EBF3EE] border border-[#B8D1C4] text-[#123B2A]">
+          <div className="card-premium p-6 sm:p-8 bg-[#0B1722] border border-[#162E40] shadow-xl">
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#162E40]">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-[#00DC82]/10 border border-[#00DC82]/30 text-[#00DC82]">
                 <Home size={20} />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-[#17231C]">Create Property Listing</h2>
-                <p className="text-[#718078] text-xs">Add a new Sri Lankan property asset to your portfolio inventory</p>
+                <h2 className="text-lg font-bold text-white">Create Property Listing</h2>
+                <p className="text-[#94A3B8] text-xs">Add a new Sri Lankan property asset to your portfolio inventory</p>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#17231C] mb-1">Property Title *</label>
+                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Property Title *</label>
                 <input
                   type="text"
                   name="title"
@@ -97,7 +97,7 @@ export default function NewPropertyPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#17231C] mb-1">Description</label>
+                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Description</label>
                 <textarea
                   name="description"
                   rows={3}
@@ -110,13 +110,13 @@ export default function NewPropertyPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#17231C] mb-1">Property Type</label>
+                  <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Property Type</label>
                   <select name="propertyType" value={form.propertyType} onChange={handleChange} className="input-field">
                     {TYPES.map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#17231C] mb-1">District / City *</label>
+                  <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">District / City *</label>
                   <select name="location" value={form.location} onChange={handleChange} className="input-field" required>
                     {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
                       <optgroup key={province} label={`— ${province}`}>
@@ -129,42 +129,42 @@ export default function NewPropertyPage() {
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#17231C] mb-1">Area (sqft) *</label>
+                  <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Area (sqft) *</label>
                   <input type="number" name="area" placeholder="2200" value={form.area} onChange={handleChange} className="input-field" required />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#17231C] mb-1">Bedrooms</label>
+                  <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Bedrooms</label>
                   <input type="number" name="bedrooms" min="0" value={form.bedrooms} onChange={handleChange} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#17231C] mb-1">Bathrooms</label>
+                  <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Bathrooms</label>
                   <input type="number" name="bathrooms" min="0" value={form.bathrooms} onChange={handleChange} className="input-field" />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#17231C] mb-1">Parking</label>
+                  <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Parking</label>
                   <input type="number" name="parking" min="0" value={form.parking} onChange={handleChange} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#17231C] mb-1">House Age (yrs)</label>
+                  <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">House Age (yrs)</label>
                   <input type="number" name="houseAge" min="0" value={form.houseAge} onChange={handleChange} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#17231C] mb-1">Land (perches)</label>
+                  <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Land (perches)</label>
                   <input type="number" name="landSize" placeholder="10" value={form.landSize} onChange={handleChange} className="input-field" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#17231C] mb-1">Asking Price (LKR)</label>
+                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Asking Price (LKR)</label>
                 <input type="number" name="askingPrice" placeholder="e.g. 85000000" value={form.askingPrice} onChange={handleChange} className="input-field" />
               </div>
 
               {/* Amenities */}
               <div>
-                <label className="block text-xs font-bold text-[#17231C] mb-2">Amenities</label>
+                <label className="block text-xs font-semibold text-[#CBD5E1] mb-2">Amenities</label>
                 <div className="flex flex-wrap gap-2">
                   {AMENITIES.map((a) => {
                     const active = selectedAmenities.includes(a);
@@ -175,8 +175,8 @@ export default function NewPropertyPage() {
                         onClick={() => toggleAmenity(a)}
                         className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                           active
-                            ? 'bg-[#123B2A] text-white border-[#123B2A]'
-                            : 'bg-white text-[#718078] border-[#E7E3DA] hover:border-[#123B2A]'
+                            ? 'bg-[#00DC82] text-[#061017] border-[#00DC82] font-bold shadow-sm'
+                            : 'bg-[#08141F] text-[#94A3B8] border-[#162E40] hover:border-[#00DC82]/40'
                         }`}
                       >
                         {a}
@@ -187,10 +187,10 @@ export default function NewPropertyPage() {
               </div>
 
               <div className="pt-4 flex gap-3">
-                <Link href="/properties" className="btn-secondary flex-1 py-3 justify-center text-xs">
+                <Link href="/properties" className="btn-secondary flex-1 py-3 justify-center text-xs font-semibold">
                   Cancel
                 </Link>
-                <button type="submit" disabled={loading} className="btn-primary flex-1 py-3 justify-center text-xs disabled:opacity-50">
+                <button type="submit" disabled={loading} className="btn-primary flex-1 py-3 justify-center text-xs font-bold disabled:opacity-50">
                   {loading ? 'Creating...' : 'Save & Publish Asset'}
                 </button>
               </div>

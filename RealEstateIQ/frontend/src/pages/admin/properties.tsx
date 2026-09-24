@@ -49,28 +49,28 @@ export default function AdminPropertiesPage() {
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-black text-[#17231C]">Property Inventory</h2>
-              <p className="text-[#718078] text-xs mt-1">{pagination?.total || 0} active assets in database</p>
+              <h2 className="text-2xl font-black text-white">Property Inventory</h2>
+              <p className="text-[#94A3B8] text-xs mt-1">{pagination?.total || 0} active assets in database</p>
             </div>
             <Link href="/properties/new" className="btn-primary text-xs py-2 px-3.5 inline-flex items-center gap-1.5">
               <Plus size={14} /> Add Property
             </Link>
           </div>
 
-          <div className="card-premium p-4 bg-white border border-[#E7E3DA]">
+          <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40]">
             <div className="relative">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
               <input
                 type="text"
                 placeholder="Search properties by title or location..."
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                className="input-field pl-10 text-xs"
+                className="input-field pl-10 text-xs bg-[#08141F] border-[#162E40] text-white"
               />
             </div>
           </div>
 
-          <div className="card-premium overflow-hidden bg-white border border-[#E7E3DA]">
+          <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
             {loading ? (
               <div className="p-8 space-y-3">
                 {[...Array(5)].map((_, i) => (
@@ -88,20 +88,20 @@ export default function AdminPropertiesPage() {
                       <tr key={p._id}>
                         <td>
                           <div>
-                            <p className="font-bold text-[#17231C] text-sm line-clamp-1">{p.title}</p>
+                            <p className="font-bold text-white text-sm line-clamp-1">{p.title}</p>
                             <span className="badge-forest text-[9px] uppercase font-bold capitalize mt-1 inline-flex">{p.propertyType}</span>
                           </div>
                         </td>
-                        <td className="text-[#718078] text-xs">{p.location}{p.district ? `, ${p.district}` : ''}</td>
-                        <td className="text-[#718078] text-xs">{p.area.toLocaleString()} sqft · {p.bedrooms} Beds / {p.bathrooms} Baths</td>
-                        <td className="text-[#123B2A] font-black text-sm">
+                        <td className="text-[#94A3B8] text-xs">{p.location}{p.district ? `, ${p.district}` : ''}</td>
+                        <td className="text-[#CBD5E1] text-xs">{p.area.toLocaleString()} sqft · {p.bedrooms} Beds / {p.bathrooms} Baths</td>
+                        <td className="text-[#00DC82] font-black text-sm">
                           {p.askingPrice ? `Rs. ${p.askingPrice.toLocaleString()}` : '—'}
                         </td>
                         <td>
                           <div className="flex gap-3">
-                            <Link href={`/properties/${p._id}`} className="text-xs font-bold text-[#2F6B4F] hover:text-[#123B2A] transition-colors">View</Link>
+                            <Link href={`/properties/${p._id}`} className="text-xs font-bold text-[#00DC82] hover:text-[#34D399] transition-colors">View</Link>
                             <button onClick={() => handleDelete(p._id, p.title)}
-                              className="text-xs font-bold text-[#C94C4C] hover:text-[#A63838] transition-colors">Delete</button>
+                              className="text-xs font-bold text-rose-400 hover:text-rose-300 transition-colors">Delete</button>
                           </div>
                         </td>
                       </tr>
@@ -112,8 +112,8 @@ export default function AdminPropertiesPage() {
             )}
 
             {pagination && pagination.pages > 1 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-[#E7E3DA] bg-[#FAF9F6]">
-                <p className="text-xs text-[#718078] font-medium">Page {pagination.page} of {pagination.pages}</p>
+              <div className="flex items-center justify-between px-6 py-4 border-t border-[#162E40] bg-[#08141F]">
+                <p className="text-xs text-[#94A3B8] font-medium">Page {pagination.page} of {pagination.pages}</p>
                 <div className="flex gap-2">
                   <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
                     className="btn-secondary text-xs py-1.5 px-3 disabled:opacity-30">

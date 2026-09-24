@@ -31,16 +31,16 @@ export default function AdminPredictionsPage() {
       <DashboardLayout title="Valuation Audits">
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div>
-            <h2 className="text-2xl font-black text-[#17231C]">Valuation Audit Analytics</h2>
-            <p className="text-[#718078] text-xs mt-1">{analytics?.total || 0} total institutional valuations audited</p>
+            <h2 className="text-2xl font-black text-white">Valuation Audit Analytics</h2>
+            <p className="text-[#94A3B8] text-xs mt-1">{analytics?.total || 0} total institutional valuations audited</p>
           </div>
 
           {/* By location */}
           {analytics?.byLocation?.length > 0 && (
-            <div className="card-premium overflow-hidden bg-white border border-[#E7E3DA]">
-              <div className="px-6 py-4 border-b border-[#E7E3DA] bg-[#FAF9F6]">
-                <h3 className="font-bold text-[#17231C] text-sm flex items-center gap-2">
-                  <Brain size={16} className="text-[#123B2A]" /> Valuation Volume by District
+            <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
+              <div className="px-6 py-4 border-b border-[#162E40] bg-[#08141F]">
+                <h3 className="font-bold text-white text-sm flex items-center gap-2">
+                  <Brain size={16} className="text-[#00DC82]" /> Valuation Volume by District
                 </h3>
               </div>
               <div className="overflow-x-auto">
@@ -51,9 +51,9 @@ export default function AdminPredictionsPage() {
                   <tbody>
                     {analytics.byLocation.map((loc: { _id: string; count: number; avgPrice: number }) => (
                       <tr key={loc._id}>
-                        <td className="font-bold text-[#17231C]">{loc._id}</td>
-                        <td className="text-[#718078]">{loc.count}</td>
-                        <td className="text-[#123B2A] font-black">Rs. {Math.round(loc.avgPrice).toLocaleString()}</td>
+                        <td className="font-bold text-white">{loc._id}</td>
+                        <td className="text-[#94A3B8]">{loc.count}</td>
+                        <td className="text-[#00DC82] font-black">Rs. {Math.round(loc.avgPrice).toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -64,10 +64,10 @@ export default function AdminPredictionsPage() {
 
           {/* Recent activity */}
           {analytics?.recentActivity?.length > 0 && (
-            <div className="card-premium overflow-hidden bg-white border border-[#E7E3DA]">
-              <div className="px-6 py-4 border-b border-[#E7E3DA] bg-[#FAF9F6]">
-                <h3 className="font-bold text-[#17231C] text-sm flex items-center gap-2">
-                  <FileBarChart size={16} className="text-[#123B2A]" /> Daily Audit Volume (Last 30 Days)
+            <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
+              <div className="px-6 py-4 border-b border-[#162E40] bg-[#08141F]">
+                <h3 className="font-bold text-white text-sm flex items-center gap-2">
+                  <FileBarChart size={16} className="text-[#00DC82]" /> Daily Audit Volume (Last 30 Days)
                 </h3>
               </div>
               <div className="overflow-x-auto">
@@ -80,16 +80,16 @@ export default function AdminPredictionsPage() {
                       const maxVal = Math.max(...analytics.recentActivity.map((d: { count: number }) => d.count)) || 1;
                       return (
                         <tr key={day._id}>
-                          <td className="text-[#17231C] font-mono text-xs">{day._id}</td>
+                          <td className="text-[#CBD5E1] font-mono text-xs">{day._id}</td>
                           <td>
                             <div className="flex items-center gap-3">
-                              <div className="w-28 h-2 rounded-full bg-[#EFECE3] overflow-hidden">
+                              <div className="w-28 h-2 rounded-full bg-[#142938] overflow-hidden">
                                 <div
-                                  className="h-full rounded-full bg-[#123B2A]"
+                                  className="h-full rounded-full bg-[#00DC82]"
                                   style={{ width: `${(day.count / maxVal) * 100}%` }}
                                 />
                               </div>
-                              <span className="font-bold text-[#17231C] text-xs">{day.count}</span>
+                              <span className="font-bold text-white text-xs">{day.count}</span>
                             </div>
                           </td>
                         </tr>
