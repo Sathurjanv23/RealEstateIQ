@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Sidebar } from './Sidebar';
 import { MobileBottomNav } from './MobileBottomNav';
 import { BrandLogo } from '../ui/BrandLogo';
 import { PwaInstallPrompt } from '../ui/PwaInstallPrompt';
-import { Menu, Bell } from 'lucide-react';
+import { Menu, Bell, Home } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 interface DashboardLayoutProps {
@@ -46,6 +47,16 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Go to Home Page Button */}
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0E1F2E] border border-[#1E3A4E] text-[#94A3B8] hover:text-white hover:border-[#00DC82] text-xs font-semibold transition-all group"
+              title="Go to Home Landing Page"
+            >
+              <Home size={15} className="text-[#00DC82] group-hover:scale-110 transition-transform" />
+              <span>Home Page</span>
+            </Link>
+
             {/* Live Sri Lanka Market Status */}
             <div className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00DC82]/10 border border-[#00DC82]/30 text-[#00DC82] text-xs font-semibold">
               <span className="relative flex h-2 w-2">

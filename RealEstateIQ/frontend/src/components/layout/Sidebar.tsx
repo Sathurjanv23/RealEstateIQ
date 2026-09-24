@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import {
   LayoutDashboard,
   Home,
+  Globe,
   History,
   BookmarkCheck,
   GitCompare,
@@ -33,6 +34,7 @@ interface NavItem {
 }
 
 const userNav: NavItem[] = [
+  { href: '/', label: 'Home Landing', icon: <Globe size={18} /> },
   { href: '/dashboard', label: 'Intelligence Hub', icon: <LayoutDashboard size={18} /> },
   { href: '/properties', label: 'Properties', icon: <Home size={18} /> },
   { href: '/predict', label: 'Property Valuation', icon: <Brain size={18} />, badge: 'Engine' },
