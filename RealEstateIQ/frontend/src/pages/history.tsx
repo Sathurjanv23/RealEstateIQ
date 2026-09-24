@@ -1,10 +1,9 @@
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { History, Brain, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { History, Brain, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 import { predictionService } from '../services/services';
@@ -31,23 +30,23 @@ export default function HistoryPage() {
   return (
     <>
       <Head>
-        <title>Prediction History — RealEstateIQ</title>
+        <title>Valuation History — RealEstateIQ</title>
       </Head>
-      <DashboardLayout title="Prediction History">
-        <div className="space-y-6 animate-fade-in">
+      <DashboardLayout title="Valuation History">
+        <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-white">My Predictions</h2>
-              <p className="text-white/50 text-sm mt-1">
-                {pagination?.total || 0} total predictions
+              <h2 className="text-2xl font-black text-[#17231C]">Property Valuation History</h2>
+              <p className="text-[#718078] text-xs mt-1">
+                {pagination?.total || 0} total valuations generated
               </p>
             </div>
-            <Link href="/predict" className="btn-primary text-sm py-2.5">
-              <Brain size={16} /> New Prediction
+            <Link href="/predict" className="btn-primary text-xs py-2.5 px-4">
+              <Brain size={15} /> New Valuation
             </Link>
           </div>
 
-          <div className="glass-card overflow-hidden">
+          <div className="card-premium overflow-hidden bg-white border border-[#E7E3DA]">
             {loading ? (
               <div className="p-8 space-y-4">
                 {[...Array(5)].map((_, i) => (
@@ -56,72 +55,74 @@ export default function HistoryPage() {
               </div>
             ) : predictions.length === 0 ? (
               <div className="p-16 text-center">
-                <History size={48} className="text-white/20 mx-auto mb-4" />
-                <p className="text-white/40 text-lg font-medium">No predictions yet</p>
-                <p className="text-white/30 text-sm mt-2">Make your first prediction to see it here.</p>
-                <Link href="/predict" className="btn-primary mt-6 inline-flex">
-                  <Brain size={16} /> Predict Now
+                <History size={48} className="text-[#DCD6CB] mx-auto mb-4" />
+                <p className="text-[#17231C] text-base font-bold">No valuations recorded yet</p>
+                <p className="text-[#718078] text-xs mt-1">Run your first property appraisal to see audit records here.</p>
+                <Link href="/predict" className="btn-primary mt-6 inline-flex text-xs py-2.5 px-4">
+                  <Brain size={15} /> Run Valuation Now
                 </Link>
               </div>
             ) : (
               <>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Location</th>
-                      <th>Area</th>
-                      <th>Bedrooms</th>
-                      <th>Estimated Value</th>
-                      <th>Price/Sqft</th>
-                      <th>Model</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {predictions.map((pred) => (
-                      <tr key={pred._id}>
-                        <td className="text-white/50 text-xs">
-                          {new Date(pred.createdAt).toLocaleDateString()}
-                          <br />
-                          <span className="text-white/30">{new Date(pred.createdAt).toLocaleTimeString()}</span>
-                        </td>
-                        <td>{pred.inputFeatures.location}</td>
-                        <td>{pred.inputFeatures.area.toLocaleString()} sqft</td>
-                        <td>{pred.inputFeatures.bedrooms}BR / {pred.inputFeatures.bathrooms}BA</td>
-                        <td className="text-brand-400 font-semibold">
-                          Rs. {pred.predictedPrice.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                        </td>
-                        <td className="text-white/60">
-                          {pred.pricePerSqft ? `Rs. ${Math.round(pred.pricePerSqft).toLocaleString()}` : '—'}
-                        </td>
-                        <td>
-                          <span className="badge-indigo">{pred.modelVersion}</span>
-                        </td>
+                <div className="overflow-x-auto">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>District / Location</th>
+                        <th>Area</th>
+                        <th>Configuration</th>
+                        <th>Estimated Value</th>
+                        <th>Price / Sqft</th>
+                        <th>Engine</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {predictions.map((pred) => (
+                        <tr key={pred._id}>
+                          <td className="text-[#718078] text-xs">
+                            {new Date(pred.createdAt).toLocaleDateString()}
+                            <br />
+                            <span className="text-[10px] text-[#718078]/80">{new Date(pred.createdAt).toLocaleTimeString()}</span>
+                          </td>
+                          <td className="font-bold text-[#17231C]">{pred.inputFeatures.location}</td>
+                          <td className="text-[#17231C]">{pred.inputFeatures.area.toLocaleString()} sqft</td>
+                          <td className="text-[#718078]">{pred.inputFeatures.bedrooms} Bed · {pred.inputFeatures.bathrooms} Bath</td>
+                          <td className="text-[#123B2A] font-black text-sm">
+                            Rs. {Math.round(pred.predictedPrice).toLocaleString()}
+                          </td>
+                          <td className="text-[#718078]">
+                            {pred.pricePerSqft ? `Rs. ${Math.round(pred.pricePerSqft).toLocaleString()}` : '—'}
+                          </td>
+                          <td>
+                            <span className="badge-forest text-[10px] font-bold">{pred.modelVersion}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
 
                 {/* Pagination */}
                 {pagination && pagination.pages > 1 && (
-                  <div className="flex items-center justify-between px-6 py-4 border-t border-white/5">
-                    <p className="text-sm text-white/40">
+                  <div className="flex items-center justify-between px-6 py-4 border-t border-[#E7E3DA] bg-[#FAF9F6]">
+                    <p className="text-xs text-[#718078] font-medium">
                       Page {pagination.page} of {pagination.pages}
                     </p>
                     <div className="flex gap-2">
                       <button
                         onClick={() => setPage(p => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="btn-secondary text-sm py-2 px-3 disabled:opacity-30"
+                        className="btn-secondary text-xs py-1.5 px-3 disabled:opacity-30"
                       >
-                        <ChevronLeft size={16} />
+                        <ChevronLeft size={14} />
                       </button>
                       <button
                         onClick={() => setPage(p => Math.min(pagination.pages, p + 1))}
                         disabled={page === pagination.pages}
-                        className="btn-secondary text-sm py-2 px-3 disabled:opacity-30"
+                        className="btn-secondary text-xs py-1.5 px-3 disabled:opacity-30"
                       >
-                        <ChevronRight size={16} />
+                        <ChevronRight size={14} />
                       </button>
                     </div>
                   </div>

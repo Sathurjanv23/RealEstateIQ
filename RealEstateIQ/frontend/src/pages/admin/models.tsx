@@ -11,9 +11,9 @@ import { MlModel } from '../../types';
 
 const STATUS_COLORS: Record<string, string> = {
   production: 'badge-green',
-  development: 'badge-indigo',
-  staging: 'badge-amber',
-  archived: 'badge badge-rose',
+  development: 'badge-forest',
+  staging: 'badge-gold',
+  archived: 'badge-rose',
 };
 
 export default function AdminModelsPage() {
@@ -43,33 +43,37 @@ export default function AdminModelsPage() {
 
   return (
     <>
-      <Head><title>ML Models — Admin</title></Head>
-      <DashboardLayout title="ML Model Management">
-        <div className="space-y-6 animate-fade-in">
+      <Head><title>AI Models — Admin RealEstateIQ</title></Head>
+      <DashboardLayout title="Model Registry">
+        <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div>
-            <h2 className="text-2xl font-bold text-white">ML Model Registry</h2>
-            <p className="text-white/50 text-sm mt-1">Trained models with actual evaluation metrics</p>
+            <h2 className="text-2xl font-black text-[#17231C]">AI Model Registry</h2>
+            <p className="text-[#718078] text-xs mt-1">Institutional valuation models and calibrated metrics</p>
           </div>
 
           {loading ? (
-            <div className="space-y-4">{[...Array(2)].map((_, i) => <div key={i} className="skeleton h-48 rounded-2xl" />)}</div>
+            <div className="space-y-4">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="skeleton h-48 rounded-2xl" />
+              ))}
+            </div>
           ) : models.length === 0 ? (
-            <div className="glass-card p-16 text-center">
-              <Brain size={48} className="text-white/20 mx-auto mb-4" />
-              <p className="text-white/40">No models registered. Run the training pipeline first.</p>
+            <div className="card-premium p-16 text-center bg-white border border-[#E7E3DA]">
+              <Brain size={48} className="text-[#DCD6CB] mx-auto mb-4" />
+              <p className="text-[#17231C] font-bold">No models registered yet.</p>
             </div>
           ) : (
             <div className="space-y-4">
               {models.map((model) => (
-                <div key={model._id} className="glass-card p-6">
+                <div key={model._id} className="card-premium p-6 bg-white border border-[#E7E3DA]">
                   <div className="flex items-start justify-between flex-wrap gap-4">
                     <div>
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-white">{model.modelName}</h3>
-                        <span className={STATUS_COLORS[model.status] || 'badge-indigo'}>{model.status}</span>
+                        <h3 className="font-bold text-[#17231C] text-base">{model.modelName}</h3>
+                        <span className={STATUS_COLORS[model.status] || 'badge-forest'}>{model.status}</span>
                       </div>
-                      <p className="text-white/50 text-sm font-mono mb-1">{model.version} · {model.algorithm}</p>
-                      <p className="text-white/30 text-xs">
+                      <p className="text-[#2F6B4F] text-xs font-mono font-bold mb-1">{model.version} · {model.algorithm}</p>
+                      <p className="text-[#718078] text-xs">
                         Dataset: {model.datasetVersion} · Trained: {new Date(model.trainingDate).toLocaleDateString()}
                         · Train: {model.trainSize} / Test: {model.testSize} rows
                       </p>
@@ -77,7 +81,7 @@ export default function AdminModelsPage() {
                     <select
                       value={model.status}
                       onChange={(e) => statusMutation.mutate({ id: model._id, status: e.target.value })}
-                      className="input-dark text-sm py-2"
+                      className="input-field text-xs py-2 w-auto"
                     >
                       {['development', 'staging', 'production', 'archived'].map((s) => (
                         <option key={s} value={s} className="capitalize">{s}</option>
@@ -90,40 +94,37 @@ export default function AdminModelsPage() {
                     {[
                       { label: 'MAE', value: `Rs. ${Math.round(model.metrics.mae).toLocaleString()}` },
                       { label: 'RMSE', value: `Rs. ${Math.round(model.metrics.rmse).toLocaleString()}` },
-                      { label: 'R²', value: model.metrics.r2.toFixed(4) },
+                      { label: 'Calibration R²', value: model.metrics.r2.toFixed(4) },
                       { label: 'CV R² Mean', value: model.metrics.cv_r2_mean?.toFixed(4) ?? '—' },
                       { label: 'CV R² Std', value: model.metrics.cv_r2_std ? `±${model.metrics.cv_r2_std.toFixed(4)}` : '—' },
                     ].map((m) => (
-                      <div key={m.label} className="glass-card p-3 text-center">
-                        <p className="text-xs text-white/40 mb-1">{m.label}</p>
-                        <p className="text-sm font-bold text-brand-400">{m.value}</p>
+                      <div key={m.label} className="p-3 rounded-xl bg-[#FAF9F6] border border-[#E7E3DA] text-center">
+                        <p className="text-[10px] uppercase font-bold text-[#718078] mb-1">{m.label}</p>
+                        <p className="text-sm font-black text-[#123B2A]">{m.value}</p>
                       </div>
                     ))}
                   </div>
 
-                  {/* Feature importance */}
+                  {/* Feature importance bar */}
                   {model.featureImportance && Object.keys(model.featureImportance).length > 0 && (
-                    <div className="mt-5">
-                      <p className="text-xs text-white/40 mb-3 uppercase tracking-wider">Feature Importance</p>
-                      <div className="space-y-2">
+                    <div className="mt-5 pt-4 border-t border-[#E7E3DA]">
+                      <p className="text-xs font-bold text-[#17231C] mb-2">Feature Importance Breakdown</p>
+                      <div className="space-y-1.5">
                         {Object.entries(model.featureImportance)
-                          .sort(([, a], [, b]) => (b as number) - (a as number))
+                          .sort(([, a], [, b]) => b - a)
+                          .slice(0, 5)
                           .map(([feat, val]) => (
-                            <div key={feat} className="flex items-center gap-3">
-                              <p className="text-xs text-white/50 w-36 truncate capitalize">{feat.replace('location_', 'loc: ')}</p>
+                            <div key={feat} className="flex items-center gap-3 text-xs">
+                              <span className="w-28 text-[#718078] truncate">{feat}</span>
                               <div className="flex-1 feature-bar">
-                                <div className="feature-bar-fill" style={{ width: `${Math.round((val as number) * 100 * 1.5)}%` }} />
+                                <div className="feature-bar-fill" style={{ width: `${Math.round(val * 100)}%` }} />
                               </div>
-                              <p className="text-xs text-brand-400 w-10 text-right">{((val as number) * 100).toFixed(1)}%</p>
+                              <span className="text-[#123B2A] font-bold w-12 text-right">{(val * 100).toFixed(1)}%</span>
                             </div>
                           ))}
                       </div>
                     </div>
                   )}
-
-                  <p className="text-xs text-white/40 mt-4">
-                    ✓ Evaluated on an authentic hold-out test set from 14,833 Sri Lankan property transactions.
-                  </p>
                 </div>
               ))}
             </div>

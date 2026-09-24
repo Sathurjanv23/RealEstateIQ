@@ -61,47 +61,47 @@ export default function PropertyMap({ properties, height = '550px', selectedProp
 
     mapInstanceRef.current = map;
 
-    // Add CartoDB Dark Matter tile layer for stunning dark UI
+    // Add CartoDB Voyager tile layer for crisp light cartography
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 19,
     }).addTo(map);
 
-    // Custom Marker Icon
+    // Custom Marker Icon: Deep Forest Green (#123B2A) with Luxury Gold dot (#C9A227)
     const createCustomIcon = (price: number | undefined) => {
       const formattedPrice = price
-        ? `Rs. ${(price / 1000).toFixed(0)}k`
+        ? `Rs. ${(price / 1000000).toFixed(1)}M`
         : 'Property';
 
       return L.divIcon({
         className: 'custom-property-marker',
         html: `
           <div style="
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: #ffffff;
+            background: #123B2A;
+            color: #FFFFFF;
             font-weight: 700;
             font-size: 11px;
             padding: 4px 8px;
             border-radius: 9999px;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-            border: 2px solid #ffffff;
+            box-shadow: 0 4px 12px rgba(18, 59, 42, 0.3);
+            border: 2px solid #FFFFFF;
             white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             cursor: pointer;
           ">
-            <span style="display:inline-block; width:6px; height:6px; background:#10b981; border-radius:50%;"></span>
+            <span style="display:inline-block; width:6px; height:6px; background:#C9A227; border-radius:50%;"></span>
             ${formattedPrice}
           </div>
         `,
-        iconSize: [60, 24],
-        iconAnchor: [30, 12],
+        iconSize: [68, 24],
+        iconAnchor: [34, 12],
       });
     };
 
-    // Add markers
+    // Render Markers
     const bounds = L.latLngBounds([]);
 
     properties.forEach((prop, idx) => {
@@ -112,63 +112,43 @@ export default function PropertyMap({ properties, height = '550px', selectedProp
         icon: createCustomIcon(prop.askingPrice),
       }).addTo(map);
 
-      const popupContent = `
-        <div style="font-family: system-ui, sans-serif; min-width: 200px; color: #1e1e38; padding: 2px;">
-          <div style="font-size: 10px; text-transform: uppercase; font-weight: 700; color: #6366f1; margin-bottom: 2px;">
-            ${prop.propertyType} · ${prop.location}
+      // Clean Light Popup Content
+      const popupHtml = `
+        <div style="min-width: 190px; font-family: system-ui, sans-serif; padding: 2px;">
+          <h4 style="font-weight: 700; font-size: 13px; color: #17231C; margin: 0 0 4px 0;">${prop.title}</h4>
+          <p style="font-size: 11px; color: #718078; margin: 0 0 6px 0;">${prop.location}${prop.district ? ', ' + prop.district : ''}</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 11px; color: #718078;">${prop.area.toLocaleString()} sqft</span>
+            <span style="font-size: 11px; color: #718078;">${prop.bedrooms} Bed · ${prop.bathrooms} Bath</span>
           </div>
-          <div style="font-size: 13px; font-weight: 700; margin-bottom: 4px; line-height: 1.2;">
-            ${prop.title}
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #E7E3DA; padding-top: 6px;">
+            <strong style="color: #123B2A; font-size: 13px;">${prop.askingPrice ? 'Rs. ' + prop.askingPrice.toLocaleString() : 'Price on Inquiry'}</strong>
+            <a href="/properties/${prop._id}" style="color: #2F6B4F; font-size: 11px; text-decoration: none; font-weight: 600;">View →</a>
           </div>
-          <div style="font-size: 14px; font-weight: 800; color: #4f46e5; margin-bottom: 6px;">
-            ${prop.askingPrice ? `Rs. ${prop.askingPrice.toLocaleString()}` : 'Price on request'}
-          </div>
-          <div style="font-size: 11px; color: #64748b; margin-bottom: 8px;">
-            ${prop.area.toLocaleString()} sqft · ${prop.bedrooms} Beds · ${prop.bathrooms} Baths
-          </div>
-          <a href="/properties/${prop._id}" style="
-            display: block;
-            text-align: center;
-            background: #6366f1;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 8px;
-          ">
-            View Property →
-          </a>
         </div>
       `;
 
-      marker.bindPopup(popupContent, {
-        closeButton: true,
-        autoPan: true,
-      });
+      marker.bindPopup(popupHtml);
 
-      if (selectedProperty && selectedProperty._id === prop._id) {
+      if (selectedProperty && prop._id === selectedProperty._id) {
         marker.openPopup();
       }
     });
 
-    if (properties.length > 1 && !selectedProperty && !centerCity) {
-      map.fitBounds(bounds, { padding: [30, 30] });
+    if (properties.length > 1 && !selectedProperty) {
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
     }
 
     return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
+      map.remove();
     };
   }, [properties, selectedProperty, centerCity]);
 
   return (
     <div
       ref={mapContainerRef}
-      style={{ height, width: '100%', borderRadius: '16px', overflow: 'hidden' }}
-      className="border border-white/10 shadow-xl"
+      style={{ height, width: '100%' }}
+      className="rounded-2xl border border-[#E7E3DA] overflow-hidden shadow-soft-sm"
     />
   );
 }

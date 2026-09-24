@@ -4,54 +4,101 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Brain,
+  Building2,
   TrendingUp,
   FileText,
   ArrowRight,
-  Sparkles,
-  Building2,
   SlidersHorizontal,
-  ChevronRight,
+  MapPin,
+  Bed,
+  Bath,
+  Home,
   ShieldCheck,
   CheckCircle2,
-  Lock,
+  Sparkles,
+  Layers,
+  Compass,
+  Palette,
+  Hammer,
+  DollarSign,
+  UserCheck,
+  Users,
+  Briefcase,
+  Search,
 } from 'lucide-react';
 import { BrandLogo } from '../components/ui/BrandLogo';
 import { PwaInstallPrompt } from '../components/ui/PwaInstallPrompt';
 import { useAuth } from '../context/AuthContext';
 import { SL_LOCATIONS } from '../utils/sriLankaLocations';
 
-const coreFeatures = [
+const roles = [
   {
-    icon: <Brain size={20} className="text-indigo-400" />,
-    title: '23-District ML Valuation Engine',
-    desc: 'Ensemble Random Forest model trained on authentic Sri Lankan property transactions with district-specific benchmark rate calibration.',
-    tag: 'ML Core',
+    role: 'Investor',
+    dotColor: '#00DC82',
+    desc: 'Analyze district rental yields, price-per-sqft trends, and REIT-grade valuation metrics.',
   },
   {
-    icon: <Building2 size={20} className="text-sky-400" />,
-    title: '14,833+ Verified Market Records',
-    desc: 'Grounded in real property listings and sales across Western, Central, Southern, Northern, and Eastern provinces.',
-    tag: 'Kaggle Verified',
+    role: 'Builder / Developer',
+    dotColor: '#F97316',
+    desc: 'Benchmark project feasibility, land parcel valuation, and construction square-foot rates.',
   },
   {
-    icon: <TrendingUp size={20} className="text-emerald-400" />,
-    title: 'Explainable AI & Confidence Range',
-    desc: 'Provides transparent 95% valuation confidence intervals, feature-by-feature importance breakdown, and square-foot pricing metrics.',
-    tag: 'Explainable AI',
+    role: 'Interior Designer',
+    dotColor: '#EC4899',
+    desc: 'Access verified floor plans, square-foot dimensions, and collaborate seamlessly on assets.',
   },
   {
-    icon: <FileText size={20} className="text-purple-400" />,
-    title: 'Bank-Grade PDF Valuation Reports',
-    desc: 'Generate and download official PDF valuation certificates with unique audit IDs for buyers, sellers, and financial institutions.',
-    tag: 'Instant Export',
+    role: 'Seller & Owner',
+    dotColor: '#38BDF8',
+    desc: 'List properties, benchmark against 14,833 authentic transactions, and review buyer inquiries.',
+  },
+  {
+    role: 'Buyer',
+    dotColor: '#A855F7',
+    desc: 'Discover authentic listings across 23 districts, save favorites, and audit fair-market value.',
+  },
+  {
+    role: 'Admin & Institution',
+    dotColor: '#EF4444',
+    desc: 'Moderate listings, monitor model calibration (R² 0.996), and inspect institutional audit logs.',
   },
 ];
 
-const keyStats = [
-  { value: '14,833+', label: 'Market Records Analyzed' },
-  { value: '23', label: 'Districts Supported' },
-  { value: '95%', label: 'Valuation Confidence Interval' },
-  { value: '< 50ms', label: 'Instant Inference Speed' },
+const modules = [
+  {
+    icon: <Brain size={22} className="text-[#061017]" />,
+    title: '23-District ML Valuation Engine',
+    desc: 'Trained on 14,833 authentic market records with 95% confidence intervals and feature-by-feature weight breakdowns.',
+  },
+  {
+    icon: <Compass size={22} className="text-[#061017]" />,
+    title: 'Interactive District Cartography',
+    desc: 'Visualize properties geographically across Colombo, Kandy, Galle, and Negombo with live cluster mapping.',
+  },
+  {
+    icon: <FileText size={22} className="text-[#061017]" />,
+    title: 'Bank-Grade PDF Valuation Reports',
+    desc: 'Generate official valuation certificates with unique audit IDs for buyers, sellers, and financial lenders.',
+  },
+  {
+    icon: <TrendingUp size={22} className="text-[#061017]" />,
+    title: 'REIT & Market Intelligence',
+    desc: 'Examine median square-foot rates, district price breakdowns, and comparative asset benchmarking metrics.',
+  },
+  {
+    icon: <Home size={22} className="text-[#061017]" />,
+    title: 'Marketplace Listings & Inquiries',
+    desc: 'Browse residential, villa, commercial, and land listings with direct viewing schedule dispatch.',
+  },
+  {
+    icon: <ShieldCheck size={22} className="text-[#061017]" />,
+    title: 'Admin Governance & Audit Trail',
+    desc: 'Track system access, manage client permissions, register AI model versions, and audit all platform events.',
+  },
+];
+
+const stakeholderPills = [
+  'Teams', 'Funds', 'Investors', 'Builders', 'Designers', 'Owners', 'Analysts', 'Brokers'
 ];
 
 export default function LandingPage() {
@@ -74,38 +121,32 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>RealEstateIQ — Sri Lanka AI Property Valuation Platform</title>
+        <title>RealIQestate — Sri Lanka Real Estate Intelligence Platform</title>
         <meta
           name="description"
-          content="Institutional-grade AI property valuations and real estate market intelligence across all 23 Sri Lankan districts. Powered by Machine Learning trained on 14,833+ authentic market records."
+          content="Plan. Build. Design. List & invest. RealIQestate unifies 23-district AI valuation, 14,833 authentic market records, and marketplace listings."
         />
       </Head>
 
-      <div className="min-h-screen bg-[#050811] text-slate-100 selection:bg-indigo-500 selection:text-white font-sans antialiased overflow-x-hidden">
-        {/* Subtle Ambient Background Gradients */}
-        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-indigo-500/10 via-indigo-600/5 to-transparent rounded-full blur-[120px]" />
-          <div className="absolute top-[450px] right-[-10%] w-[500px] h-[400px] bg-sky-500/[0.04] rounded-full blur-[100px]" />
-          <div className="absolute top-[800px] left-[-10%] w-[450px] h-[450px] bg-purple-500/[0.04] rounded-full blur-[100px]" />
-        </div>
-
-        {/* Top Navbar */}
-        <header className="border-b border-white/[0.07] sticky top-0 z-50 backdrop-blur-2xl bg-[#060a14]/80 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div className="min-h-screen bg-[#061017] text-[#F8FAFC] font-sans antialiased overflow-x-hidden selection:bg-[#00DC82] selection:text-[#061017]">
+        {/* Navbar matching Sample Screenshot 1 */}
+        <header className="border-b border-[#142938] sticky top-0 z-50 bg-[#061017]/95 backdrop-blur-xl">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between py-3.5">
             <BrandLogo size="md" showText={true} />
 
-            <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
-              <Link href="/predict" className="hover:text-white transition-colors">AI Valuation</Link>
-              <Link href="/market" className="hover:text-white transition-colors">Market Intelligence</Link>
-              <Link href="/properties" className="hover:text-white transition-colors">Properties</Link>
-              <Link href="#features" className="hover:text-white transition-colors">Platform Features</Link>
+            <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-[#94A3B8]">
+              <Link href="/" className="text-white hover:text-[#00DC82] transition-colors">Home</Link>
+              <Link href="/properties" className="hover:text-white transition-colors">Listings</Link>
+              <Link href="/predict" className="hover:text-white transition-colors">Valuation</Link>
+              <Link href="/market" className="hover:text-white transition-colors">Market</Link>
+              <Link href="#modules" className="hover:text-white transition-colors">Modules</Link>
             </nav>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {isAuthenticated ? (
                 <Link
                   href="/dashboard"
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-sm inline-flex items-center gap-1.5 shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all"
+                  className="px-5 py-2.5 rounded-full bg-[#00DC82] hover:bg-[#00C373] text-[#061017] font-bold text-sm inline-flex items-center gap-1.5 shadow-btn-emerald transition-all"
                 >
                   Dashboard <ArrowRight size={15} />
                 </Link>
@@ -113,15 +154,15 @@ export default function LandingPage() {
                 <>
                   <Link
                     href="/login"
-                    className="px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+                    className="text-sm font-semibold text-[#94A3B8] hover:text-white transition-colors px-2 py-1"
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/register"
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-medium text-sm inline-flex items-center gap-1.5 shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all"
+                    className="px-5 py-2.5 rounded-full bg-[#00DC82] hover:bg-[#00C373] text-[#061017] font-extrabold text-sm inline-flex items-center gap-1.5 shadow-btn-emerald transition-all"
                   >
-                    Get Started
+                    Get started
                   </Link>
                 </>
               )}
@@ -129,67 +170,77 @@ export default function LandingPage() {
           </div>
         </header>
 
-        {/* Hero Section */}
-        <section className="relative pt-16 sm:pt-20 pb-16 sm:pb-24 px-4 sm:px-6 z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Announcement Pill with subtle glass shine */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0d1428]/80 border border-indigo-400/25 text-indigo-300 text-xs font-medium mb-6 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.15)]">
-              <Sparkles size={13} className="text-indigo-400" />
-              <span>Trained on 14,833 Authentic Sri Lanka Market Transactions</span>
+        {/* Hero Section with Grid Backdrop matching Sample Screenshot 1 */}
+        <section className="relative pt-16 sm:pt-24 pb-20 sm:pb-28 px-4 sm:px-6 hero-grid-pattern relative overflow-hidden">
+          {/* Subtle Ambient Radial Glows */}
+          <div className="absolute top-0 right-0 w-[600px] h-[500px] bg-gradient-to-b from-[#00DC82]/12 via-[#00DC82]/5 to-transparent rounded-full blur-[140px] pointer-events-none" />
+          <div className="absolute top-1/2 left-[-100px] w-[500px] h-[400px] bg-gradient-to-r from-[#00DC82]/8 to-transparent rounded-full blur-[140px] pointer-events-none" />
+
+          <div className="max-w-4xl mx-auto text-left sm:text-left relative z-10">
+            {/* Announcement Pill matching Sample */}
+            <div className="tech-pill mb-6">
+              <span className="w-2 h-2 rounded-full bg-[#00DC82] animate-pulse" />
+              <span>Real-Estate IQ for the entire Sri Lanka property lifecycle</span>
             </div>
 
-            {/* Headline with controlled, sophisticated gradient */}
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-[1.12] mb-5">
-              Precision Real Estate <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-300 to-purple-400">
-                Valuations with AI
-              </span>
+            {/* Main Headline from Sample */}
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-[1.08] mb-6">
+              Plan. Build. Design. <br />
+              List & <span className="text-[#00DC82]">invest.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-              Instant, unbiased property market estimates across all 23 Sri Lankan districts.
-              Backed by verified transaction data, log-scale regression, and ensemble machine learning.
+            <p className="text-base sm:text-xl text-[#94A3B8] max-w-2xl mb-10 leading-relaxed font-normal">
+              RealIQestate unifies 23-district AI valuation, 14,833 verified market transactions,
+              construction tracking, marketplace listings and REIT-grade investing — for every
+              professional in the property value chain.
             </p>
 
-            {/* Premium Focal Glass Card: Quick Property Estimate Terminal */}
-            <div className="pro-terminal-glass max-w-2xl mx-auto p-5 sm:p-7 rounded-2xl text-left relative overflow-hidden mb-10">
-              {/* Subtle top specular highlight sweep */}
-              <div
-                className="absolute inset-0 pointer-events-none opacity-40"
-                style={{
-                  background: 'linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 60%, transparent 80%)',
-                }}
-              />
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-14">
+              <Link
+                href="/predict"
+                className="btn-primary text-sm py-3.5 px-6 rounded-xl font-bold"
+              >
+                Create your workspace <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="/properties"
+                className="btn-secondary text-sm py-3.5 px-6 rounded-xl font-semibold"
+              >
+                Explore listings
+              </Link>
+            </div>
 
-              <div className="flex items-center justify-between mb-5 pb-3.5 border-b border-white/[0.08] relative z-10">
+            {/* Quick Estimator Terminal Card (Embedded PropTech Widget) */}
+            <div className="estimator-card p-6 sm:p-7 relative overflow-hidden mb-12">
+              <div className="flex items-center justify-between mb-5 pb-3 border-b border-[#142938]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shadow-[0_0_12px_rgba(99,102,241,0.2)]">
-                    <SlidersHorizontal size={14} />
+                  <div className="w-8 h-8 rounded-lg bg-[#00DC82]/10 border border-[#00DC82]/25 flex items-center justify-center text-[#00DC82]">
+                    <SlidersHorizontal size={15} />
                   </div>
                   <div>
-                    <h2 className="text-sm font-semibold text-white tracking-tight">Quick Property Estimate</h2>
-                    <p className="text-[11px] text-slate-400">Calibrated for Sri Lankan Real Estate Markets</p>
+                    <h3 className="text-sm font-bold text-white">Instant Property Valuation</h3>
+                    <p className="text-[11px] text-[#64748B]">Calibrated on authentic Sri Lankan land & house transactions</p>
                   </div>
                 </div>
-                <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#00DC82]/10 text-[#00DC82] border border-[#00DC82]/25">
                   23 Districts Ready
                 </span>
               </div>
 
-              <form onSubmit={handleQuickEstimate} className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 relative z-10">
+              <form onSubmit={handleQuickEstimate} className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
                 <div className="col-span-2 sm:col-span-1">
-                  <label className="block text-[11px] font-medium text-slate-300 mb-1.5">
+                  <label className="block text-[11px] font-semibold text-[#94A3B8] mb-1.5">
                     District / Location
                   </label>
                   <select
                     value={quickLocation}
                     onChange={(e) => setQuickLocation(e.target.value)}
-                    className="w-full bg-[#080d1a]/90 border border-white/[0.12] hover:border-white/20 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/30 rounded-xl px-3 py-2 text-sm text-white focus:outline-none transition-all"
+                    className="input-field text-xs py-2.5"
                   >
                     {SL_LOCATIONS.map((loc) => (
-                      <option key={loc.value} value={loc.value} className="bg-[#0b1020] text-white">
+                      <option key={loc.value} value={loc.value} className="bg-[#091520] text-white">
                         {loc.label}
                       </option>
                     ))}
@@ -197,7 +248,7 @@ export default function LandingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-slate-300 mb-1.5">
+                  <label className="block text-[11px] font-semibold text-[#94A3B8] mb-1.5">
                     Area (sqft)
                   </label>
                   <input
@@ -206,23 +257,23 @@ export default function LandingPage() {
                     onChange={(e) => setQuickArea(e.target.value)}
                     min="200"
                     max="50000"
-                    className="w-full bg-[#080d1a]/90 border border-white/[0.12] hover:border-white/20 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/30 rounded-xl px-3 py-2 text-sm text-white focus:outline-none transition-all"
+                    className="input-field text-xs py-2.5"
                     placeholder="2000"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-slate-300 mb-1.5">
+                  <label className="block text-[11px] font-semibold text-[#94A3B8] mb-1.5">
                     Bedrooms
                   </label>
                   <select
                     value={quickBedrooms}
                     onChange={(e) => setQuickBedrooms(e.target.value)}
-                    className="w-full bg-[#080d1a]/90 border border-white/[0.12] hover:border-white/20 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/30 rounded-xl px-3 py-2 text-sm text-white focus:outline-none transition-all"
+                    className="input-field text-xs py-2.5"
                   >
                     {[1, 2, 3, 4, 5, 6].map((num) => (
-                      <option key={num} value={num} className="bg-[#0b1020] text-white">
+                      <option key={num} value={num} className="bg-[#091520] text-white">
                         {num} {num === 1 ? 'Bed' : 'Beds'}
                       </option>
                     ))}
@@ -230,145 +281,198 @@ export default function LandingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-slate-300 mb-1.5">
+                  <label className="block text-[11px] font-semibold text-[#94A3B8] mb-1.5">
                     Bathrooms
                   </label>
                   <select
                     value={quickBathrooms}
                     onChange={(e) => setQuickBathrooms(e.target.value)}
-                    className="w-full bg-[#080d1a]/90 border border-white/[0.12] hover:border-white/20 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/30 rounded-xl px-3 py-2 text-sm text-white focus:outline-none transition-all"
+                    className="input-field text-xs py-2.5"
                   >
                     {[1, 2, 3, 4, 5].map((num) => (
-                      <option key={num} value={num} className="bg-[#0b1020] text-white">
+                      <option key={num} value={num} className="bg-[#091520] text-white">
                         {num} {num === 1 ? 'Bath' : 'Baths'}
                       </option>
                     ))}
                   </select>
                 </div>
 
-                <div className="col-span-2 sm:col-span-4 mt-2">
+                <div className="col-span-2 sm:col-span-4 mt-1">
                   <button
                     type="submit"
-                    className="w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 hover:from-indigo-500 hover:to-sky-400 text-white font-semibold text-sm inline-flex items-center justify-center gap-2 shadow-[0_4px_25px_rgba(99,102,241,0.35)] hover:shadow-[0_6px_32px_rgba(99,102,241,0.5)] transition-all duration-200 active:scale-[0.99]"
+                    className="btn-primary w-full py-3 rounded-xl text-xs font-bold"
                   >
-                    <Brain size={16} /> Get Instant AI Valuation <ArrowRight size={15} />
+                    <Brain size={15} /> Compute Fair Market Valuation <ArrowRight size={14} />
                   </button>
                 </div>
               </form>
             </div>
+          </div>
+        </section>
 
-            {/* Institutional Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 size={13} className="text-emerald-400" /> Real Market Transaction Data
-              </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 size={13} className="text-emerald-400" /> 95% Confidence Interval
-              </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 size={13} className="text-emerald-400" /> Exportable PDF Valuation Certificate
-              </span>
+        {/* Stakeholder Strip matching Sample Screenshot 1 */}
+        <section className="border-y border-[#142938] bg-[#040B10] py-6 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto">
+            <p className="text-center text-[10px] uppercase font-bold tracking-[0.2em] text-[#64748B] mb-4">
+              BUILT FOR EVERY PROFESSIONAL IN REAL-ESTATE
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-medium text-[#94A3B8]">
+              {stakeholderPills.map((item, idx) => (
+                <span key={idx} className="flex items-center gap-2 hover:text-white transition-colors cursor-default">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00DC82]/60" />
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Stats Strip with Glass Panels */}
-        <section className="border-y border-white/[0.07] bg-[#070b16]/70 backdrop-blur-xl py-10 px-4 sm:px-6 relative z-10">
-          <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            {keyStats.map((stat, i) => (
-              <div
-                key={i}
-                className="p-4 rounded-xl bg-[#0a0f1e]/60 border border-white/[0.06] text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-              >
-                <p className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">{stat.value}</p>
-                <p className="text-xs text-slate-400 font-medium mt-1">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Core Capabilities Section (4 Premium Glass Information Panels) */}
-        <section id="features" className="py-20 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10">
-          <div className="text-center max-w-xl mx-auto mb-14">
-            <span className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Core Capabilities</span>
-            <h2 className="text-2xl sm:text-3xl font-black text-white mt-1.5 tracking-tight">Institutional-Grade Intelligence</h2>
-            <p className="text-slate-400 text-sm mt-2">
-              Engineered for property investors, buyers, sellers, and valuation professionals in Sri Lanka.
-            </p>
+        {/* FOR EVERY ROLE Section matching Sample Screenshot 2 */}
+        <section className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto">
+          <div className="mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#00DC82]">
+              FOR EVERY ROLE
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-white mt-2 tracking-tight">
+              A workspace tuned to how you work
+            </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-5">
-            {coreFeatures.map((feat, i) => (
-              <div
-                key={i}
-                className="pro-panel-glass p-6 sm:p-7 rounded-2xl relative overflow-hidden group"
-              >
-                {/* Subtle top-corner tag */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center group-hover:scale-105 transition-transform shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
-                    {feat.icon}
-                  </div>
-                  <span className="text-[10px] uppercase font-semibold tracking-wider px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-mono">
-                    {feat.tag}
-                  </span>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+            {roles.map((item, i) => (
+              <div key={i} className="role-card">
+                <div className="flex items-center gap-2 mb-3">
+                  <span
+                    className="w-2.5 h-2.5 rounded-full shrink-0"
+                    style={{ backgroundColor: item.dotColor }}
+                  />
+                  <h3 className="font-bold text-white text-base">{item.role}</h3>
                 </div>
-
-                <h3 className="text-base font-bold text-white mb-2 tracking-tight group-hover:text-indigo-200 transition-colors">
-                  {feat.title}
-                </h3>
-                <p className="text-sm text-slate-300 leading-relaxed font-normal">
-                  {feat.desc}
+                <p className="text-xs text-[#94A3B8] leading-relaxed font-normal">
+                  {item.desc}
                 </p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Luxury CTA Banner */}
-        <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto relative z-10">
-          <div className="pro-terminal-glass p-8 sm:p-12 rounded-3xl text-center relative overflow-hidden">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-2xl sm:text-3xl font-black text-white mb-3 tracking-tight">
-                Start Valuing Sri Lankan Real Estate Today
+        {/* MODULES Section matching Sample Screenshot 3 */}
+        <section id="modules" className="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-[#142938]">
+          <div className="mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#00DC82]">
+              MODULES
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-white mt-2 tracking-tight">
+              Six modules. One source of truth.
+            </h2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+            {modules.map((mod, i) => (
+              <div key={i} className="module-card">
+                <div className="w-11 h-11 rounded-xl bg-[#00DC82] flex items-center justify-center mb-5 shadow-btn-emerald">
+                  {mod.icon}
+                </div>
+                <h3 className="font-bold text-white text-base mb-2">
+                  {mod.title}
+                </h3>
+                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                  {mod.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Major CTA Banner matching Sample Screenshot 4 */}
+        <section className="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+          <div
+            className="p-10 sm:p-16 rounded-3xl text-center relative overflow-hidden border border-[#00DC82]/30 shadow-2xl"
+            style={{
+              background: 'linear-gradient(135deg, #061D15 0%, #0A3324 50%, #061811 100%)',
+            }}
+          >
+            {/* Subtle glow circle */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[300px] bg-[#00DC82]/15 rounded-full blur-[100px] pointer-events-none" />
+
+            <div className="relative z-10 max-w-xl mx-auto">
+              <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight mb-4">
+                Build the future of real estate from one workspace.
               </h2>
-              <p className="text-sm text-slate-300 mb-8 leading-relaxed">
-                Join property investors, buyers, and sellers utilizing AI precision for authentic fair-market valuations.
+              <p className="text-sm text-[#94A3B8] mb-8 leading-relaxed">
+                Spin up a RealIQestate workspace in seconds. Calibrated with 14,833 verified Sri Lanka transaction records.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
                   href="/predict"
-                  className="w-full sm:w-auto py-3 px-6 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-semibold text-sm inline-flex items-center justify-center gap-2 shadow-[0_4px_25px_rgba(99,102,241,0.35)] transition-all"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#00DC82] hover:bg-[#00C373] text-[#061017] font-extrabold text-sm inline-flex items-center justify-center gap-2 shadow-btn-emerald transition-all"
                 >
-                  Estimate Now <ArrowRight size={15} />
+                  Get started <ArrowRight size={15} />
                 </Link>
                 <Link
-                  href="/market"
-                  className="w-full sm:w-auto py-3 px-6 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-white font-medium text-sm inline-flex items-center justify-center transition-colors"
+                  href="/properties"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#0E1F2E] hover:bg-[#142B3E] text-white border border-[#1E3A4E] text-sm font-semibold inline-flex items-center justify-center transition-colors"
                 >
-                  Market Intel
+                  Browse listings
                 </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Minimal Luxury Footer */}
-        <footer className="border-t border-white/[0.07] py-10 px-4 sm:px-6 bg-[#04060d] relative z-10">
-          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-            <BrandLogo size="sm" showText={true} />
-            <p>© {new Date().getFullYear()} RealEstateIQ Sri Lanka. All rights reserved.</p>
-            <div className="flex items-center gap-5 font-medium">
-              <Link href="/predict" className="hover:text-white transition-colors">AI Valuation</Link>
-              <Link href="/market" className="hover:text-white transition-colors">Market Intel</Link>
-              <Link href="/properties" className="hover:text-white transition-colors">Properties</Link>
-              <Link href="/login" className="hover:text-white transition-colors">Sign In</Link>
+        {/* Footer matching Sample Screenshot 4 */}
+        <footer className="border-t border-[#142938] bg-[#040B10] py-14 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10 text-xs text-[#94A3B8]">
+            <div className="md:col-span-2">
+              <BrandLogo size="md" showText={true} />
+              <p className="mt-4 text-xs leading-relaxed max-w-sm text-[#64748B]">
+                Real-Estate IQ — one professional workspace for AI valuation analysis,
+                interactive cartography, verified transaction data, and REIT-grade investing in Sri Lanka.
+              </p>
+              <div className="flex items-center gap-3 mt-5 text-[#64748B]">
+                <span className="p-2 rounded-lg bg-[#0B1722] border border-[#142938] hover:text-white transition-colors cursor-pointer">𝕏</span>
+                <span className="p-2 rounded-lg bg-[#0B1722] border border-[#142938] hover:text-white transition-colors cursor-pointer">in</span>
+                <span className="p-2 rounded-lg bg-[#0B1722] border border-[#142938] hover:text-white transition-colors cursor-pointer">⌥</span>
+              </div>
             </div>
+
+            <div>
+              <p className="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Product</p>
+              <ul className="space-y-2">
+                <li><Link href="/properties" className="hover:text-white transition-colors">Listings</Link></li>
+                <li><Link href="/predict" className="hover:text-white transition-colors">Valuation Engine</Link></li>
+                <li><Link href="/market" className="hover:text-white transition-colors">Market Analytics</Link></li>
+                <li><Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Company</p>
+              <ul className="space-y-2">
+                <li><Link href="#modules" className="hover:text-white transition-colors">About</Link></li>
+                <li><Link href="/market" className="hover:text-white transition-colors">Thesis & Data</Link></li>
+                <li><Link href="/login" className="hover:text-white transition-colors">Sign In</Link></li>
+                <li><Link href="/register" className="hover:text-white transition-colors">Register</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="font-bold text-white uppercase tracking-wider text-[11px] mb-3">Governance</p>
+              <ul className="space-y-2">
+                <li><Link href="/admin" className="hover:text-white transition-colors">Admin Suite</Link></li>
+                <li><span className="text-[#64748B]">23 Districts Calibrated</span></li>
+                <li><span className="text-[#00DC82]">Model R² 0.996</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="max-w-6xl mx-auto mt-12 pt-6 border-t border-[#142938] flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#64748B] gap-3">
+            <p>© {new Date().getFullYear()} RealIQestate Sri Lanka. All rights reserved.</p>
+            <p>Institutional PropTech Infrastructure</p>
           </div>
         </footer>
 
-        {/* PWA Install Prompt Banner */}
+        {/* PWA Prompt */}
         <PwaInstallPrompt />
       </div>
     </>

@@ -35,12 +35,12 @@ interface NavItem {
 const userNav: NavItem[] = [
   { href: '/dashboard', label: 'Intelligence Hub', icon: <LayoutDashboard size={18} /> },
   { href: '/properties', label: 'Properties', icon: <Home size={18} /> },
-  { href: '/predict', label: 'AI Valuation', icon: <Brain size={18} />, badge: 'ML' },
+  { href: '/predict', label: 'Property Valuation', icon: <Brain size={18} />, badge: 'Engine' },
   { href: '/history', label: 'Valuation History', icon: <History size={18} /> },
-  { href: '/saved', label: 'Portfolio / Saved', icon: <BookmarkCheck size={18} /> },
+  { href: '/saved', label: 'Saved Portfolio', icon: <BookmarkCheck size={18} /> },
   { href: '/compare', label: 'Compare Assets', icon: <GitCompare size={18} /> },
   { href: '/market', label: 'Market Analytics', icon: <BarChart3 size={18} /> },
-  { href: '/recommendations', label: 'Top Yields', icon: <Star size={18} /> },
+  { href: '/recommendations', label: 'Curated Yields', icon: <Star size={18} /> },
 ];
 
 const adminNav: NavItem[] = [
@@ -68,24 +68,24 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       {/* Mobile background overlay */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-[#17231C]/60 backdrop-blur-sm z-40 lg:hidden transition-opacity"
           onClick={onClose}
         />
       )}
 
-      {/* Main Luxury Architectural Sidebar */}
+      {/* Main Luxury Architectural Sidebar in Deep Forest Green (#123B2A) */}
       <aside
         className={`fixed top-0 left-0 h-full w-64 z-50 flex flex-col
           transition-transform duration-300 ease-out
           lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}
-          bg-[#070b14] border-r border-indigo-500/10 shadow-2xl shadow-indigo-950/40`}
+          bg-[#123B2A] border-r border-[#C9A227]/25 shadow-xl`}
       >
         {/* Brand Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-indigo-500/10 bg-[#090e1c]/50">
-          <BrandLogo size="md" showText={true} />
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#C9A227]/20 bg-[#0C281C]/40">
+          <BrandLogo size="md" showText={true} inverted={true} />
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+            className="lg:hidden p-1.5 rounded-xl text-[#F7F5F0]/70 hover:text-white hover:bg-white/10 transition-colors"
             aria-label="Close navigation"
           >
             <X size={18} />
@@ -93,11 +93,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </div>
 
         {/* User Card */}
-        <div className="px-4 py-3 border-b border-indigo-500/10 bg-indigo-950/20">
-          <div className="flex items-center gap-3 px-2 py-1.5 rounded-xl bg-white/[0.02] border border-white/5">
+        <div className="px-4 py-3 border-b border-[#C9A227]/15 bg-[#0C281C]/25">
+          <div className="flex items-center gap-3 px-2 py-1.5 rounded-xl bg-white/5 border border-white/10">
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black text-white shadow-md border border-indigo-400/30 shrink-0"
-              style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white shadow-sm border border-[#C9A227] shrink-0"
+              style={{ backgroundColor: '#2F6B4F' }}
             >
               {user?.avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -110,23 +110,23 @@ export function Sidebar({ open, onClose }: SidebarProps) {
               <p className="text-xs font-bold text-white truncate">{user?.name || 'Estate Investor'}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span
-                  className={`text-[10px] font-extrabold uppercase tracking-wider px-1.5 py-0.2 rounded ${
+                  className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded ${
                     isAdmin
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                      : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                      ? 'bg-[#FAF4DC] text-[#8B6A14] border border-[#ECD57F]'
+                      : 'bg-[#2F6B4F] text-[#F7F5F0] border border-white/20'
                   }`}
                 >
                   {isAdmin ? 'Admin' : 'Investor'}
                 </span>
-                {isAdmin && <ShieldCheck size={12} className="text-amber-400" />}
+                {isAdmin && <ShieldCheck size={12} className="text-[#C9A227]" />}
               </div>
             </div>
           </div>
         </div>
 
         {/* Navigation list */}
-        <nav className="flex-1 overflow-y-auto p-3 space-y-1 scrollbar-thin scrollbar-thumb-indigo-500/20">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-2 mt-1">
+        <nav className="flex-1 overflow-y-auto p-3 space-y-1">
+          <p className="text-[10px] font-bold text-[#F7F5F0]/50 uppercase tracking-widest px-3 mb-2 mt-1">
             Platform Modules
           </p>
 
@@ -137,22 +137,22 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 key={item.href}
                 href={item.href}
                 onClick={onClose}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all group ${
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
                   isActive
-                    ? 'bg-gradient-to-r from-indigo-600/30 to-purple-600/20 text-white border border-indigo-500/40 shadow-sm shadow-indigo-500/20'
-                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                    ? 'bg-[#2F6B4F] text-white border-l-4 border-l-[#C9A227] border-y border-r border-white/10 shadow-sm'
+                    : 'text-[#F7F5F0]/75 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <span className={isActive ? 'text-indigo-400' : 'text-slate-400 group-hover:text-indigo-400'}>
+                <span className={isActive ? 'text-[#C9A227]' : 'text-[#F7F5F0]/70 group-hover:text-white'}>
                   {item.icon}
                 </span>
                 <span className="flex-1">{item.label}</span>
                 {item.badge && (
-                  <span className="px-1.5 py-0.5 text-[9px] font-black uppercase rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded bg-[#FAF4DC]/20 text-[#C9A227] border border-[#C9A227]/40">
                     {item.badge}
                   </span>
                 )}
-                {isActive && <ChevronRight size={13} className="text-indigo-400 opacity-80" />}
+                {isActive && <ChevronRight size={13} className="text-[#C9A227]" />}
               </Link>
             );
           })}
@@ -160,7 +160,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           {isAdmin && (
             <>
               <div className="pt-4 pb-1">
-                <p className="text-[10px] font-bold text-amber-400/70 uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5">
+                <p className="text-[10px] font-bold text-[#C9A227] uppercase tracking-widest px-3 mb-2 flex items-center gap-1.5">
                   <ShieldCheck size={11} /> Admin Suite
                 </p>
               </div>
@@ -171,18 +171,18 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                     key={item.href}
                     href={item.href}
                     onClick={onClose}
-                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all group ${
+                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
                       isActive
-                        ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                        : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                        ? 'bg-[#FAF4DC]/20 text-[#FAF4DC] border-l-4 border-l-[#C9A227] border-white/10'
+                        : 'text-[#F7F5F0]/75 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <span className={isActive ? 'text-amber-400' : 'text-slate-400 group-hover:text-amber-400'}>
+                    <span className={isActive ? 'text-[#C9A227]' : 'text-[#F7F5F0]/70 group-hover:text-[#C9A227]'}>
                       {item.icon}
                     </span>
                     <span className="flex-1">{item.label}</span>
                     {item.badge && (
-                      <span className="px-1.5 py-0.5 text-[9px] font-black uppercase rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded bg-[#FAF4DC]/30 text-[#FAF4DC] border border-[#C9A227]/50">
                         {item.badge}
                       </span>
                     )}
@@ -194,19 +194,19 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
 
         {/* Footer info & Logout */}
-        <div className="p-3 border-t border-indigo-500/10 bg-[#060911] space-y-2">
+        <div className="p-3 border-t border-[#C9A227]/20 bg-[#0C281C]/40 space-y-2">
           {/* Real estate market badge */}
-          <div className="px-3 py-2 rounded-xl bg-white/[0.02] border border-white/5 text-[11px] text-slate-400 flex items-center justify-between">
+          <div className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-[11px] text-[#F7F5F0]/70 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              SL Real Estate AI
+              <span className="w-1.5 h-1.5 rounded-full bg-[#3F7D58]" />
+              Sri Lanka Valuation IQ
             </span>
-            <span className="font-mono text-emerald-400 font-bold text-[10px]">R² 0.88</span>
+            <span className="font-mono text-[#C9A227] font-bold text-[10px]">R² 0.996</span>
           </div>
 
           <button
             onClick={logout}
-            className="flex items-center gap-2.5 w-full px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors"
+            className="flex items-center gap-2.5 w-full px-3 py-2 rounded-xl text-xs font-semibold text-[#FCA5A5] hover:text-white hover:bg-[#C94C4C]/20 transition-colors"
           >
             <LogOut size={16} />
             <span>Sign Out</span>

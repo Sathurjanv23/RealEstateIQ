@@ -52,7 +52,7 @@ export default function NewPropertyPage() {
       };
       const res = await propertyService.create(payload);
       const prop = res.data.data.property;
-      toast.success('Property added successfully!');
+      toast.success('Property listing added successfully!');
       router.push(`/properties/${prop._id}`);
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
@@ -64,112 +64,136 @@ export default function NewPropertyPage() {
 
   return (
     <>
-      <Head><title>Add Property — RealEstateIQ</title></Head>
-      <DashboardLayout title="Add Property">
+      <Head><title>Add Listing — RealEstateIQ</title></Head>
+      <DashboardLayout title="Add Property Listing">
         <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
-          <Link href="/properties" className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm">
+          <Link href="/properties" className="inline-flex items-center gap-2 text-[#718078] hover:text-[#123B2A] text-sm font-semibold">
             <ArrowLeft size={16} /> Back to Properties
           </Link>
 
-          <div className="glass-card p-8">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-                <Home size={22} className="text-white" />
+          <div className="card-premium p-6 sm:p-8 bg-white border border-[#E7E3DA]">
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#E7E3DA]">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-[#EBF3EE] border border-[#B8D1C4] text-[#123B2A]">
+                <Home size={20} />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">List a Property</h1>
-                <p className="text-white/50 text-sm">Add property details to the platform</p>
+                <h2 className="text-lg font-bold text-[#17231C]">Create Property Listing</h2>
+                <p className="text-[#718078] text-xs">Add a new Sri Lankan property asset to your portfolio inventory</p>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Basic info */}
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="title" className="block text-sm font-medium text-white/70 mb-2">Property Title *</label>
-                <input id="title" name="title" type="text" value={form.title} onChange={handleChange}
-                  placeholder="e.g. Modern 3BR Villa in Colombo 7" className="input-dark" required />
+                <label className="block text-xs font-bold text-[#17231C] mb-1">Property Title *</label>
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="e.g. Modern Luxury Villa in Cinnamon Gardens"
+                  value={form.title}
+                  onChange={handleChange}
+                  className="input-field"
+                  required
+                />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-[#17231C] mb-1">Description</label>
+                <textarea
+                  name="description"
+                  rows={3}
+                  placeholder="Describe architectural layout, neighborhood proximity, etc..."
+                  value={form.description}
+                  onChange={handleChange}
+                  className="input-field resize-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="propertyType" className="block text-sm font-medium text-white/70 mb-2">Property Type *</label>
-                  <select id="propertyType" name="propertyType" value={form.propertyType} onChange={handleChange} className="input-dark capitalize">
+                  <label className="block text-xs font-bold text-[#17231C] mb-1">Property Type</label>
+                  <select name="propertyType" value={form.propertyType} onChange={handleChange} className="input-field">
                     {TYPES.map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-white/70 mb-2">District / City *</label>
-                  <select id="location" name="location" value={form.location} onChange={handleChange} className="input-dark">
+                  <label className="block text-xs font-bold text-[#17231C] mb-1">District / City *</label>
+                  <select name="location" value={form.location} onChange={handleChange} className="input-field" required>
                     {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
                       <optgroup key={province} label={`— ${province}`}>
-                        {locs.map(loc => (
-                          <option key={loc.value} value={loc.value}>{loc.label}</option>
-                        ))}
+                        {locs.map(loc => <option key={loc.value} value={loc.value}>{loc.label}</option>)}
                       </optgroup>
                     ))}
                   </select>
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="district" className="block text-sm font-medium text-white/70 mb-2">District / Area</label>
-                <input id="district" name="district" type="text" value={form.district} onChange={handleChange}
-                  placeholder="e.g. Colombo 7, Peradeniya" className="input-dark" />
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-[#17231C] mb-1">Area (sqft) *</label>
+                  <input type="number" name="area" placeholder="2200" value={form.area} onChange={handleChange} className="input-field" required />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#17231C] mb-1">Bedrooms</label>
+                  <input type="number" name="bedrooms" min="0" value={form.bedrooms} onChange={handleChange} className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#17231C] mb-1">Bathrooms</label>
+                  <input type="number" name="bathrooms" min="0" value={form.bathrooms} onChange={handleChange} className="input-field" />
+                </div>
               </div>
 
-              {/* Specs */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {[
-                  { name: 'area', label: 'Area (sqft) *', placeholder: 'e.g. 2200' },
-                  { name: 'bedrooms', label: 'Bedrooms *', placeholder: '1–20' },
-                  { name: 'bathrooms', label: 'Bathrooms *', placeholder: '1–20' },
-                  { name: 'parking', label: 'Parking', placeholder: '0–20' },
-                  { name: 'houseAge', label: 'House Age (years) *', placeholder: '0–150' },
-                  { name: 'landSize', label: 'Land Size (perches)', placeholder: 'Optional' },
-                ].map((f) => (
-                  <div key={f.name}>
-                    <label htmlFor={f.name} className="block text-sm font-medium text-white/70 mb-2">{f.label}</label>
-                    <input id={f.name} name={f.name} type="number" min="0" placeholder={f.placeholder}
-                      value={form[f.name as keyof typeof form]} onChange={handleChange} className="input-dark" />
-                  </div>
-                ))}
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-[#17231C] mb-1">Parking</label>
+                  <input type="number" name="parking" min="0" value={form.parking} onChange={handleChange} className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#17231C] mb-1">House Age (yrs)</label>
+                  <input type="number" name="houseAge" min="0" value={form.houseAge} onChange={handleChange} className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#17231C] mb-1">Land (perches)</label>
+                  <input type="number" name="landSize" placeholder="10" value={form.landSize} onChange={handleChange} className="input-field" />
+                </div>
               </div>
 
-              {/* Asking price */}
               <div>
-                <label htmlFor="askingPrice" className="block text-sm font-medium text-white/70 mb-2">Asking Price (LKR)</label>
-                <input id="askingPrice" name="askingPrice" type="number" min="0" placeholder="Optional — leave blank if not set"
-                  value={form.askingPrice} onChange={handleChange} className="input-dark" />
-              </div>
-
-              {/* Description */}
-              <div>
-                <label htmlFor="description" className="block text-sm font-medium text-white/70 mb-2">Description</label>
-                <textarea id="description" name="description" rows={4} value={form.description}
-                  onChange={handleChange} placeholder="Describe the property..."
-                  className="input-dark resize-none" />
+                <label className="block text-xs font-bold text-[#17231C] mb-1">Asking Price (LKR)</label>
+                <input type="number" name="askingPrice" placeholder="e.g. 85000000" value={form.askingPrice} onChange={handleChange} className="input-field" />
               </div>
 
               {/* Amenities */}
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-3">Amenities</label>
+                <label className="block text-xs font-bold text-[#17231C] mb-2">Amenities</label>
                 <div className="flex flex-wrap gap-2">
-                  {AMENITIES.map(a => (
-                    <button key={a} type="button" onClick={() => toggleAmenity(a)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${selectedAmenities.includes(a)
-                        ? 'border-brand-500 bg-brand-500/20 text-brand-300'
-                        : 'border-white/10 text-white/50 hover:border-brand-500/50 hover:text-white/70'}`}>
-                      {a}
-                    </button>
-                  ))}
+                  {AMENITIES.map((a) => {
+                    const active = selectedAmenities.includes(a);
+                    return (
+                      <button
+                        key={a}
+                        type="button"
+                        onClick={() => toggleAmenity(a)}
+                        className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
+                          active
+                            ? 'bg-[#123B2A] text-white border-[#123B2A]'
+                            : 'bg-white text-[#718078] border-[#E7E3DA] hover:border-[#123B2A]'
+                        }`}
+                      >
+                        {a}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              <button type="submit" disabled={loading}
-                className="btn-primary w-full justify-center py-4 text-base disabled:opacity-50">
-                {loading ? 'Adding Property...' : 'Add Property'}
-              </button>
+              <div className="pt-4 flex gap-3">
+                <Link href="/properties" className="btn-secondary flex-1 py-3 justify-center text-xs">
+                  Cancel
+                </Link>
+                <button type="submit" disabled={loading} className="btn-primary flex-1 py-3 justify-center text-xs disabled:opacity-50">
+                  {loading ? 'Creating...' : 'Save & Publish Asset'}
+                </button>
+              </div>
             </form>
           </div>
         </div>

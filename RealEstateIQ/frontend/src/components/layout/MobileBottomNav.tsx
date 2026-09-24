@@ -33,7 +33,7 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
     },
     {
       href: '/predict',
-      label: 'Predict',
+      label: 'Valuate',
       icon: Brain,
       isPrimary: true,
       isActive: pathname.startsWith('/predict'),
@@ -55,7 +55,7 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
   return (
     <nav
       aria-label="Mobile Navigation"
-      className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-[#0a0f1d]/95 backdrop-blur-xl border-t border-indigo-500/20 px-2 py-1.5 shadow-[0_-8px_30px_rgba(0,0,0,0.6)]"
+      className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-[#FFFFFF] border-t border-[#E7E3DA] px-2 py-1.5 shadow-[0_-4px_20px_rgba(18,59,42,0.06)]"
       style={{ paddingBottom: 'calc(0.4rem + env(safe-area-inset-bottom))' }}
     >
       <div className="flex items-center justify-around max-w-md mx-auto relative">
@@ -63,7 +63,7 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
           const Icon = item.icon;
 
           if (item.isPrimary) {
-            // Elevated Center AI Valuation Action Button
+            // Elevated Center Deep Forest Green Valuation Button with Gold Accent
             return (
               <Link
                 key={item.href}
@@ -71,15 +71,15 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
                 className="flex flex-col items-center -mt-5 group focus:outline-none"
               >
                 <div
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-xl transition-transform active:scale-95 duration-200 ${
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md transition-transform active:scale-95 duration-200 ${
                     item.isActive
-                      ? 'bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-600 shadow-indigo-500/50 scale-105 ring-2 ring-indigo-400/40'
-                      : 'bg-gradient-to-tr from-indigo-600 to-sky-500 shadow-indigo-600/40 group-hover:scale-105'
+                      ? 'bg-[#123B2A] border-2 border-[#C9A227] scale-105'
+                      : 'bg-[#123B2A] border border-[#2F6B4F] group-hover:scale-105'
                   }`}
                 >
-                  <Icon size={22} className="animate-pulse" />
+                  <Icon size={20} className="text-[#C9A227]" />
                 </div>
-                <span className="text-[10px] font-bold text-sky-400 mt-1 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-[#123B2A] mt-1 uppercase tracking-wider">
                   {item.label}
                 </span>
               </Link>
@@ -92,14 +92,14 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
               href={item.href}
               className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-colors ${
                 item.isActive
-                  ? 'text-indigo-400 font-semibold'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'text-[#123B2A] font-bold'
+                  : 'text-[#718078] hover:text-[#17231C]'
               }`}
             >
               <div className="relative">
-                <Icon size={20} />
+                <Icon size={19} />
                 {item.isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-indigo-400 rounded-full shadow-[0_0_6px_#818cf8]" />
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#C9A227] rounded-full" />
                 )}
               </div>
               <span className="text-[10px] mt-1">{item.label}</span>
@@ -107,12 +107,12 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
           );
         })}
 
-        {/* Drawer Menu button for Admin / full options */}
+        {/* Drawer Menu button */}
         <button
           onClick={onOpenMenu}
-          className="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-slate-400 hover:text-slate-200 transition-colors"
+          className="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-[#718078] hover:text-[#17231C] transition-colors"
         >
-          <Menu size={20} />
+          <Menu size={19} />
           <span className="text-[10px] mt-1">Menu</span>
         </button>
       </div>

@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Brain, TrendingUp, TrendingDown, Minus, ArrowLeft, BarChart3, Clock, Database, Download, FileText } from 'lucide-react';
+import { Brain, ArrowLeft, Download, ShieldCheck, MapPin, Home, Bed, Bath, Clock, Car } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { Prediction } from '../../types';
@@ -12,9 +12,11 @@ function FeatureBar({ name, value }: { name: string; value: number }) {
   const pct = Math.round(value * 100);
   return (
     <div>
-      <div className="flex justify-between mb-1">
-        <span className="text-sm text-white/70 capitalize">{name.replace('location_', 'Location: ').replace('_', ' ')}</span>
-        <span className="text-sm text-brand-400">{(value * 100).toFixed(1)}%</span>
+      <div className="flex justify-between mb-1.5">
+        <span className="text-xs font-semibold text-[#17231C] capitalize">
+          {name.replace('location_', 'District: ').replace('_', ' ')}
+        </span>
+        <span className="text-xs font-bold text-[#123B2A]">{(value * 100).toFixed(1)}%</span>
       </div>
       <div className="feature-bar">
         <div className="feature-bar-fill" style={{ width: `${Math.min(100, pct * 1.5)}%` }} />
@@ -35,8 +37,11 @@ export default function PredictionResultPage() {
     }
     const stored = localStorage.getItem('riq_last_prediction');
     if (stored) {
-      try { setPrediction(JSON.parse(stored)); }
-      catch { router.push('/predict'); }
+      try {
+        setPrediction(JSON.parse(stored));
+      } catch {
+        router.push('/predict');
+      }
     } else {
       router.push('/predict');
     }
@@ -47,149 +52,143 @@ export default function PredictionResultPage() {
   const { predictedPrice, pricePerSqft, modelVersion, algorithm, datasetVersion, featureImportance, inputFeatures, createdAt } = prediction;
   const sortedFeatures = Object.entries(featureImportance || {}).sort(([, a], [, b]) => b - a);
 
+  // Confidence calculations
+  const mae = algorithm === 'LinearRegression' ? 8126.7 : 20325.76;
+  const margin = Math.round(mae * 1.96);
+  const low = Math.max(0, Math.round(predictedPrice - margin));
+  const high = Math.round(predictedPrice + margin);
+
   return (
     <>
       <Head>
-        <title>Prediction Result — RealEstateIQ</title>
+        <title>Valuation Certificate — RealEstateIQ</title>
       </Head>
-      <DashboardLayout title="Prediction Result">
+      <DashboardLayout title="Valuation Certificate">
         <div className="max-w-3xl mx-auto space-y-6 animate-slide-up">
           {/* Back link */}
-          <Link href="/predict" className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm transition-colors">
-            <ArrowLeft size={16} /> New Prediction
+          <Link
+            href="/predict"
+            className="inline-flex items-center gap-2 text-[#718078] hover:text-[#123B2A] text-sm font-semibold transition-colors"
+          >
+            <ArrowLeft size={16} /> New Property Valuation
           </Link>
 
-          {/* Main result card */}
-          <div className="glass-card p-8 text-center border-brand-500/20"
-            style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05))' }}>
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
-              style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-              <Brain size={28} className="text-white" />
+          {/* Main Result Card: Pure White with Soft Realistic Shadow */}
+          <div className="card-premium p-8 text-center bg-white border border-[#E7E3DA] shadow-soft-lg">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-[#EBF3EE] border border-[#B8D1C4] text-[#123B2A]">
+              <Brain size={26} />
             </div>
-            <p className="text-sm text-white/50 uppercase tracking-wider mb-2">ML Estimated Market Value</p>
-            <h1 className="text-5xl font-black text-gradient mb-2">
-              Rs. {predictedPrice.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+
+            <p className="text-xs text-[#718078] font-bold uppercase tracking-widest mb-1">
+              Estimated Fair Market Value
+            </p>
+            <h1 className="text-4xl sm:text-5xl font-black text-[#123B2A] mb-2 tracking-tight">
+              Rs. {Math.round(predictedPrice).toLocaleString()}
             </h1>
 
+            {pricePerSqft && (
+              <p className="text-sm font-semibold text-[#718078] mb-5">
+                Rs. {Math.round(pricePerSqft).toLocaleString()} per square foot
+              </p>
+            )}
+
             {/* 95% Confidence Interval badge & range */}
-            {(() => {
-              const mae = prediction.algorithm === 'LinearRegression' ? 8126.7 : 20325.76;
-              const margin = Math.round(mae * 1.96);
-              const low = Math.max(0, Math.round(predictedPrice - margin));
-              const high = Math.round(predictedPrice + margin);
-              return (
-                <div className="mt-4 inline-flex flex-col items-center p-3.5 px-6 rounded-2xl bg-brand-500/10 border border-brand-500/20 max-w-lg mx-auto">
-                  <span className="text-[11px] uppercase tracking-wider text-brand-300 font-semibold mb-1">
-                    95% Valuation Confidence Interval
-                  </span>
-                  <span className="text-base sm:text-lg font-bold text-white">
-                    Rs. {low.toLocaleString()} – Rs. {high.toLocaleString()}
-                  </span>
-                  <span className="text-[10px] sm:text-[11px] text-white/40 mt-0.5">
-                    Model Margin: ± Rs. {margin.toLocaleString()} ({prediction.algorithm || 'Model'} MAE: Rs. {Math.round(mae).toLocaleString()})
-                  </span>
-                </div>
-              );
-            })()}
+            <div className="inline-flex flex-col items-center p-4 px-6 rounded-2xl bg-[#EAF4EE] border border-[#B8D9C5] max-w-md mx-auto">
+              <span className="text-[11px] uppercase tracking-wider text-[#2F6B4F] font-bold mb-1">
+                95% Valuation Confidence Interval
+              </span>
+              <span className="text-base sm:text-lg font-black text-[#17231C]">
+                Rs. {low.toLocaleString()} – Rs. {high.toLocaleString()}
+              </span>
+              <span className="text-[11px] text-[#718078] mt-0.5 font-medium">
+                Calculated Model Margin: ± Rs. {margin.toLocaleString()} ({algorithm || 'Model'} MAE: Rs. {Math.round(mae).toLocaleString()})
+              </span>
+            </div>
 
             <div className="mt-6 flex justify-center">
               <button
                 onClick={() => generateValuationPDF(prediction)}
-                className="btn-primary inline-flex items-center gap-2 shadow-lg shadow-brand-500/20 text-sm py-2.5 px-6"
+                className="btn-primary text-sm py-3 px-6 shadow-soft-md"
               >
-                <Download size={16} /> Download Valuation Report (PDF)
+                <Download size={16} className="text-[#C9A227]" /> Download Official PDF Valuation Certificate
               </button>
             </div>
-
-            <p className="text-white/30 text-xs mt-4">
-              ℹ️ ML model estimate powered by 14,833 authentic Sri Lanka real estate market transactions.
-            </p>
           </div>
 
-          {/* Stats row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: 'Price / Sqft', value: pricePerSqft ? `Rs. ${Math.round(pricePerSqft).toLocaleString()}` : '—' },
-              { label: 'Model', value: algorithm || modelVersion },
-              { label: 'Version', value: modelVersion },
-              { label: 'Predicted On', value: new Date(createdAt).toLocaleDateString() },
-            ].map((s) => (
-              <div key={s.label} className="glass-card p-4 text-center">
-                <p className="text-xs text-white/40 mb-1">{s.label}</p>
-                <p className="text-sm font-semibold text-white">{s.value}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Input summary */}
-          <div className="glass-card p-6">
-            <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-              <Database size={18} className="text-brand-400" /> Input Summary
+          {/* Property Input Summary */}
+          <div className="card-premium p-6 bg-white border border-[#E7E3DA]">
+            <h3 className="font-bold text-[#17231C] text-sm mb-4 pb-3 border-b border-[#E7E3DA]">
+              Evaluated Asset Specifications
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[
-                { label: 'Area', value: `${inputFeatures.area.toLocaleString()} sqft` },
-                { label: 'Location', value: inputFeatures.location },
-                { label: 'Bedrooms', value: inputFeatures.bedrooms },
-                { label: 'Bathrooms', value: inputFeatures.bathrooms },
-                { label: 'House Age', value: `${inputFeatures.house_age} years` },
-                { label: 'Parking', value: `${inputFeatures.parking} spaces` },
-              ].map((item) => (
-                <div key={item.label} className="p-3 rounded-xl bg-surface-700">
-                  <p className="text-xs text-white/40 mb-1">{item.label}</p>
-                  <p className="text-sm font-medium text-white">{item.value}</p>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+              <div className="p-3 rounded-xl bg-[#FAF9F6] border border-[#E7E3DA]">
+                <p className="text-[#718078] font-medium flex items-center gap-1.5 mb-1">
+                  <MapPin size={13} className="text-[#123B2A]" /> Location
+                </p>
+                <p className="font-bold text-[#17231C] text-sm">{inputFeatures.location}</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FAF9F6] border border-[#E7E3DA]">
+                <p className="text-[#718078] font-medium flex items-center gap-1.5 mb-1">
+                  <Home size={13} className="text-[#123B2A]" /> Area
+                </p>
+                <p className="font-bold text-[#17231C] text-sm">{inputFeatures.area.toLocaleString()} sqft</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FAF9F6] border border-[#E7E3DA]">
+                <p className="text-[#718078] font-medium flex items-center gap-1.5 mb-1">
+                  <Bed size={13} className="text-[#123B2A]" /> Bedrooms
+                </p>
+                <p className="font-bold text-[#17231C] text-sm">{inputFeatures.bedrooms} Bedrooms</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FAF9F6] border border-[#E7E3DA]">
+                <p className="text-[#718078] font-medium flex items-center gap-1.5 mb-1">
+                  <Bath size={13} className="text-[#123B2A]" /> Bathrooms
+                </p>
+                <p className="font-bold text-[#17231C] text-sm">{inputFeatures.bathrooms} Bathrooms</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FAF9F6] border border-[#E7E3DA]">
+                <p className="text-[#718078] font-medium flex items-center gap-1.5 mb-1">
+                  <Clock size={13} className="text-[#123B2A]" /> House Age
+                </p>
+                <p className="font-bold text-[#17231C] text-sm">{inputFeatures.house_age} Years</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FAF9F6] border border-[#E7E3DA]">
+                <p className="text-[#718078] font-medium flex items-center gap-1.5 mb-1">
+                  <Car size={13} className="text-[#123B2A]" /> Parking
+                </p>
+                <p className="font-bold text-[#17231C] text-sm">{inputFeatures.parking} Spaces</p>
+              </div>
             </div>
           </div>
 
-          {/* Feature importance */}
+          {/* Factor Importance Breakdown */}
           {sortedFeatures.length > 0 && (
-            <div className="glass-card p-6">
-              <h3 className="font-semibold text-white mb-2 flex items-center gap-2">
-                <BarChart3 size={18} className="text-brand-400" /> Feature Importance
-              </h3>
-              <p className="text-xs text-white/40 mb-5">
-                Relative importance of each feature in the model&apos;s prediction (from actual model coefficients).
-              </p>
+            <div className="card-premium p-6 bg-white border border-[#E7E3DA]">
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#E7E3DA]">
+                <h3 className="font-bold text-[#17231C] text-sm">
+                  Valuation Factor Attribution
+                </h3>
+                <span className="text-[10px] font-bold text-[#718078] uppercase tracking-wider">
+                  Relative Weight
+                </span>
+              </div>
               <div className="space-y-4">
-                {sortedFeatures.map(([name, value]) => (
-                  <FeatureBar key={name} name={name} value={value} />
+                {sortedFeatures.map(([feat, val]) => (
+                  <FeatureBar key={feat} name={feat} value={val} />
                 ))}
               </div>
             </div>
           )}
 
-          {/* Model metadata */}
-          <div className="glass-card p-6">
-            <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-              <Clock size={18} className="text-brand-400" /> Model Details
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-              {[
-                { label: 'Algorithm', value: algorithm },
-                { label: 'Version', value: modelVersion },
-                { label: 'Dataset', value: datasetVersion },
-              ].map((item) => (
-                <div key={item.label}>
-                  <p className="text-white/40 text-xs mb-1">{item.label}</p>
-                  <p className="text-white font-mono text-xs">{item.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => generateValuationPDF(prediction)}
-              className="btn-primary"
-            >
-              <Download size={16} /> Download PDF Report
-            </button>
-            <Link href="/predict" className="btn-secondary">New Prediction</Link>
-            <Link href="/history" className="btn-secondary">View History</Link>
-            <Link href="/properties" className="btn-secondary">Browse Properties</Link>
+          {/* Model Audit Metadata */}
+          <div className="p-4 rounded-xl bg-white border border-[#E7E3DA] text-xs text-[#718078] flex flex-wrap items-center justify-between gap-3">
+            <span>Model: <strong className="text-[#17231C]">{modelVersion}</strong> ({algorithm || 'LinearRegression'})</span>
+            <span>Dataset: <strong className="text-[#17231C]">{datasetVersion}</strong></span>
+            <span>Audit Date: <strong className="text-[#17231C]">{new Date(createdAt).toLocaleDateString()}</strong></span>
           </div>
         </div>
       </DashboardLayout>

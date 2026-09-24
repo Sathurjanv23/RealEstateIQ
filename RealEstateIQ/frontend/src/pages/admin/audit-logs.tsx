@@ -9,18 +9,18 @@ import { adminService } from '../../services/services';
 import { AuditLog } from '../../types';
 
 const ACTION_COLORS: Record<string, string> = {
-  USER_LOGIN: 'badge-indigo',
+  USER_LOGIN: 'badge-forest',
   USER_REGISTER: 'badge-green',
-  USER_LOGOUT: 'badge badge-rose',
+  USER_LOGOUT: 'badge-rose',
   PROPERTY_CREATED: 'badge-green',
-  PROPERTY_UPDATED: 'badge-amber',
-  PROPERTY_DELETED: 'badge badge-rose',
-  PREDICTION_CREATED: 'badge-indigo',
-  PROPERTY_SAVED: 'badge-indigo',
-  PROPERTY_UNSAVED: 'badge-amber',
-  ADMIN_USER_UPDATED: 'badge-amber',
-  ADMIN_USER_DELETED: 'badge badge-rose',
-  MODEL_STATUS_CHANGED: 'badge-amber',
+  PROPERTY_UPDATED: 'badge-gold',
+  PROPERTY_DELETED: 'badge-rose',
+  PREDICTION_CREATED: 'badge-forest',
+  PROPERTY_SAVED: 'badge-forest',
+  PROPERTY_UNSAVED: 'badge-gold',
+  ADMIN_USER_UPDATED: 'badge-gold',
+  ADMIN_USER_DELETED: 'badge-rose',
+  MODEL_STATUS_CHANGED: 'badge-gold',
 };
 
 export default function AdminAuditLogsPage() {
@@ -36,7 +36,7 @@ export default function AdminAuditLogsPage() {
     queryKey: ['auditLogs', page],
     queryFn: () => adminService.getAuditLogs({ page, limit: 20 }),
     enabled: isAdmin,
-    refetchInterval: 30000, // auto-refresh every 30s
+    refetchInterval: 30000,
   });
 
   const logs: AuditLog[] = data?.data?.data?.logs || [];
@@ -46,63 +46,75 @@ export default function AdminAuditLogsPage() {
 
   return (
     <>
-      <Head><title>Audit Logs — Admin</title></Head>
-      <DashboardLayout title="Audit Logs">
-        <div className="space-y-6 animate-fade-in">
+      <Head><title>Audit Logs — Admin RealEstateIQ</title></Head>
+      <DashboardLayout title="System Audit Logs">
+        <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div>
-            <h2 className="text-2xl font-bold text-white">System Audit Logs</h2>
-            <p className="text-white/50 text-sm mt-1">{pagination?.total || 0} total audit events · Auto-refreshes every 30s</p>
+            <h2 className="text-2xl font-black text-[#17231C]">System Audit Logs</h2>
+            <p className="text-[#718078] text-xs mt-1">{pagination?.total || 0} audit events logged · Real-time auto-refresh</p>
           </div>
 
-          <div className="glass-card overflow-hidden">
+          <div className="card-premium overflow-hidden bg-white border border-[#E7E3DA]">
             {loading ? (
-              <div className="p-8 space-y-3">{[...Array(8)].map((_, i) => <div key={i} className="skeleton h-10 rounded-xl" />)}</div>
+              <div className="p-8 space-y-3">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="skeleton h-10 rounded-xl" />
+                ))}
+              </div>
             ) : logs.length === 0 ? (
               <div className="p-16 text-center">
-                <ClipboardList size={48} className="text-white/20 mx-auto mb-4" />
-                <p className="text-white/40">No audit events yet.</p>
+                <ClipboardList size={48} className="text-[#DCD6CB] mx-auto mb-4" />
+                <p className="text-[#17231C] font-bold">No audit events recorded.</p>
               </div>
             ) : (
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Timestamp</th><th>Action</th><th>User</th><th>Resource</th><th>IP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {logs.map((log) => (
-                    <tr key={log._id}>
-                      <td className="text-xs text-white/40">
-                        {new Date(log.createdAt).toLocaleDateString()}{' '}
-                        <span className="text-white/30">{new Date(log.createdAt).toLocaleTimeString()}</span>
-                      </td>
-                      <td>
-                        <span className={ACTION_COLORS[log.action] || 'badge-indigo'}>
-                          {log.action.replace(/_/g, ' ')}
-                        </span>
-                      </td>
-                      <td className="text-xs text-white/60">
-                        {log.userId ? (
-                          typeof log.userId === 'object' ? log.userId.email : 'Unknown'
-                        ) : 'Anonymous'}
-                      </td>
-                      <td className="text-xs text-white/50">
-                        {log.resource}
-                        {log.resourceId && <span className="text-white/30 ml-1 font-mono">({log.resourceId.slice(-8)})</span>}
-                      </td>
-                      <td className="text-xs text-white/30 font-mono">{log.ipAddress || '—'}</td>
+              <div className="overflow-x-auto">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th><th>Action</th><th>User</th><th>Resource</th><th>IP Address</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {logs.map((log) => (
+                      <tr key={log._id}>
+                        <td className="text-xs text-[#718078]">
+                          {new Date(log.createdAt).toLocaleDateString()}{' '}
+                          <span className="text-[10px] text-[#718078]/80">{new Date(log.createdAt).toLocaleTimeString()}</span>
+                        </td>
+                        <td>
+                          <span className={ACTION_COLORS[log.action] || 'badge-forest'}>
+                            {log.action.replace(/_/g, ' ')}
+                          </span>
+                        </td>
+                        <td className="text-xs text-[#17231C] font-mono">
+                          {log.userId ? (
+                            typeof log.userId === 'object' ? log.userId.email : 'Unknown'
+                          ) : 'Anonymous'}
+                        </td>
+                        <td className="text-xs text-[#718078]">
+                          {log.resource}
+                          {log.resourceId && <span className="text-[#718078]/60 ml-1 font-mono">({log.resourceId.slice(-8)})</span>}
+                        </td>
+                        <td className="text-xs text-[#718078] font-mono">{log.ipAddress || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
 
             {pagination && pagination.pages > 1 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-white/5">
-                <p className="text-sm text-white/40">Page {pagination.page} of {pagination.pages}</p>
+              <div className="flex items-center justify-between px-6 py-4 border-t border-[#E7E3DA] bg-[#FAF9F6]">
+                <p className="text-xs text-[#718078] font-medium">Page {pagination.page} of {pagination.pages}</p>
                 <div className="flex gap-2">
-                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="btn-secondary py-2 px-3 disabled:opacity-30"><ChevronLeft size={16} /></button>
-                  <button onClick={() => setPage(p => Math.min(pagination.pages, p + 1))} disabled={page === pagination.pages} className="btn-secondary py-2 px-3 disabled:opacity-30"><ChevronRight size={16} /></button>
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                    className="btn-secondary text-xs py-1.5 px-3 disabled:opacity-30">
+                    <ChevronLeft size={14} />
+                  </button>
+                  <button onClick={() => setPage(p => Math.min(pagination.pages, p + 1))} disabled={page === pagination.pages}
+                    className="btn-secondary text-xs py-1.5 px-3 disabled:opacity-30">
+                    <ChevronRight size={14} />
+                  </button>
                 </div>
               </div>
             )}

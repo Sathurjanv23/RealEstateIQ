@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { Star, Brain, Home, MapPin, AlertTriangle } from 'lucide-react';
+import { Star, Brain, Home, MapPin, ShieldCheck, ArrowRight } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 import { marketService } from '../services/services';
@@ -30,40 +30,47 @@ export default function RecommendationsPage() {
   });
 
   const recommendations: Recommendation[] = data?.data?.data?.recommendations || [];
-  const criteria = data?.data?.data?.matchingCriteria;
 
   return (
     <>
-      <Head><title>Recommendations — RealEstateIQ</title></Head>
-      <DashboardLayout title="Property Recommendations">
-        <div className="space-y-6 animate-fade-in">
+      <Head><title>Curated Yields & Recommendations — RealEstateIQ</title></Head>
+      <DashboardLayout title="Asset Matching">
+        <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div>
-            <h2 className="text-2xl font-bold text-white">Smart Recommendations</h2>
-            <p className="text-white/50 text-sm mt-1">Rule-based property matching based on your preferences</p>
+            <h2 className="text-2xl font-black text-[#17231C]">Curated Property Matching</h2>
+            <p className="text-[#718078] text-xs mt-1">Multi-factor weighted asset alignment based on your acquisition criteria</p>
           </div>
 
-          {/* Note */}
-          <div className="glass-card p-4 border-blue-500/20 flex gap-3">
-            <AlertTriangle size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-white/60">
-              Recommendations use transparent rule-based weighted scoring (budget: 40pts, bedrooms: 20pts, bathrooms: 15pts, area: 25pts).
-              This is not an ML recommendation system.
+          {/* Institutional Note */}
+          <div className="card-premium p-4 border border-[#B8D9C5] bg-[#EAF4EE] flex gap-3 items-center">
+            <ShieldCheck size={18} className="text-[#3F7D58] shrink-0" />
+            <p className="text-xs text-[#2F6B4F]">
+              Scoring utilizes transparent multi-factor weighted evaluation (Budget: 40%, Area: 25%, Bedrooms: 20%, Bathrooms: 15%).
             </p>
           </div>
 
-          {/* Preferences form */}
-          <div className="glass-card p-6">
-            <h3 className="font-semibold text-white mb-5">Set Your Preferences</h3>
+          {/* Preferences Form: Pure White */}
+          <div className="card-premium p-6 bg-white border border-[#E7E3DA]">
+            <h3 className="font-bold text-[#17231C] text-sm mb-4 pb-2 border-b border-[#E7E3DA]">Set Portfolio Target Criteria</h3>
             <div className="grid md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs text-white/50 mb-2">Budget (Max LKR)</label>
-                <input type="number" placeholder="e.g. 500000" value={prefs.budget}
-                  onChange={(e) => setPrefs({ ...prefs, budget: e.target.value })} className="input-dark text-sm" />
+                <label className="block text-xs font-bold text-[#17231C] mb-1">Max Budget (LKR)</label>
+                <input
+                  type="number"
+                  placeholder="e.g. 75000000"
+                  value={prefs.budget}
+                  onChange={(e) => setPrefs({ ...prefs, budget: e.target.value })}
+                  className="input-field"
+                />
               </div>
               <div>
-                <label className="block text-xs text-white/50 mb-2">Location</label>
-                <select value={prefs.location} onChange={(e) => setPrefs({ ...prefs, location: e.target.value })} className="input-dark text-sm">
-                  <option value="">Any Location</option>
+                <label className="block text-xs font-bold text-[#17231C] mb-1">District / Location</label>
+                <select
+                  value={prefs.location}
+                  onChange={(e) => setPrefs({ ...prefs, location: e.target.value })}
+                  className="input-field"
+                >
+                  <option value="">Any District</option>
                   {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
                     <optgroup key={province} label={`— ${province}`}>
                       {locs.map(loc => (
@@ -74,30 +81,54 @@ export default function RecommendationsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-white/50 mb-2">Property Type</label>
-                <select value={prefs.propertyType} onChange={(e) => setPrefs({ ...prefs, propertyType: e.target.value })} className="input-dark text-sm">
-                  <option value="">Any Type</option>
+                <label className="block text-xs font-bold text-[#17231C] mb-1">Asset Type</label>
+                <select
+                  value={prefs.propertyType}
+                  onChange={(e) => setPrefs({ ...prefs, propertyType: e.target.value })}
+                  className="input-field"
+                >
+                  <option value="">Any Asset Type</option>
                   {TYPES.filter(Boolean).map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-white/50 mb-2">Bedrooms</label>
-                <input type="number" min="1" placeholder="e.g. 3" value={prefs.bedrooms}
-                  onChange={(e) => setPrefs({ ...prefs, bedrooms: e.target.value })} className="input-dark text-sm" />
+                <label className="block text-xs font-bold text-[#17231C] mb-1">Bedrooms</label>
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="e.g. 3"
+                  value={prefs.bedrooms}
+                  onChange={(e) => setPrefs({ ...prefs, bedrooms: e.target.value })}
+                  className="input-field"
+                />
               </div>
               <div>
-                <label className="block text-xs text-white/50 mb-2">Bathrooms</label>
-                <input type="number" min="1" placeholder="e.g. 2" value={prefs.bathrooms}
-                  onChange={(e) => setPrefs({ ...prefs, bathrooms: e.target.value })} className="input-dark text-sm" />
+                <label className="block text-xs font-bold text-[#17231C] mb-1">Bathrooms</label>
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="e.g. 2"
+                  value={prefs.bathrooms}
+                  onChange={(e) => setPrefs({ ...prefs, bathrooms: e.target.value })}
+                  className="input-field"
+                />
               </div>
               <div>
-                <label className="block text-xs text-white/50 mb-2">Min Area (sqft)</label>
-                <input type="number" placeholder="e.g. 1500" value={prefs.minArea}
-                  onChange={(e) => setPrefs({ ...prefs, minArea: e.target.value })} className="input-dark text-sm" />
+                <label className="block text-xs font-bold text-[#17231C] mb-1">Min Area (sqft)</label>
+                <input
+                  type="number"
+                  placeholder="e.g. 1500"
+                  value={prefs.minArea}
+                  onChange={(e) => setPrefs({ ...prefs, minArea: e.target.value })}
+                  className="input-field"
+                />
               </div>
             </div>
-            <button onClick={() => setSearch(true)} className="btn-primary mt-5 text-sm">
-              <Star size={16} /> Find Recommendations
+            <button
+              onClick={() => setSearch(true)}
+              className="btn-primary mt-5 text-xs py-2.5 px-5"
+            >
+              <Star size={14} className="text-[#C9A227]" /> Identify Matching Properties
             </button>
           </div>
 
@@ -105,49 +136,67 @@ export default function RecommendationsPage() {
           {search && (
             loading ? (
               <div className="grid md:grid-cols-2 gap-4">
-                {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-48 rounded-2xl" />)}
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="skeleton h-48 rounded-2xl" />
+                ))}
               </div>
             ) : recommendations.length === 0 ? (
-              <div className="glass-card p-16 text-center">
-                <Star size={48} className="text-white/20 mx-auto mb-4" />
-                <p className="text-white/40 text-lg">No matches found</p>
-                <p className="text-white/30 text-sm mt-2">Try adjusting your preferences or broadening your criteria.</p>
+              <div className="card-premium p-16 text-center bg-white border border-[#E7E3DA]">
+                <Star size={48} className="text-[#DCD6CB] mx-auto mb-3" />
+                <p className="text-[#17231C] font-bold text-base">No properties matching your criteria</p>
+                <p className="text-[#718078] text-xs mt-1">Try expanding your budget ceiling or choosing all locations.</p>
               </div>
             ) : (
               <div className="space-y-4">
-                <p className="text-white/50 text-sm">{recommendations.length} properties matched your preferences</p>
-                <div className="grid md:grid-cols-2 gap-4">
+                <p className="text-xs font-bold text-[#718078]">{recommendations.length} properties matched your preferences</p>
+                <div className="grid md:grid-cols-2 gap-5">
                   {recommendations.map((rec) => (
-                    <div key={rec.property._id} className="glass-card-hover p-5">
-                      {/* Match score bar */}
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="badge-indigo text-xs capitalize">{rec.property.propertyType}</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-24 h-2 rounded-full bg-white/10 overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${rec.matchPercentage}%`, background: 'linear-gradient(90deg, #6366f1, #8b5cf6)' }} />
+                    <div key={rec.property._id} className="card-premium-hover p-5 bg-white border border-[#E7E3DA] flex flex-col justify-between">
+                      <div>
+                        {/* Match score bar */}
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="badge-forest text-[10px] uppercase font-bold">{rec.property.propertyType}</span>
+                          <div className="flex items-center gap-2">
+                            <div className="w-24 h-2 rounded-full bg-[#EFECE3] overflow-hidden">
+                              <div
+                                className="h-full rounded-full bg-[#2F6B4F]"
+                                style={{ width: `${rec.matchPercentage}%` }}
+                              />
+                            </div>
+                            <span className="text-xs font-black text-[#123B2A]">
+                              {rec.matchPercentage}% Match
+                            </span>
                           </div>
-                          <span className={`text-sm font-bold ${rec.matchPercentage >= 80 ? 'text-emerald-400' : rec.matchPercentage >= 60 ? 'text-amber-400' : 'text-white/60'}`}>
-                            {rec.matchPercentage}%
-                          </span>
                         </div>
+
+                        <h3 className="font-bold text-[#17231C] text-sm mb-1 truncate">{rec.property.title}</h3>
+                        <div className="flex items-center gap-1 text-[#718078] text-xs mb-3">
+                          <MapPin size={12} className="text-[#C9A227]" /> {rec.property.location}
+                        </div>
+
+                        <div className="flex items-center gap-4 text-xs text-[#718078] mb-4 py-2 border-y border-[#E7E3DA]">
+                          <span>{rec.property.area.toLocaleString()} sqft</span>
+                          <span>{rec.property.bedrooms} Beds</span>
+                          <span>{rec.property.bathrooms} Baths</span>
+                        </div>
+
+                        {rec.property.askingPrice && (
+                          <p className="text-[#123B2A] font-black text-sm mb-4">Rs. {rec.property.askingPrice.toLocaleString()}</p>
+                        )}
                       </div>
-                      <h3 className="font-semibold text-white mb-1 truncate">{rec.property.title}</h3>
-                      <div className="flex items-center gap-1 text-white/50 text-xs mb-3">
-                        <MapPin size={12} /> {rec.property.location}
-                      </div>
-                      <div className="flex items-center gap-4 text-xs text-white/50 mb-4">
-                        <span>{rec.property.area.toLocaleString()} sqft</span>
-                        <span>{rec.property.bedrooms}BR</span>
-                        <span>{rec.property.bathrooms}BA</span>
-                      </div>
-                      {rec.property.askingPrice && (
-                        <p className="text-brand-400 font-bold mb-3">Rs. {rec.property.askingPrice.toLocaleString()}</p>
-                      )}
-                      <div className="flex gap-2">
-                        <Link href={`/properties/${rec.property._id}`} className="btn-secondary text-xs py-2 flex-1 justify-center">View Property</Link>
-                        <Link href={`/predict?area=${rec.property.area}&bedrooms=${rec.property.bedrooms}&bathrooms=${rec.property.bathrooms}&location=${rec.property.location}&house_age=${rec.property.houseAge}&parking=${rec.property.parking}&propertyId=${rec.property._id}`}
-                          className="btn-primary text-xs py-2 flex-1 justify-center">
-                          <Brain size={12} /> Predict
+
+                      <div className="flex gap-2 pt-2">
+                        <Link
+                          href={`/properties/${rec.property._id}`}
+                          className="btn-secondary text-xs py-2 flex-1 justify-center"
+                        >
+                          View Details
+                        </Link>
+                        <Link
+                          href={`/predict?area=${rec.property.area}&bedrooms=${rec.property.bedrooms}&bathrooms=${rec.property.bathrooms}&location=${rec.property.location}&house_age=${rec.property.houseAge}&parking=${rec.property.parking}&propertyId=${rec.property._id}`}
+                          className="btn-primary text-xs py-2 flex-1 justify-center"
+                        >
+                          <Brain size={13} /> Valuate
                         </Link>
                       </div>
                     </div>
