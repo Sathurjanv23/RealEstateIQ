@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { Building2, Mail, Lock, User, Eye, EyeOff, KeyRound, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, KeyRound, ArrowLeft, RefreshCw } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
 import { BrandLogo } from '../components/ui/BrandLogo';
 import { authService } from '../services/services';
@@ -48,7 +48,7 @@ export default function RegisterPage() {
       router.push('/dashboard');
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Google sign-up failed.');
+      toast.error(error.response?.data?.message || 'Google registration failed.');
     } finally {
       setLoading(false);
     }
@@ -69,12 +69,12 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await authService.sendOtp(email, name);
-      toast.success(`Verification code sent to ${email}`);
+      toast.success(`Verification code dispatched to ${email}`);
       setStep('otp');
       setCountdown(60);
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Failed to send verification code. Please check your email.');
+      toast.error(error.response?.data?.message || 'Failed to dispatch verification code.');
     } finally {
       setLoading(false);
     }
@@ -119,7 +119,7 @@ export default function RegisterPage() {
       router.push('/dashboard');
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Verification failed. Please check the code.');
+      toast.error(error.response?.data?.message || 'Verification failed. Please verify the code.');
     } finally {
       setLoading(false);
     }
@@ -129,113 +129,106 @@ export default function RegisterPage() {
     <>
       <Head>
         <title>Create Account — RealEstateIQ</title>
-        <meta name="description" content="Create your RealEstateIQ account to access AI-powered property intelligence." />
+        <meta name="description" content="Create your RealEstateIQ account to access institutional property intelligence." />
       </Head>
-      <div className="min-h-screen flex items-center justify-center px-4 py-12">
-        <div className="fixed inset-0 pointer-events-none">
-          <div
-            className="absolute top-1/3 left-1/2 w-96 h-96 rounded-full blur-3xl opacity-10 -translate-x-1/2"
-            style={{ background: 'radial-gradient(circle, #8b5cf6, transparent)' }}
-          />
-        </div>
-
-        <div className="w-full max-w-md relative">
+      <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#F7F5F0]">
+        <div className="w-full max-w-md relative animate-fade-in">
           <div className="text-center mb-8">
-            <div className="flex justify-center mb-5">
+            <div className="flex justify-center mb-4">
               <BrandLogo size="lg" showText={true} />
             </div>
-            <h1 className="text-2xl font-black text-white tracking-tight mb-2">
-              {step === 'details' ? 'Create Account' : 'Verify Email Address'}
+            <h1 className="text-2xl font-black text-[#17231C] tracking-tight mb-1">
+              {step === 'details' ? 'Create Client Account' : 'Verify Email Address'}
             </h1>
-            <p className="text-slate-400 text-sm">
+            <p className="text-[#718078] text-xs">
               {step === 'details'
-                ? 'Join Sri Lanka’s premier property valuation network'
+                ? 'Join Sri Lanka’s premier real estate valuation network'
                 : `Enter the 6-digit verification code sent to ${email}`}
             </p>
           </div>
 
-          <div className="glass-card p-8">
+          <div className="card-premium p-8 bg-white border border-[#E7E3DA] shadow-soft-lg">
             {step === 'details' ? (
               <>
-                <form onSubmit={handleRequestOtp} className="space-y-5">
+                <form onSubmit={handleRequestOtp} className="space-y-4">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-white/70 mb-2">
-                      Full name
+                    <label htmlFor="name" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                      Full Name
                     </label>
                     <div className="relative">
-                      <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                      <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
                       <input
                         id="name"
                         type="text"
                         autoComplete="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Your full name"
-                        className="input-dark pl-11"
+                        placeholder="Priyantha Jayasuriya"
+                        className="input-field pl-10"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-white/70 mb-2">
-                      Email address
+                    <label htmlFor="email" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                      Email Address
                     </label>
                     <div className="relative">
-                      <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                      <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
                       <input
                         id="email"
                         type="email"
                         autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="you@example.com"
-                        className="input-dark pl-11"
+                        placeholder="client@investor.lk"
+                        className="input-field pl-10"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-white/70 mb-2">
-                      Password
+                    <label htmlFor="password" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                      Password (min 8 characters)
                     </label>
                     <div className="relative">
-                      <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
                       <input
                         id="password"
                         type={showPassword ? 'text' : 'password'}
                         autoComplete="new-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="At least 8 characters"
-                        className="input-dark pl-11 pr-11"
+                        placeholder="••••••••••••"
+                        className="input-field pl-10 pr-10"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#718078] hover:text-[#17231C]"
                       >
-                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-white/70 mb-2">
-                      Confirm password
+                    <label htmlFor="confirmPassword" className="block text-xs font-bold text-[#17231C] mb-1.5">
+                      Confirm Password
                     </label>
                     <div className="relative">
-                      <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718078]" />
                       <input
                         id="confirmPassword"
                         type={showPassword ? 'text' : 'password'}
                         autoComplete="new-password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Repeat your password"
-                        className="input-dark pl-11"
+                        placeholder="••••••••••••"
+                        className="input-field pl-10"
                         required
                       />
                     </div>
@@ -244,19 +237,19 @@ export default function RegisterPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-primary w-full justify-center py-3.5 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm"
+                    className="btn-primary w-full py-3.5 text-sm mt-2 disabled:opacity-50"
                   >
-                    {loading ? 'Sending verification code...' : 'Continue & Verify Email'}
+                    {loading ? 'Dispatching verification code...' : 'Continue & Verify Email'}
                   </button>
                 </form>
 
                 {/* Divider */}
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-white/10" />
+                    <div className="w-full border-t border-[#E7E3DA]" />
                   </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-[#181829] px-3 text-white/40">Or continue with</span>
+                  <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
+                    <span className="bg-white px-3 text-[#718078]">Or continue with</span>
                   </div>
                 </div>
 
@@ -266,8 +259,8 @@ export default function RegisterPage() {
                     <div className="w-full flex justify-center">
                       <GoogleLogin
                         onSuccess={handleGoogleSuccess}
-                        onError={() => toast.error('Google Sign-Up failed. Please try again.')}
-                        theme="filled_black"
+                        onError={() => toast.error('Google Sign-Up failed.')}
+                        theme="outline"
                         shape="pill"
                         size="large"
                         text="signup_with"
@@ -277,10 +270,10 @@ export default function RegisterPage() {
                   ) : (
                     <button
                       type="button"
-                      onClick={() => toast.error('Google Client ID is not configured yet in .env.')}
-                      className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white text-sm font-medium transition-colors"
+                      onClick={() => toast.error('Google Client ID is not configured yet.')}
+                      className="btn-secondary w-full py-2.5 text-xs justify-center"
                     >
-                      <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
@@ -293,19 +286,19 @@ export default function RegisterPage() {
               </>
             ) : (
               /* Step 2: OTP Verification Form */
-              <form onSubmit={handleVerifyOtp} className="space-y-6">
+              <form onSubmit={handleVerifyOtp} className="space-y-5">
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-4">
-                    <KeyRound size={24} />
+                  <div className="w-12 h-12 rounded-2xl bg-[#EBF3EE] border border-[#B8D1C4] text-[#123B2A] flex items-center justify-center mx-auto mb-3">
+                    <KeyRound size={22} />
                   </div>
-                  <p className="text-sm text-white/70">
-                    Enter the 6-digit code sent to <br />
-                    <span className="font-semibold text-white">{email}</span>
+                  <p className="text-xs text-[#718078]">
+                    Enter the 6-digit verification code sent to <br />
+                    <strong className="text-[#17231C]">{email}</strong>
                   </p>
                 </div>
 
                 <div>
-                  <label htmlFor="otp" className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2 text-center">
+                  <label htmlFor="otp" className="block text-xs font-bold text-[#17231C] uppercase tracking-wider mb-2 text-center">
                     6-Digit Verification Code
                   </label>
                   <input
@@ -316,7 +309,7 @@ export default function RegisterPage() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                     placeholder="• • • • • •"
-                    className="input-dark text-center font-mono text-2xl tracking-[0.5em] py-3 text-brand-300 font-bold"
+                    className="input-field text-center font-mono text-2xl tracking-[0.5em] py-3 text-[#123B2A] font-bold"
                     required
                   />
                 </div>
@@ -324,16 +317,16 @@ export default function RegisterPage() {
                 <button
                   type="submit"
                   disabled={loading || otp.length !== 6}
-                  className="btn-primary w-full justify-center py-3.5 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                  className="btn-primary w-full py-3.5 text-sm disabled:opacity-50"
                 >
-                  {loading ? 'Verifying...' : 'Verify & Create Account'}
+                  {loading ? 'Verifying...' : 'Verify & Complete Account'}
                 </button>
 
                 <div className="flex items-center justify-between text-xs pt-2">
                   <button
                     type="button"
                     onClick={() => setStep('details')}
-                    className="inline-flex items-center gap-1.5 text-white/50 hover:text-white transition-colors"
+                    className="inline-flex items-center gap-1.5 text-[#718078] hover:text-[#123B2A] font-medium"
                   >
                     <ArrowLeft size={14} /> Back to details
                   </button>
@@ -342,9 +335,9 @@ export default function RegisterPage() {
                     type="button"
                     onClick={handleResendOtp}
                     disabled={countdown > 0 || resending}
-                    className="inline-flex items-center gap-1.5 text-brand-400 hover:text-brand-300 disabled:text-white/30 disabled:cursor-not-allowed transition-colors font-medium"
+                    className="inline-flex items-center gap-1.5 text-[#123B2A] hover:text-[#2F6B4F] disabled:text-[#718078]/50 disabled:cursor-not-allowed font-bold"
                   >
-                    <RefreshCw size={14} className={resending ? 'animate-spin' : ''} />
+                    <RefreshCw size={13} className={resending ? 'animate-spin' : ''} />
                     {countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'}
                   </button>
                 </div>
@@ -352,9 +345,9 @@ export default function RegisterPage() {
             )}
           </div>
 
-          <p className="text-center text-white/50 text-sm mt-6">
+          <p className="text-center text-[#718078] text-xs mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="text-brand-400 hover:text-brand-300 font-medium">
+            <Link href="/login" className="text-[#123B2A] hover:text-[#2F6B4F] font-bold">
               Sign in
             </Link>
           </p>

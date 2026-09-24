@@ -1,14 +1,14 @@
 {
-  "name": "RealEstateIQ — Sri Lanka Real Estate Intelligence",
+  "name": "RealEstateIQ — Sri Lanka Real Estate Platform",
   "short_name": "RealEstateIQ",
-  "description": "AI-Powered Real Estate Valuation & Market Intelligence Platform for Sri Lanka",
+  "description": "Premium Real Estate Valuation & Market Intelligence Platform for Sri Lanka",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#070a13",
-  "theme_color": "#6366f1",
+  "background_color": "#F7F5F0",
+  "theme_color": "#123B2A",
   "orientation": "portrait-primary",
   "scope": "/",
-  "categories": ["business", "finance", "productivity"],
+  "categories": ["business", "finance", "real-estate"],
   "icons": [
     {
       "src": "/favicon.svg",
@@ -31,9 +31,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Predict House Value",
-      "short_name": "Predict",
-      "description": "Calculate AI property valuation in Sri Lanka",
+      "name": "Property Valuation",
+      "short_name": "Valuation",
+      "description": "Institutional property valuation in Sri Lanka",
       "url": "/predict",
       "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
     },
@@ -45,9 +45,9 @@
       "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
     },
     {
-      "name": "Market Analytics",
+      "name": "Market Intelligence",
       "short_name": "Market",
-      "description": "Inspect Sri Lanka real estate market trends",
+      "description": "Sri Lanka real estate market analytics",
       "url": "/market",
       "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
     }
