@@ -32,7 +32,6 @@ import {
 import { BrandLogo } from '../components/ui/BrandLogo';
 import { PwaInstallPrompt } from '../components/ui/PwaInstallPrompt';
 import { useAuth } from '../context/AuthContext';
-import { SL_LOCATIONS } from '../utils/sriLankaLocations';
 
 const roles = [
   {
@@ -107,19 +106,6 @@ const stakeholderPills = [
 export default function LandingPage() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
-
-  // Quick estimator widget states
-  const [quickLocation, setQuickLocation] = useState('Colombo');
-  const [quickArea, setQuickArea] = useState('2000');
-  const [quickBedrooms, setQuickBedrooms] = useState('3');
-  const [quickBathrooms, setQuickBathrooms] = useState('2');
-
-  const handleQuickEstimate = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push(
-      `/predict?location=${encodeURIComponent(quickLocation)}&area=${quickArea}&bedrooms=${quickBedrooms}&bathrooms=${quickBathrooms}`
-    );
-  };
 
   return (
     <>
