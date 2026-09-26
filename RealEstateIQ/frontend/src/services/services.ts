@@ -51,6 +51,7 @@ export const inquiryService = {
 
 export const predictionService = {
   predict: (data: Record<string, unknown>) => api.post('/api/predictions', data),
+  estimate: (data: Record<string, unknown>) => api.post('/api/predictions/estimate', data),
   getHistory: (params?: Record<string, unknown>) => api.get('/api/predictions/history', { params }),
   getOne: (id: string) => api.get(`/api/predictions/${id}`),
 };

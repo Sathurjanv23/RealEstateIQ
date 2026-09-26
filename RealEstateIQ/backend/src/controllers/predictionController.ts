@@ -1,9 +1,45 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { Prediction } from '../models/Prediction';
 import { callMlPredict } from '../utils/mlClient';
 import { audit } from '../utils/auditLogger';
 import { createError } from '../middleware/errorHandler';
 import { AuthRequest } from '../middleware/auth';
+
+// ── Estimate prediction via authentic ML Model (no login required) ──────────
+export const estimatePrediction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { area, bedrooms, bathrooms, location, house_age, parking } = req.body;
+    const mlResult = await callMlPredict({
+      area: Number(area),
+      bedrooms: Number(bedrooms) || 3,
+      bathrooms: Number(bathrooms) || 2,
+      location: location || 'Colombo',
+      house_age: Number(house_age) || 5,
+      parking: Number(parking) || 1,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        prediction: {
+          predictedPrice: mlResult.predicted_price,
+          pricePerSqft: mlResult.price_per_sqft,
+          modelVersion: mlResult.model_version,
+          algorithm: mlResult.algorithm,
+          datasetVersion: mlResult.dataset_version,
+          featureImportance: mlResult.feature_importance,
+          disclaimer: mlResult.disclaimer,
+        },
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 // ── Create prediction ──────────────────────────────────────────────────────
 export const createPrediction = async (
