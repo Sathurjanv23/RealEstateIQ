@@ -141,4 +141,5 @@ jobs:
         working-directory: RealEstateIQ/frontend
         env:
           NEXT_PUBLIC_API_URL: http://localhost:5000
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: "1057402952960-juqhht2uh0b1t4krf1kj9gr17urpekdi.apps.googleusercontent.com"
         run: npm run build

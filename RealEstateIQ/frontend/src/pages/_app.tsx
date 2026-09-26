@@ -16,7 +16,9 @@ const queryClient = new QueryClient({
   },
 });
 
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_ID =
+  process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+  '1057402952960-juqhht2uh0b1t4krf1kj9gr17urpekdi.apps.googleusercontent.com';
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -55,13 +57,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {GOOGLE_CLIENT_ID ? (
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-          {content}
-        </GoogleOAuthProvider>
-      ) : (
-        content
-      )}
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        {content}
+      </GoogleOAuthProvider>
     </QueryClientProvider>
   );
 }
