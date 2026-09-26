@@ -10,15 +10,15 @@ import { marketService } from '../services/services';
 import { MarketAnalytics } from '../types';
 import { SL_LOCATIONS_GROUPED } from '../utils/sriLankaLocations';
 
-const COLORS = ['#00DC82', '#38BDF8', '#C9A227', '#A78BFA', '#F472B6', '#34D399'];
+const COLORS = ['#DFBA73', '#C5A880', '#E8C888', '#9B7B3E', '#F6E7CA', '#B8934A'];
 const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
-    <div className="card-premium p-5 bg-[#0B1722] border border-[#162E40]">
-      <p className="text-[11px] text-[#94A3B8] uppercase font-bold tracking-wider mb-1">{label}</p>
-      <p className="text-2xl font-black text-white">{value}</p>
-      {sub && <p className="text-xs text-[#64748B] mt-1">{sub}</p>}
+    <div className="luxury-glass-card p-5">
+      <p className="text-[11px] text-neutral-400 uppercase font-bold tracking-wider mb-1">{label}</p>
+      <p className="text-2xl font-serif font-black text-white">{value}</p>
+      {sub && <p className="text-xs text-[#DFBA73] mt-1">{sub}</p>}
     </div>
   );
 }
@@ -48,14 +48,14 @@ export default function MarketPage() {
           {/* Header controls */}
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h2 className="text-2xl font-black text-white">Market Intelligence & Trends</h2>
-              <p className="text-[#94A3B8] text-xs mt-1">Calibrated from authentic transaction and listing records</p>
+              <h2 className="text-2xl font-serif font-bold text-white">Market Intelligence & Trends</h2>
+              <p className="text-neutral-400 text-xs mt-1">Calibrated from authentic transaction and listing records</p>
             </div>
             <div className="flex gap-2.5">
               <select
                 value={filters.location}
                 onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-                className="input-field text-xs py-2 w-auto bg-[#08141F] border-[#162E40] text-white"
+                className="input-field text-xs py-2 w-auto bg-[#090D14] border-white/[0.12] text-white focus:border-[#DFBA73]"
               >
                 <option value="">All Districts</option>
                 {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
@@ -69,7 +69,7 @@ export default function MarketPage() {
               <select
                 value={filters.propertyType}
                 onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })}
-                className="input-field text-xs py-2 w-auto bg-[#08141F] border-[#162E40] text-white"
+                className="input-field text-xs py-2 w-auto bg-[#090D14] border-white/[0.12] text-white focus:border-[#DFBA73]"
               >
                 <option value="">All Asset Types</option>
                 {TYPES.filter(Boolean).map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
@@ -78,9 +78,9 @@ export default function MarketPage() {
           </div>
 
           {/* Institutional Note */}
-          <div className="card-premium p-4 border border-[#00DC82]/20 bg-[#00DC82]/5 flex gap-3 items-center">
-            <ShieldCheck size={18} className="text-[#00DC82] shrink-0" />
-            <p className="text-xs text-[#34D399] font-medium">
+          <div className="luxury-glass-card p-4 border border-[#DFBA73]/30 bg-[#DFBA73]/10 flex gap-3 items-center">
+            <ShieldCheck size={18} className="text-[#DFBA73] shrink-0" />
+            <p className="text-xs text-neutral-300 font-medium">
               {analytics?.note || 'Market metrics computed from verified transaction records.'}
               {' '}Calibrated on Sri Lankan real estate benchmarks across 23 districts.
             </p>
@@ -107,20 +107,20 @@ export default function MarketPage() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Avg price by location */}
               {analytics.byLocation.length > 0 && (
-                <div className="card-premium p-6 bg-[#0B1722] border border-[#162E40]">
-                  <h3 className="font-bold text-white text-sm mb-5 flex items-center gap-2">
-                    <MapPin size={16} className="text-[#00DC82]" /> Average Price by District (LKR)
+                <div className="luxury-glass-card p-6">
+                  <h3 className="font-serif font-bold text-white text-base mb-5 flex items-center gap-2">
+                    <MapPin size={16} className="text-[#DFBA73]" /> Average Price by District (LKR)
                   </h3>
                   <ResponsiveContainer width="100%" height={230}>
                     <BarChart data={analytics.byLocation}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#162E40" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" />
                       <XAxis dataKey="_id" tick={{ fill: '#94A3B8', fontSize: 11 }} />
                       <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickFormatter={(v) => `${(v / 1000000).toFixed(1)}M`} />
                       <Tooltip
-                        contentStyle={{ background: '#08141F', border: '1px solid #162E40', borderRadius: '10px', color: '#F8FAFC', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
+                        contentStyle={{ background: '#090D14', border: '1px solid rgba(223, 186, 115, 0.3)', borderRadius: '10px', color: '#F8FAFC', boxShadow: '0 8px 24px rgba(0,0,0,0.7)' }}
                         formatter={(v: number) => [`Rs. ${Math.round(v).toLocaleString()}`, 'Avg Price']}
                       />
-                      <Bar dataKey="avgPrice" fill="#00DC82" radius={[6, 6, 0, 0]} />
+                      <Bar dataKey="avgPrice" fill="#DFBA73" radius={[6, 6, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -128,9 +128,9 @@ export default function MarketPage() {
 
               {/* By property type */}
               {analytics.byPropertyType.length > 0 && (
-                <div className="card-premium p-6 bg-[#0B1722] border border-[#162E40]">
-                  <h3 className="font-bold text-white text-sm mb-5 flex items-center gap-2">
-                    <Home size={16} className="text-[#00DC82]" /> Portfolio Composition by Type
+                <div className="luxury-glass-card p-6">
+                  <h3 className="font-serif font-bold text-white text-base mb-5 flex items-center gap-2">
+                    <Home size={16} className="text-[#DFBA73]" /> Portfolio Composition by Type
                   </h3>
                   <ResponsiveContainer width="100%" height={260}>
                     <PieChart>
@@ -172,12 +172,12 @@ export default function MarketPage() {
 
           {/* Price by location table */}
           {analytics && analytics.byLocation.length > 0 && (
-            <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
-              <div className="px-6 py-4 border-b border-[#162E40] bg-[#08141F] flex items-center justify-between">
-                <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                  <BarChart3 size={16} className="text-[#00DC82]" /> District Valuation Breakdown
+            <div className="luxury-glass-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-white/[0.08] bg-[#090D14] flex items-center justify-between">
+                <h3 className="font-serif font-bold text-white text-base flex items-center gap-2">
+                  <BarChart3 size={16} className="text-[#DFBA73]" /> District Valuation Breakdown
                 </h3>
-                <span className="text-xs text-[#94A3B8] font-medium md:hidden">Scroll sideways →</span>
+                <span className="text-xs text-neutral-400 font-medium md:hidden">Scroll sideways →</span>
               </div>
               <div className="overflow-x-auto w-full">
                 <table className="data-table min-w-[620px]">
@@ -189,12 +189,12 @@ export default function MarketPage() {
                   <tbody>
                     {analytics.byLocation.map((loc) => (
                       <tr key={loc._id}>
-                        <td className="font-bold text-white">{loc._id}</td>
-                        <td className="text-[#94A3B8] font-medium">{loc.count}</td>
-                        <td className="text-[#00DC82] font-black">Rs. {Math.round(loc.avgPrice).toLocaleString()}</td>
-                        <td className="text-[#CBD5E1]">Rs. {loc.minPrice ? Math.round(loc.minPrice).toLocaleString() : '—'}</td>
-                        <td className="text-[#CBD5E1]">Rs. {loc.maxPrice ? Math.round(loc.maxPrice).toLocaleString() : '—'}</td>
-                        <td className="text-[#94A3B8]">{loc.avgArea ? `${Math.round(loc.avgArea).toLocaleString()} sqft` : '—'}</td>
+                        <td className="font-serif font-bold text-white">{loc._id}</td>
+                        <td className="text-neutral-400 font-medium">{loc.count}</td>
+                        <td className="text-[#DFBA73] font-bold">Rs. {Math.round(loc.avgPrice).toLocaleString()}</td>
+                        <td className="text-neutral-300">Rs. {loc.minPrice ? Math.round(loc.minPrice).toLocaleString() : '—'}</td>
+                        <td className="text-neutral-300">Rs. {loc.maxPrice ? Math.round(loc.maxPrice).toLocaleString() : '—'}</td>
+                        <td className="text-neutral-400">{loc.avgArea ? `${Math.round(loc.avgArea).toLocaleString()} sqft` : '—'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -204,10 +204,10 @@ export default function MarketPage() {
           )}
 
           {analytics?.overall?.count === 0 && (
-            <div className="card-premium p-16 text-center bg-[#0B1722] border border-[#162E40]">
-              <BarChart3 size={48} className="text-[#1E3A4E] mx-auto mb-4" />
-              <p className="text-white font-bold">No property records available for analytics.</p>
-              <p className="text-[#94A3B8] text-xs mt-1">Add property listings to generate district intelligence.</p>
+            <div className="luxury-glass-card p-16 text-center">
+              <BarChart3 size={48} className="text-neutral-600 mx-auto mb-4" />
+              <p className="text-white font-serif text-lg">No property records available for analytics.</p>
+              <p className="text-neutral-400 text-xs mt-1">Add property listings to generate district intelligence.</p>
             </div>
           )}
         </div>

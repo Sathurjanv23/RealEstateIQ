@@ -14,7 +14,7 @@
   }
 
   body {
-    background-color: #061017;
+    background-color: #080A0E;
     color: #F8FAFC;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -23,8 +23,8 @@
   }
 
   ::selection {
-    background-color: #00DC82;
-    color: #061017;
+    background-color: #DFBA73;
+    color: #080A0E;
   }
 
   ::-webkit-scrollbar {
@@ -33,16 +33,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #061017;
+    background: #080A0E;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1A3142;
+    background: #18202D;
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #00DC82;
+    background: #DFBA73;
   }
 }
 
@@ -205,9 +205,9 @@
   }
 
   .ios-glossy-btn {
-    background: linear-gradient(180deg, #00FF9D 0%, #00DC82 50%, #00A35F 100%);
+    background: linear-gradient(135deg, #F6E7CA 0%, #DFBA73 35%, #C5A880 75%, #A88448 100%);
     box-shadow: 
-      0 8px 25px rgba(0, 220, 130, 0.45),
+      0 8px 25px rgba(212, 175, 55, 0.35),
       inset 0 1.5px 2px rgba(255, 255, 255, 0.85),
       inset 0 -1.5px 2px rgba(0, 0, 0, 0.35);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -215,7 +215,7 @@
 
   .ios-glossy-btn:hover {
     box-shadow: 
-      0 12px 30px rgba(0, 220, 130, 0.65),
+      0 12px 30px rgba(212, 175, 55, 0.55),
       inset 0 2px 3px rgba(255, 255, 255, 0.95),
       inset 0 -2px 3px rgba(0, 0, 0, 0.2);
     transform: translateY(-1px) scale(1.05);
@@ -223,39 +223,39 @@
 
   /* Role Card from sample Screenshot 2 */
   .role-card {
-    background-color: #0A1622;
-    border: 1px solid #132736;
+    background-color: #0C1017;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0.875rem;
     padding: 1.5rem;
     transition: all 0.2s ease;
   }
 
   .role-card:hover {
-    border-color: #1D3B52;
-    background-color: #0D1C2B;
+    border-color: rgba(223, 186, 115, 0.35);
+    background-color: #111722;
     transform: translateY(-2px);
   }
 
   /* Module Card from sample Screenshot 3 */
   .module-card {
-    background-color: #0A1622;
-    border: 1px solid #132736;
+    background-color: #0C1017;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0.875rem;
     padding: 1.5rem;
     transition: all 0.2s ease;
   }
 
   .module-card:hover {
-    border-color: rgba(0, 220, 130, 0.3);
-    background-color: #0D1C2B;
+    border-color: rgba(223, 186, 115, 0.4);
+    background-color: #111722;
     transform: translateY(-2px);
   }
 
   /* Estimator Terminal Container */
   .pro-terminal-glass,
   .estimator-card {
-    background-color: #091520;
-    border: 1px solid #162E40;
+    background-color: #0C1017;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 1.25rem;
     box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.7);
   }
@@ -269,58 +269,58 @@
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 600;
-    background-color: rgba(0, 220, 130, 0.08);
-    border: 1px solid rgba(0, 220, 130, 0.2);
-    color: #00DC82;
+    background-color: rgba(223, 186, 115, 0.1);
+    border: 1px solid rgba(223, 186, 115, 0.3);
+    color: #DFBA73;
   }
 
-  /* Primary Emerald Button from sample */
+  /* Primary Button - Sitewide Luxury Champagne Gold */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1.6rem;
     border-radius: 0.75rem;
     font-weight: 700;
     font-size: 0.875rem;
-    color: #061017;
-    background-color: #00DC82;
-    box-shadow: 0 4px 14px -1px rgba(0, 220, 130, 0.3);
-    transition: all 0.2s ease;
+    color: #0A0D12;
+    background: linear-gradient(135deg, #F6E7CA 0%, #DFBA73 35%, #C5A880 75%, #A88448 100%);
+    box-shadow: 0 4px 18px -1px rgba(212, 175, 55, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .btn-primary:hover {
-    background-color: #00C373;
-    box-shadow: 0 6px 20px -1px rgba(0, 220, 130, 0.45);
+    background: linear-gradient(135deg, #FFFFFF 0%, #E8C888 35%, #D4AF37 75%, #B8934A 100%);
+    box-shadow: 0 6px 24px -1px rgba(212, 175, 55, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.8);
     transform: translateY(-1px);
   }
 
   .btn-primary:active {
     transform: translateY(0);
-    background-color: #00A862;
+    background: #C5A880;
   }
 
-  /* Dark Secondary Button from sample */
+  /* Dark Secondary Button */
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1.6rem;
     border-radius: 0.75rem;
     font-weight: 600;
     font-size: 0.875rem;
     color: #F8FAFC;
-    background-color: #0E1F2E;
-    border: 1px solid #1E3A4E;
-    transition: all 0.2s ease;
+    background-color: #0D121B;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.25s ease;
   }
 
   .btn-secondary:hover {
-    background-color: #142B3E;
-    border-color: #274C64;
-    color: #FFFFFF;
+    background-color: #131A26;
+    border-color: rgba(223, 186, 115, 0.45);
+    color: #DFBA73;
     transform: translateY(-1px);
   }
 
@@ -328,14 +328,14 @@
     transform: translateY(0);
   }
 
-  /* Sleek Dark Inputs */
+  /* Sleek Dark Inputs with Champagne Gold Focus */
   .input-dark,
   .input-field {
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
-    background-color: #08141F;
-    border: 1px solid #162E40;
+    background-color: #0A0E16;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: #F8FAFC;
     font-size: 0.875rem;
     transition: all 0.2s ease;
@@ -349,8 +349,8 @@
   .input-dark:focus,
   .input-field:focus {
     outline: none;
-    border-color: #00DC82;
-    box-shadow: 0 0 0 2px rgba(0, 220, 130, 0.15);
+    border-color: #DFBA73;
+    box-shadow: 0 0 0 2px rgba(223, 186, 115, 0.25);
   }
 
   /* Badges */
@@ -366,21 +366,21 @@
 
   .badge-forest,
   .badge-indigo {
-    background-color: rgba(0, 220, 130, 0.1);
-    color: #00DC82;
-    border: 1px solid rgba(0, 220, 130, 0.25);
+    background-color: rgba(223, 186, 115, 0.12);
+    color: #DFBA73;
+    border: 1px solid rgba(223, 186, 115, 0.3);
   }
 
   .badge-gold {
-    background-color: rgba(201, 162, 39, 0.12);
-    color: #E5C358;
-    border: 1px solid rgba(201, 162, 39, 0.3);
+    background-color: rgba(223, 186, 115, 0.14);
+    color: #DFBA73;
+    border: 1px solid rgba(223, 186, 115, 0.35);
   }
 
   .badge-green {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: #34D399;
-    border: 1px solid rgba(16, 185, 129, 0.25);
+    background-color: rgba(223, 186, 115, 0.12);
+    color: #DFBA73;
+    border: 1px solid rgba(223, 186, 115, 0.3);
   }
 
   .badge-amber {
@@ -397,7 +397,7 @@
 
   /* Skeleton Loader */
   .skeleton {
-    background-color: #0E1F2E;
+    background-color: #101622;
     border-radius: 0.5rem;
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
@@ -418,13 +418,13 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: 0.75rem;
-    border-bottom: 1px solid #142938;
-    background-color: #08141F;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: #0A0E16;
   }
 
   .data-table td {
     padding: 1rem;
-    border-bottom: 1px solid #142938;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     color: #F8FAFC;
   }
 
@@ -433,21 +433,21 @@
   }
 
   .data-table tr:hover td {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(223, 186, 115, 0.03);
   }
 
   /* Feature Bar */
   .feature-bar {
     height: 0.5rem;
     border-radius: 9999px;
-    background-color: #142938;
+    background-color: #141A24;
     overflow: hidden;
   }
 
   .feature-bar-fill {
     height: 100%;
     border-radius: 9999px;
-    background-color: #00DC82;
+    background: linear-gradient(90deg, #C5A880 0%, #DFBA73 100%);
     transition: all 0.7s ease;
   }
 }

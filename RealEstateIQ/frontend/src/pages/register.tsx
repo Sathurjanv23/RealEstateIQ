@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { Mail, Lock, User, Eye, EyeOff, KeyRound, ArrowLeft, RefreshCw } from 'lucide-react';
-import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import { BrandLogo } from '../components/ui/BrandLogo';
 import { authService } from '../services/services';
 import { useAuth } from '../context/AuthContext';
@@ -34,14 +34,10 @@ export default function RegisterPage() {
     return () => clearTimeout(timer);
   }, [step, countdown]);
 
-  const handleGoogleSuccess = async (credentialResponse: any) => {
-    if (!credentialResponse.credential) {
-      toast.error('No Google credential returned.');
-      return;
-    }
+  const handleGoogleAuth = async (accessToken: string) => {
     setLoading(true);
     try {
-      const res = await authService.googleLogin(credentialResponse.credential);
+      const res = await authService.googleLogin({ accessToken });
       const { token, user } = res.data.data;
       login(token, user);
       toast.success(`Welcome to RealEstateIQ, ${user.name}!`);
@@ -53,6 +49,11 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
+  const triggerGoogleRegister = useGoogleLogin({
+    onSuccess: (tokenResponse) => handleGoogleAuth(tokenResponse.access_token),
+    onError: () => toast.error('Google Sign-Up was cancelled or failed.'),
+  });
 
   // Step 1: Validate details & send OTP email
   const handleRequestOtp = async (e: React.FormEvent) => {
@@ -131,36 +132,36 @@ export default function RegisterPage() {
         <title>Create Account — RealEstateIQ</title>
         <meta name="description" content="Create your RealEstateIQ account to access institutional property intelligence." />
       </Head>
-      <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#061017] hero-grid-pattern relative overflow-hidden">
-        {/* Subtle emerald ambient aura */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#00DC82]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="min-h-screen flex flex-col justify-center items-center px-4 py-8 sm:py-12 bg-[#080A0E] hero-grid-pattern relative overflow-y-auto">
+        {/* Subtle champagne gold ambient aura */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#DFBA73]/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="w-full max-w-md relative z-10 animate-fade-in">
+        <div className="w-full max-w-md relative z-10 animate-fade-in my-auto">
 
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <BrandLogo size="lg" showText={true} />
+          <div className="text-center mb-6">
+            <div className="flex justify-center mb-3">
+              <BrandLogo size="lg" showText={true} variant="luxury" />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
+            <h1 className="text-2xl sm:text-3xl font-serif text-white tracking-tight mb-1.5">
               {step === 'details' ? 'Create Client Account' : 'Verify Email Address'}
             </h1>
-            <p className="text-[#94A3B8] text-xs">
+            <p className="text-neutral-400 text-xs">
               {step === 'details'
-                ? 'Join Sri Lanka’s premier real estate valuation network'
+                ? 'Join Sri Lanka’s premier luxury real estate intelligence platform'
                 : `Enter the 6-digit verification code sent to ${email}`}
             </p>
           </div>
 
-          <div className="card-premium p-8 bg-[#0B1722] border border-[#162E40] shadow-2xl rounded-2xl">
+          <div className="luxury-glass-card p-6 sm:p-8 shadow-2xl rounded-2xl">
             {step === 'details' ? (
               <>
                 <form onSubmit={handleRequestOtp} className="space-y-4">
                   <div>
-                    <label htmlFor="name" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
+                    <label htmlFor="name" className="block text-xs font-semibold text-neutral-300 mb-2">
                       Full Name
                     </label>
                     <div className="relative">
-                      <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
+                      <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                       <input
                         id="name"
                         type="text"
@@ -168,18 +169,18 @@ export default function RegisterPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Priyantha Jayasuriya"
-                        className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
+                        className="w-full bg-[#090D14] border border-white/[0.12] focus:border-[#DFBA73] focus:ring-1 focus:ring-[#DFBA73] text-white placeholder-neutral-500 rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
+                    <label htmlFor="email" className="block text-xs font-semibold text-neutral-300 mb-2">
                       Email Address
                     </label>
                     <div className="relative">
-                      <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
+                      <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                       <input
                         id="email"
                         type="email"
@@ -187,18 +188,18 @@ export default function RegisterPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="client@investor.lk"
-                        className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
+                        className="w-full bg-[#090D14] border border-white/[0.12] focus:border-[#DFBA73] focus:ring-1 focus:ring-[#DFBA73] text-white placeholder-neutral-500 rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="password" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
+                    <label htmlFor="password" className="block text-xs font-semibold text-neutral-300 mb-2">
                       Password (min 8 characters)
                     </label>
                     <div className="relative">
-                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
+                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                       <input
                         id="password"
                         type={showPassword ? 'text' : 'password'}
@@ -206,13 +207,13 @@ export default function RegisterPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 pr-11 text-sm outline-none transition-all"
+                        className="w-full bg-[#090D14] border border-white/[0.12] focus:border-[#DFBA73] focus:ring-1 focus:ring-[#DFBA73] text-white placeholder-neutral-500 rounded-xl px-4 py-3 pl-11 pr-11 text-sm outline-none transition-all"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white transition-colors"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white transition-colors"
                       >
                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -220,11 +221,11 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="confirmPassword" className="block text-xs font-semibold text-[#CBD5E1] mb-2">
+                    <label htmlFor="confirmPassword" className="block text-xs font-semibold text-neutral-300 mb-2">
                       Confirm Password
                     </label>
                     <div className="relative">
-                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
+                      <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                       <input
                         id="confirmPassword"
                         type={showPassword ? 'text' : 'password'}
@@ -232,7 +233,7 @@ export default function RegisterPage() {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] focus:ring-1 focus:ring-[#00DC82] text-white placeholder-[#64748B] rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
+                        className="w-full bg-[#090D14] border border-white/[0.12] focus:border-[#DFBA73] focus:ring-1 focus:ring-[#DFBA73] text-white placeholder-neutral-500 rounded-xl px-4 py-3 pl-11 text-sm outline-none transition-all"
                         required
                       />
                     </div>
@@ -248,61 +249,48 @@ export default function RegisterPage() {
                 </form>
 
                 {/* Divider */}
-                <div className="relative my-6">
+                <div className="relative my-5">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-[#162E40]" />
+                    <div className="w-full border-t border-white/[0.1]" />
                   </div>
-                  <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
-                    <span className="bg-[#0B1722] px-3 text-[#64748B]">Or continue with</span>
+                  <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest">
+                    <span className="bg-[#0C1017] px-3 text-[#DFBA73]">Or continue with</span>
                   </div>
                 </div>
 
-                {/* Google OAuth Register */}
-                <div className="flex justify-center w-full">
-                  {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
-                    <div className="w-full flex justify-center">
-                      <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={() => toast.error('Google Sign-Up failed.')}
-                        theme="filled_black"
-                        shape="pill"
-                        size="large"
-                        text="signup_with"
-                        width="100%"
-                      />
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => toast.error('Google Client ID is not configured yet.')}
-                      className="btn-secondary w-full py-2.5 text-xs justify-center"
-                    >
-                      <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                      </svg>
-                      Sign up with Google
-                    </button>
-                  )}
+                {/* Google OAuth Register Button */}
+                <div className="w-full">
+                  <button
+                    type="button"
+                    onClick={() => triggerGoogleRegister()}
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] active:bg-white/[0.1] border border-white/[0.14] hover:border-[#DFBA73]/60 text-white text-xs font-semibold tracking-wide transition-all duration-200 shadow-lg group disabled:opacity-50"
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                    <span className="group-hover:text-[#DFBA73] transition-colors">Sign up with Google</span>
+                  </button>
                 </div>
               </>
             ) : (
               /* Step 2: OTP Verification Form */
               <form onSubmit={handleVerifyOtp} className="space-y-5">
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-2xl bg-[#00DC82]/10 border border-[#00DC82]/30 text-[#00DC82] flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-[#DFBA73]/10 border border-[#DFBA73]/30 text-[#DFBA73] flex items-center justify-center mx-auto mb-3">
                     <KeyRound size={22} />
                   </div>
-                  <p className="text-xs text-[#94A3B8]">
+                  <p className="text-xs text-neutral-400">
                     Enter the 6-digit verification code sent to <br />
-                    <strong className="text-[#00DC82]">{email}</strong>
+                    <strong className="text-[#DFBA73]">{email}</strong>
                   </p>
                 </div>
 
                 <div>
-                  <label htmlFor="otp" className="block text-xs font-semibold text-[#CBD5E1] uppercase tracking-wider mb-2 text-center">
+                  <label htmlFor="otp" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2 text-center">
                     6-Digit Verification Code
                   </label>
                   <input
@@ -313,7 +301,7 @@ export default function RegisterPage() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                     placeholder="• • • • • •"
-                    className="w-full bg-[#08141F] border border-[#162E40] focus:border-[#00DC82] text-center font-mono text-2xl tracking-[0.5em] py-3.5 rounded-xl text-[#00DC82] font-bold outline-none transition-all"
+                    className="w-full bg-[#090D14] border border-white/[0.12] focus:border-[#DFBA73] text-center font-mono text-2xl tracking-[0.5em] py-3.5 rounded-xl text-[#DFBA73] font-bold outline-none transition-all"
                     required
                   />
                 </div>
@@ -330,7 +318,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => setStep('details')}
-                    className="inline-flex items-center gap-1.5 text-[#94A3B8] hover:text-white font-medium transition-colors"
+                    className="inline-flex items-center gap-1.5 text-neutral-400 hover:text-white font-medium transition-colors"
                   >
                     <ArrowLeft size={14} /> Back to details
                   </button>
@@ -339,7 +327,7 @@ export default function RegisterPage() {
                     type="button"
                     onClick={handleResendOtp}
                     disabled={countdown > 0 || resending}
-                    className="inline-flex items-center gap-1.5 text-[#00DC82] hover:text-[#00DC82]/80 disabled:text-[#64748B] disabled:cursor-not-allowed font-bold"
+                    className="inline-flex items-center gap-1.5 text-[#DFBA73] hover:text-[#DFBA73]/80 disabled:text-neutral-500 disabled:cursor-not-allowed font-bold"
                   >
                     <RefreshCw size={13} className={resending ? 'animate-spin' : ''} />
                     {countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'}
@@ -349,9 +337,9 @@ export default function RegisterPage() {
             )}
           </div>
 
-          <p className="text-center text-[#94A3B8] text-xs mt-6">
+          <p className="text-center text-neutral-400 text-xs mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="text-[#00DC82] hover:underline font-bold">
+            <Link href="/login" className="text-[#DFBA73] hover:underline font-bold">
               Sign in
             </Link>
           </p>

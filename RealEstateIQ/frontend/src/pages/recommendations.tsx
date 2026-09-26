@@ -37,24 +37,24 @@ export default function RecommendationsPage() {
       <DashboardLayout title="Asset Matching">
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div>
-            <h2 className="text-2xl font-black text-white">Curated Property Matching</h2>
-            <p className="text-[#94A3B8] text-xs mt-1">Multi-factor weighted asset alignment based on your acquisition criteria</p>
+            <h2 className="text-2xl font-serif text-white">Curated Property Matching</h2>
+            <p className="text-neutral-400 text-xs mt-1">Multi-factor weighted asset alignment based on your acquisition criteria</p>
           </div>
 
           {/* Institutional Note */}
-          <div className="card-premium p-4 border border-[#00DC82]/30 bg-[#00DC82]/10 flex gap-3 items-center">
-            <ShieldCheck size={18} className="text-[#00DC82] shrink-0" />
-            <p className="text-xs text-[#94A3B8]">
+          <div className="luxury-glass-card p-4 border border-[#DFBA73]/30 bg-[#DFBA73]/10 flex gap-3 items-center">
+            <ShieldCheck size={18} className="text-[#DFBA73] shrink-0" />
+            <p className="text-xs text-neutral-300">
               Scoring utilizes transparent multi-factor weighted evaluation (Budget: 40%, Area: 25%, Bedrooms: 20%, Bathrooms: 15%).
             </p>
           </div>
 
-          {/* Preferences Form: Dark Slate */}
-          <div className="card-premium p-6 bg-[#0B1722] border border-[#162E40]">
-            <h3 className="font-bold text-white text-sm mb-4 pb-2 border-b border-[#162E40]">Set Portfolio Target Criteria</h3>
+          {/* Preferences Form: Luxury Glass */}
+          <div className="luxury-glass-card p-6 border border-white/[0.08]">
+            <h3 className="font-serif font-bold text-white text-base mb-4 pb-2 border-b border-white/[0.08]">Set Portfolio Target Criteria</h3>
             <div className="grid md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Max Budget (LKR)</label>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">Max Budget (LKR)</label>
                 <input
                   type="number"
                   placeholder="e.g. 75000000"
@@ -64,7 +64,7 @@ export default function RecommendationsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">District / Location</label>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">District / Location</label>
                 <select
                   value={prefs.location}
                   onChange={(e) => setPrefs({ ...prefs, location: e.target.value })}
@@ -81,7 +81,7 @@ export default function RecommendationsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Asset Type</label>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">Asset Type</label>
                 <select
                   value={prefs.propertyType}
                   onChange={(e) => setPrefs({ ...prefs, propertyType: e.target.value })}
@@ -92,7 +92,7 @@ export default function RecommendationsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Bedrooms</label>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">Bedrooms</label>
                 <input
                   type="number"
                   min="1"
@@ -103,7 +103,7 @@ export default function RecommendationsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Bathrooms</label>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">Bathrooms</label>
                 <input
                   type="number"
                   min="1"
@@ -114,7 +114,7 @@ export default function RecommendationsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Min Area (sqft)</label>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">Min Area (sqft)</label>
                 <input
                   type="number"
                   placeholder="e.g. 1500"
@@ -141,49 +141,49 @@ export default function RecommendationsPage() {
                 ))}
               </div>
             ) : recommendations.length === 0 ? (
-              <div className="card-premium p-16 text-center bg-[#0B1722] border border-[#162E40]">
-                <Star size={48} className="text-[#64748B] mx-auto mb-3" />
-                <p className="text-white font-bold text-base">No properties matching your criteria</p>
-                <p className="text-[#94A3B8] text-xs mt-1">Try expanding your budget ceiling or choosing all locations.</p>
+              <div className="luxury-glass-card p-16 text-center">
+                <Star size={48} className="text-neutral-600 mx-auto mb-3" />
+                <p className="text-white font-serif text-lg">No properties matching your criteria</p>
+                <p className="text-neutral-400 text-xs mt-1">Try expanding your budget ceiling or choosing all locations.</p>
               </div>
             ) : (
               <div className="space-y-4">
-                <p className="text-xs font-bold text-[#94A3B8]">{recommendations.length} properties matched your preferences</p>
+                <p className="text-xs font-bold text-neutral-400">{recommendations.length} properties matched your preferences</p>
                 <div className="grid md:grid-cols-2 gap-5">
                   {recommendations.map((rec) => (
-                    <div key={rec.property._id} className="card-premium-hover p-5 bg-[#0B1722] border border-[#162E40] flex flex-col justify-between">
+                    <div key={rec.property._id} className="luxury-glass-card p-5 flex flex-col justify-between hover:border-[#DFBA73]/40 transition-all">
                       <div>
                         {/* Match score bar */}
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[#00DC82]/10 text-[#00DC82] border border-[#00DC82]/30">
+                          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[#DFBA73]/10 text-[#DFBA73] border border-[#DFBA73]/30">
                             {rec.property.propertyType}
                           </span>
                           <div className="flex items-center gap-2">
-                            <div className="w-24 h-2 rounded-full bg-[#08141F] overflow-hidden border border-[#162E40]">
+                            <div className="w-24 h-2 rounded-full bg-[#090D14] overflow-hidden border border-white/[0.1]">
                               <div
-                                className="h-full rounded-full bg-[#00DC82]"
+                                className="h-full rounded-full bg-gradient-to-r from-[#DFBA73] to-[#C5A880]"
                                 style={{ width: `${rec.matchPercentage}%` }}
                               />
                             </div>
-                            <span className="text-xs font-black text-[#00DC82]">
+                            <span className="text-xs font-bold text-[#DFBA73]">
                               {rec.matchPercentage}% Match
                             </span>
                           </div>
                         </div>
 
-                        <h3 className="font-bold text-white text-sm mb-1 truncate">{rec.property.title}</h3>
-                        <div className="flex items-center gap-1 text-[#94A3B8] text-xs mb-3">
-                          <MapPin size={12} className="text-[#00DC82]" /> {rec.property.location}
+                        <h3 className="font-serif font-bold text-white text-base mb-1 truncate">{rec.property.title}</h3>
+                        <div className="flex items-center gap-1 text-neutral-400 text-xs mb-3">
+                          <MapPin size={12} className="text-[#DFBA73]" /> {rec.property.location}
                         </div>
 
-                        <div className="flex items-center gap-4 text-xs text-[#94A3B8] mb-4 py-2 border-y border-[#142938]">
+                        <div className="flex items-center gap-4 text-xs text-neutral-400 mb-4 py-2 border-y border-white/[0.08]">
                           <span>{rec.property.area.toLocaleString()} sqft</span>
                           <span>{rec.property.bedrooms} Beds</span>
                           <span>{rec.property.bathrooms} Baths</span>
                         </div>
 
                         {rec.property.askingPrice && (
-                          <p className="text-[#00DC82] font-black text-sm mb-4">Rs. {rec.property.askingPrice.toLocaleString()}</p>
+                          <p className="text-[#DFBA73] font-bold text-base mb-4">Rs. {rec.property.askingPrice.toLocaleString()}</p>
                         )}
                       </div>
 

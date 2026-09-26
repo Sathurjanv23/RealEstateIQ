@@ -162,30 +162,47 @@ export const googleAuth = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { credential } = req.body;
-    if (!credential) {
-      next(createError('Google credential token is required.', 400, 'MISSING_CREDENTIAL'));
-      return;
-    }
-
-    const clientId = (process.env.GOOGLE_CLIENT_ID || '').trim();
-    if (!clientId) {
-      next(createError('Google OAuth is not configured on this server.', 500, 'GOOGLE_NOT_CONFIGURED'));
+    const { credential, accessToken } = req.body;
+    if (!credential && !accessToken) {
+      next(createError('Google credential or access token is required.', 400, 'MISSING_CREDENTIAL'));
       return;
     }
 
     let payload: any;
-    try {
-      const client = new OAuth2Client(clientId);
-      const ticket = await client.verifyIdToken({
-        idToken: credential,
-        audience: clientId,
-      });
-      payload = ticket.getPayload();
-    } catch (verifyErr: any) {
-      logger.error(`Google token verification failed: ${verifyErr.message}`);
-      next(createError(`Invalid or expired Google token: ${verifyErr.message}`, 401, 'INVALID_GOOGLE_TOKEN'));
-      return;
+    if (accessToken) {
+      try {
+        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        if (!userInfoRes.ok) {
+          next(createError('Failed to verify Google access token.', 401, 'INVALID_GOOGLE_TOKEN'));
+          return;
+        }
+        payload = await userInfoRes.json();
+      } catch (err: any) {
+        logger.error(`Google userinfo fetch failed: ${err.message}`);
+        next(createError(`Google userinfo fetch failed: ${err.message}`, 401, 'INVALID_GOOGLE_TOKEN'));
+        return;
+      }
+    } else {
+      const clientId = (process.env.GOOGLE_CLIENT_ID || '').trim();
+      if (!clientId) {
+        next(createError('Google OAuth is not configured on this server.', 500, 'GOOGLE_NOT_CONFIGURED'));
+        return;
+      }
+
+      try {
+        const client = new OAuth2Client(clientId);
+        const ticket = await client.verifyIdToken({
+          idToken: credential,
+          audience: clientId,
+        });
+        payload = ticket.getPayload();
+      } catch (verifyErr: any) {
+        logger.error(`Google token verification failed: ${verifyErr.message}`);
+        next(createError(`Invalid or expired Google token: ${verifyErr.message}`, 401, 'INVALID_GOOGLE_TOKEN'));
+        return;
+      }
     }
 
     if (!payload || !payload.email) {
