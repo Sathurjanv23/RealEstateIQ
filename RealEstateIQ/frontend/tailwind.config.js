@@ -9,14 +9,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Luxury Obsidian & Charcoal Theme
+        charcoal: {
+          DEFAULT: '#080A0E',
+          surface: '#0D1117',
+          card: '#11151F',
+          cardHover: '#161C28',
+          border: 'rgba(255, 255, 255, 0.08)',
+        },
         // RealEstateIQ Sleek Dark Theme matching sample
         background: {
-          DEFAULT: '#061017', // Deep Dark Navy/Pine
-          darker: '#040B10',
-          card: '#0B1722',   // Sleek Dark Card
-          cardHover: '#0E1F2E',
-          cardBorder: '#142938',
-          input: '#091520',
+          DEFAULT: '#080A0E',
+          darker: '#05070A',
+          card: '#0D1118',
+          cardHover: '#131924',
+          cardBorder: '#1A2332',
+          input: '#0A0E15',
+        },
+        // Luxury Champagne Gold Palette
+        gold: {
+          DEFAULT: '#D4AF37',
+          champagne: '#DFBA73',
+          warm: '#C5A880',
+          light: '#F8EED9',
+          badge: '#F3E5AE',
+          muted: '#A88448',
+          dark: '#856420',
+          glow: 'rgba(212, 175, 55, 0.2)',
         },
         // Primary Brand Accent: Mint / Emerald Green
         emerald: {
@@ -31,11 +50,6 @@ module.exports = {
           deep: '#061C14',
           banner: '#082E22',
         },
-        gold: {
-          DEFAULT: '#C9A227',
-          light: '#FAF4DC',
-          badge: '#F3E5AE',
-        },
         slateText: {
           primary: '#F8FAFC',
           secondary: '#94A3B8',
@@ -43,18 +57,22 @@ module.exports = {
         },
         // Semantic compatibility colors
         brand: {
-          400: '#00DC82',
-          500: '#10B981',
-          600: '#059669',
+          400: '#DFBA73',
+          500: '#D4AF37',
+          600: '#B8934A',
         },
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Cormorant Garamond', 'Georgia', 'serif'],
       },
       boxShadow: {
         'card-dark': '0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05)',
         'emerald-glow': '0 0 25px -4px rgba(0, 220, 130, 0.35)',
         'btn-emerald': '0 4px 14px -1px rgba(0, 220, 130, 0.3)',
+        'gold-glow': '0 0 25px -2px rgba(212, 175, 55, 0.25)',
+        'btn-gold': '0 4px 18px -1px rgba(212, 175, 55, 0.35)',
+        'card-luxury': '0 20px 50px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',
