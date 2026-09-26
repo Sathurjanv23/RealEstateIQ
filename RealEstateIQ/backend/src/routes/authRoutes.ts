@@ -16,8 +16,6 @@ const router = Router();
 
 router.post(
   '/google',
-  [body('credential').notEmpty().withMessage('Google credential token is required.')],
-  validate,
   googleAuth
 );
 

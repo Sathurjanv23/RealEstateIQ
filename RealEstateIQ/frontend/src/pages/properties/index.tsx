@@ -23,39 +23,39 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
   const hasImage = property.images && property.images.length > 0 && property.images[0];
 
   return (
-    <div className="card-premium-hover overflow-hidden group flex flex-col justify-between bg-[#0B1722] border border-[#162E40]">
+    <div className="luxury-glass-card overflow-hidden group flex flex-col justify-between hover:border-[#DFBA73]/40 transition-all">
       <div>
         {hasImage ? (
-          <div className="h-48 w-full relative overflow-hidden bg-[#08141F]">
+          <div className="h-48 w-full relative overflow-hidden bg-[#080A0E]">
             <img
               src={property.images[0]}
               alt={property.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#00DC82]/15 text-[#00DC82] border border-[#00DC82]/30 shadow-sm backdrop-blur-md">
+            <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30 shadow-sm backdrop-blur-md">
               {property.propertyType}
             </span>
           </div>
         ) : (
-          <div className="h-2 w-full bg-[#00DC82]" />
+          <div className="h-2 w-full bg-gradient-to-r from-[#DFBA73] to-[#C5A880]" />
         )}
 
         <div className="p-5">
           <div className="flex items-start justify-between mb-2">
             <div className="flex-1 min-w-0 pr-2">
               {!hasImage && (
-                <span className="text-[10px] uppercase font-bold mb-2 inline-flex px-2 py-0.5 rounded bg-[#00DC82]/10 text-[#00DC82] border border-[#00DC82]/30">
+                <span className="text-[10px] uppercase font-bold mb-2 inline-flex px-2 py-0.5 rounded bg-[#DFBA73]/10 text-[#DFBA73] border border-[#DFBA73]/30">
                   {property.propertyType}
                 </span>
               )}
-              <h3 className="font-bold text-white text-sm truncate mt-0.5">{property.title}</h3>
+              <h3 className="font-serif font-bold text-white text-base truncate mt-0.5">{property.title}</h3>
             </div>
             <button
               onClick={() => onSave(property._id)}
               className={`p-2 rounded-lg transition-all ${
                 saved
-                  ? 'text-[#00DC82] bg-[#00DC82]/15 border border-[#00DC82]/30'
-                  : 'text-[#64748B] hover:text-white hover:bg-white/5'
+                  ? 'text-[#DFBA73] bg-[#DFBA73]/15 border border-[#DFBA73]/30'
+                  : 'text-neutral-500 hover:text-white hover:bg-white/5'
               }`}
               title={saved ? 'Remove from saved' : 'Save property'}
             >
@@ -63,33 +63,33 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
             </button>
           </div>
 
-          <div className="flex items-center gap-1 text-[#94A3B8] text-xs mb-3">
-            <MapPin size={12} className="text-[#00DC82]" /> {property.location}{property.district ? `, ${property.district}` : ''}
+          <div className="flex items-center gap-1 text-neutral-400 text-xs mb-3">
+            <MapPin size={12} className="text-[#DFBA73]" /> {property.location}{property.district ? `, ${property.district}` : ''}
           </div>
 
-          <div className="grid grid-cols-3 gap-2 py-2 border-y border-[#142938] mb-4 text-xs text-[#94A3B8]">
+          <div className="grid grid-cols-3 gap-2 py-2 border-y border-white/[0.08] mb-4 text-xs text-neutral-400">
             <div className="flex items-center gap-1">
-              <Home size={12} className="text-[#00DC82]" /> {property.area.toLocaleString()} sqft
+              <Home size={12} className="text-[#DFBA73]" /> {property.area.toLocaleString()} sqft
             </div>
             <div className="flex items-center gap-1">
-              <Bed size={12} className="text-[#00DC82]" /> {property.bedrooms} Beds
+              <Bed size={12} className="text-[#DFBA73]" /> {property.bedrooms} Beds
             </div>
             <div className="flex items-center gap-1">
-              <Bath size={12} className="text-[#00DC82]" /> {property.bathrooms} Baths
+              <Bath size={12} className="text-[#DFBA73]" /> {property.bathrooms} Baths
             </div>
           </div>
 
           <div className="flex items-center justify-between">
             <div>
               {property.askingPrice ? (
-                <p className="text-[#00DC82] font-black text-base">Rs. {property.askingPrice.toLocaleString()}</p>
+                <p className="text-[#DFBA73] font-serif font-black text-base">Rs. {property.askingPrice.toLocaleString()}</p>
               ) : (
-                <p className="text-[#94A3B8] text-xs font-semibold">Price on Inquiry</p>
+                <p className="text-neutral-400 text-xs font-semibold">Price on Inquiry</p>
               )}
             </div>
             <Link
               href={`/properties/${property._id}`}
-              className="text-xs font-bold text-[#00DC82] hover:underline transition-colors"
+              className="text-xs font-bold text-[#DFBA73] hover:underline transition-colors"
             >
               View Asset →
             </Link>
@@ -176,11 +176,11 @@ export default function PropertiesPage() {
       <DashboardLayout title="Property Inventory">
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           {/* Header controls: Search & Mode toggle */}
-          <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40]">
+          <div className="luxury-glass-card p-4">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               {/* Search input */}
               <div className="relative flex-1 w-full">
-                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
+                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                 <input
                   type="text"
                   placeholder="Search properties by title, district or features..."
@@ -195,24 +195,24 @@ export default function PropertiesPage() {
                 <button
                   onClick={() => setShowFilters(!showFilters)}
                   className={`btn-secondary text-xs py-2 px-3.5 ${
-                    activeFilterCount > 0 ? 'border-[#00DC82] text-[#00DC82] bg-[#00DC82]/10' : ''
+                    activeFilterCount > 0 ? 'border-[#DFBA73] text-[#DFBA73] bg-[#DFBA73]/10' : ''
                   }`}
                 >
                   <Filter size={14} />
                   <span>Filters</span>
                   {activeFilterCount > 0 && (
-                    <span className="w-5 h-5 rounded-full bg-[#00DC82] text-[#061017] text-[10px] flex items-center justify-center font-bold">
+                    <span className="w-5 h-5 rounded-full bg-[#DFBA73] text-[#0A0D12] text-[10px] flex items-center justify-center font-bold">
                       {activeFilterCount}
                     </span>
                   )}
                 </button>
 
                 {/* View Mode Toggle: Grid vs Map */}
-                <div className="flex items-center border border-[#162E40] rounded-xl overflow-hidden p-0.5 bg-[#08141F]">
+                <div className="flex items-center border border-white/[0.1] rounded-xl overflow-hidden p-0.5 bg-[#090D14]">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors ${
-                      viewMode === 'grid' ? 'bg-[#00DC82] text-[#061017] shadow-sm font-bold' : 'text-[#94A3B8] hover:text-white'
+                      viewMode === 'grid' ? 'bg-[#DFBA73] text-[#0A0D12] shadow-sm font-bold' : 'text-neutral-400 hover:text-white'
                     }`}
                     title="Grid View"
                   >
@@ -221,7 +221,7 @@ export default function PropertiesPage() {
                   <button
                     onClick={() => setViewMode('map')}
                     className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors ${
-                      viewMode === 'map' ? 'bg-[#00DC82] text-[#061017] shadow-sm font-bold' : 'text-[#94A3B8] hover:text-white'
+                      viewMode === 'map' ? 'bg-[#DFBA73] text-[#0A0D12] shadow-sm font-bold' : 'text-neutral-400 hover:text-white'
                     }`}
                     title="Map View"
                   >
@@ -233,9 +233,9 @@ export default function PropertiesPage() {
 
             {/* Filter expansion panel */}
             {showFilters && (
-              <div className="pt-4 mt-4 border-t border-[#162E40] grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fade-in">
+              <div className="pt-4 mt-4 border-t border-white/[0.08] grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fade-in">
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#CBD5E1] mb-1">District / City</label>
+                  <label className="block text-[11px] font-semibold text-neutral-300 mb-1">District / City</label>
                   <select
                     value={filters.location}
                     onChange={(e) => { setFilters({ ...filters, location: e.target.value }); setPage(1); }}
@@ -253,7 +253,7 @@ export default function PropertiesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#CBD5E1] mb-1">Property Type</label>
+                  <label className="block text-[11px] font-semibold text-neutral-300 mb-1">Property Type</label>
                   <select
                     value={filters.propertyType}
                     onChange={(e) => { setFilters({ ...filters, propertyType: e.target.value }); setPage(1); }}
@@ -267,7 +267,7 @@ export default function PropertiesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#CBD5E1] mb-1">Min Price (LKR)</label>
+                  <label className="block text-[11px] font-semibold text-neutral-300 mb-1">Min Price (LKR)</label>
                   <input
                     type="number"
                     placeholder="Min Price"
@@ -278,7 +278,7 @@ export default function PropertiesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#CBD5E1] mb-1">Max Price (LKR)</label>
+                  <label className="block text-[11px] font-semibold text-neutral-300 mb-1">Max Price (LKR)</label>
                   <input
                     type="number"
                     placeholder="Max Price"
@@ -304,12 +304,12 @@ export default function PropertiesPage() {
 
           {/* Map View */}
           {viewMode === 'map' && (
-            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40]">
+            <div className="luxury-glass-card p-4">
               <div className="mb-3 flex items-center justify-between">
-                <span className="text-xs font-bold text-white">
+                <span className="text-xs font-serif font-bold text-white">
                   Interactive Sri Lanka Asset Map ({properties.length} displayed)
                 </span>
-                <span className="text-xs text-[#94A3B8]">Click any pin to inspect pricing</span>
+                <span className="text-xs text-neutral-400">Click any pin to inspect pricing</span>
               </div>
               <PropertyMap properties={properties} height="560px" />
             </div>
@@ -325,10 +325,10 @@ export default function PropertiesPage() {
                   ))}
                 </div>
               ) : properties.length === 0 ? (
-                <div className="card-premium p-16 text-center bg-[#0B1722] border border-[#162E40]">
-                  <Home size={40} className="text-[#64748B] mx-auto mb-3" />
-                  <p className="text-white font-bold text-base">No properties match your filter criteria.</p>
-                  <p className="text-[#94A3B8] text-xs mt-1">Try broadening your search or resetting district filters.</p>
+                <div className="luxury-glass-card p-16 text-center">
+                  <Home size={40} className="text-neutral-600 mx-auto mb-3" />
+                  <p className="text-white font-serif text-lg">No properties match your filter criteria.</p>
+                  <p className="text-neutral-400 text-xs mt-1">Try broadening your search or resetting district filters.</p>
                   <button onClick={clearFilters} className="btn-secondary mt-5 text-xs py-2 px-4 font-semibold">
                     Reset All Filters
                   </button>

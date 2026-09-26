@@ -113,25 +113,25 @@ export default function PropertyDetailPage() {
         <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
           <Link
             href="/properties"
-            className="inline-flex items-center gap-2 text-[#94A3B8] hover:text-[#00DC82] text-sm font-semibold transition-colors"
+            className="inline-flex items-center gap-2 text-neutral-400 hover:text-[#DFBA73] text-sm font-semibold transition-colors"
           >
             <ArrowLeft size={16} /> Back to Properties
           </Link>
 
           {/* Photo Gallery Banner */}
           {property.images && property.images.length > 0 && (
-            <div className="card-premium overflow-hidden p-3 space-y-3 bg-[#0B1722] border border-[#162E40]">
-              <div className="relative h-72 md:h-96 rounded-xl overflow-hidden bg-[#08141F]">
+            <div className="luxury-glass-card overflow-hidden p-3 space-y-3">
+              <div className="relative h-72 md:h-96 rounded-xl overflow-hidden bg-[#080A0E]">
                 <img
                   src={property.images[activeImage] || property.images[0]}
                   alt={property.title}
                   className="w-full h-full object-cover transition-all duration-300"
                 />
                 <div className="absolute top-3 left-3 flex gap-2">
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#00DC82]/15 text-[#00DC82] border border-[#00DC82]/30 shadow-sm backdrop-blur-md">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30 shadow-sm backdrop-blur-md">
                     {property.propertyType}
                   </span>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#061017]/80 text-white border border-white/10 shadow-sm backdrop-blur-md">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#080A0E]/80 text-white border border-white/10 shadow-sm backdrop-blur-md">
                     Photo {activeImage + 1} of {property.images.length}
                   </span>
                 </div>
@@ -144,7 +144,7 @@ export default function PropertyDetailPage() {
                       onClick={() => setActiveImage(idx)}
                       className={`relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                         activeImage === idx
-                          ? 'border-[#00DC82] scale-95 ring-2 ring-[#00DC82]/30'
+                          ? 'border-[#DFBA73] scale-95 ring-2 ring-[#DFBA73]/30'
                           : 'border-transparent opacity-60 hover:opacity-100'
                       }`}
                     >
@@ -156,25 +156,25 @@ export default function PropertyDetailPage() {
             </div>
           )}
 
-          {/* Header Card: Dark Slate with Emerald Price */}
-          <div className="card-premium p-6 sm:p-8 bg-[#0B1722] border border-[#162E40]">
+          {/* Header Card: Luxury Obsidian Glass */}
+          <div className="luxury-glass-card p-6 sm:p-8">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
               <div className="flex-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider mb-2.5 inline-flex px-2 py-0.5 rounded bg-[#00DC82]/10 text-[#00DC82] border border-[#00DC82]/30">
+                <span className="text-[10px] font-bold uppercase tracking-wider mb-2.5 inline-flex px-2 py-0.5 rounded bg-[#DFBA73]/10 text-[#DFBA73] border border-[#DFBA73]/30">
                   {property.propertyType}
                 </span>
-                <h1 className="text-2xl sm:text-3xl font-black text-white mb-2">{property.title}</h1>
-                <div className="flex items-center gap-1.5 text-[#94A3B8] text-sm">
-                  <MapPin size={15} className="text-[#00DC82]" /> {property.location}{property.district ? `, ${property.district}` : ''}
+                <h1 className="text-2xl sm:text-3xl font-serif font-black text-white mb-2">{property.title}</h1>
+                <div className="flex items-center gap-1.5 text-neutral-400 text-sm">
+                  <MapPin size={15} className="text-[#DFBA73]" /> {property.location}{property.district ? `, ${property.district}` : ''}
                 </div>
               </div>
 
               <div className="flex flex-col md:items-end gap-3.5 shrink-0">
                 {property.askingPrice && (
                   <div className="md:text-right">
-                    <p className="text-xs uppercase font-bold text-[#94A3B8] mb-0.5">Asking Price</p>
-                    <p className="text-3xl font-black text-[#00DC82]">Rs. {property.askingPrice.toLocaleString()}</p>
-                    {pricePerSqft && <p className="text-xs text-[#94A3B8] font-semibold mt-0.5">Rs. {pricePerSqft.toLocaleString()} / sqft</p>}
+                    <p className="text-xs uppercase font-bold text-neutral-400 mb-0.5">Asking Price</p>
+                    <p className="text-3xl font-serif font-black text-[#DFBA73]">Rs. {property.askingPrice.toLocaleString()}</p>
+                    {pricePerSqft && <p className="text-xs text-neutral-400 font-semibold mt-0.5">Rs. {pricePerSqft.toLocaleString()} / sqft</p>}
                   </div>
                 )}
                 <div className="flex flex-wrap items-center gap-2">
@@ -194,7 +194,7 @@ export default function PropertyDetailPage() {
                     <button
                       onClick={() => saveMutation.mutate()}
                       disabled={saveMutation.isPending}
-                      className={`btn-secondary text-xs py-2.5 px-3.5 font-semibold ${saved ? 'border-[#00DC82] text-[#00DC82] bg-[#00DC82]/15' : ''}`}
+                      className={`btn-secondary text-xs py-2.5 px-3.5 font-semibold ${saved ? 'border-[#DFBA73] text-[#DFBA73] bg-[#DFBA73]/15' : ''}`}
                     >
                       {saved ? <><BookmarkCheck size={15} /> Saved</> : <><BookmarkPlus size={15} /> Save</>}
                     </button>
@@ -207,21 +207,21 @@ export default function PropertyDetailPage() {
           {/* Details Grid */}
           <div className="grid md:grid-cols-2 gap-6">
             {/* Property Specs */}
-            <div className="card-premium p-6 bg-[#0B1722] border border-[#162E40]">
-              <h2 className="font-bold text-white text-sm mb-4 pb-2 border-b border-[#162E40]">
+            <div className="luxury-glass-card p-6">
+              <h2 className="font-serif font-bold text-white text-base mb-4 pb-2 border-b border-white/[0.08]">
                 Property Specifications
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: <Home size={15} className="text-[#00DC82]" />, label: 'Total Area', value: `${property.area.toLocaleString()} sqft` },
-                  { icon: <Bed size={15} className="text-[#00DC82]" />, label: 'Bedrooms', value: property.bedrooms },
-                  { icon: <Bath size={15} className="text-[#00DC82]" />, label: 'Bathrooms', value: property.bathrooms },
-                  { icon: <Car size={15} className="text-[#00DC82]" />, label: 'Parking', value: property.parking },
-                  { icon: <Calendar size={15} className="text-[#00DC82]" />, label: 'House Age', value: `${property.houseAge} years` },
-                  ...(property.landSize ? [{ icon: <MapPin size={15} className="text-[#00DC82]" />, label: 'Land Size', value: `${property.landSize} perches` }] : []),
+                  { icon: <Home size={15} className="text-[#DFBA73]" />, label: 'Total Area', value: `${property.area.toLocaleString()} sqft` },
+                  { icon: <Bed size={15} className="text-[#DFBA73]" />, label: 'Bedrooms', value: property.bedrooms },
+                  { icon: <Bath size={15} className="text-[#DFBA73]" />, label: 'Bathrooms', value: property.bathrooms },
+                  { icon: <Car size={15} className="text-[#DFBA73]" />, label: 'Parking', value: property.parking },
+                  { icon: <Calendar size={15} className="text-[#DFBA73]" />, label: 'House Age', value: `${property.houseAge} years` },
+                  ...(property.landSize ? [{ icon: <MapPin size={15} className="text-[#DFBA73]" />, label: 'Land Size', value: `${property.landSize} perches` }] : []),
                 ].map((spec) => (
-                  <div key={spec.label} className="p-3 rounded-xl bg-[#08141F] border border-[#162E40]">
-                    <div className="flex items-center gap-1.5 mb-1">{spec.icon}<p className="text-[11px] text-[#94A3B8] font-medium">{spec.label}</p></div>
+                  <div key={spec.label} className="p-3 rounded-xl bg-[#090D14] border border-white/[0.08]">
+                    <div className="flex items-center gap-1.5 mb-1">{spec.icon}<p className="text-[11px] text-neutral-400 font-medium">{spec.label}</p></div>
                     <p className="text-sm font-bold text-white">{spec.value}</p>
                   </div>
                 ))}
@@ -229,36 +229,36 @@ export default function PropertyDetailPage() {
             </div>
 
             {/* Amenities & Description */}
-            <div className="card-premium p-6 bg-[#0B1722] border border-[#162E40]">
-              <h2 className="font-bold text-white text-sm mb-4 pb-2 border-b border-[#162E40]">
+            <div className="luxury-glass-card p-6">
+              <h2 className="font-serif font-bold text-white text-base mb-4 pb-2 border-b border-white/[0.08]">
                 Asset Amenities & Description
               </h2>
               {property.amenities.length === 0 ? (
-                <p className="text-[#94A3B8] text-xs">No specific amenities listed.</p>
+                <p className="text-neutral-400 text-xs">No specific amenities listed.</p>
               ) : (
                 <div className="flex flex-wrap gap-2 mb-4">
                   {property.amenities.map((a) => (
-                    <span key={a} className="text-xs px-2.5 py-1 rounded-lg bg-[#00DC82]/10 text-[#00DC82] border border-[#00DC82]/30 font-medium">{a}</span>
+                    <span key={a} className="text-xs px-2.5 py-1 rounded-lg bg-[#DFBA73]/10 text-[#DFBA73] border border-[#DFBA73]/30 font-medium">{a}</span>
                   ))}
                 </div>
               )}
 
               {property.description && (
-                <div className="mt-4 pt-4 border-t border-[#162E40]">
-                  <h3 className="font-bold text-[#CBD5E1] mb-2 text-xs uppercase tracking-wider">Overview</h3>
-                  <p className="text-[#94A3B8] text-xs leading-relaxed">{property.description}</p>
+                <div className="mt-4 pt-4 border-t border-white/[0.08]">
+                  <h3 className="font-bold text-neutral-300 mb-2 text-xs uppercase tracking-wider">Overview</h3>
+                  <p className="text-neutral-400 text-xs leading-relaxed">{property.description}</p>
                 </div>
               )}
             </div>
           </div>
 
           {/* Location & Map Card */}
-          <div className="card-premium p-6 space-y-4 bg-[#0B1722] border border-[#162E40]">
+          <div className="luxury-glass-card p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-white text-sm flex items-center gap-2">
-                <MapPin size={16} className="text-[#00DC82]" /> Location & Cartography
+              <h2 className="font-serif font-bold text-white text-base flex items-center gap-2">
+                <MapPin size={16} className="text-[#DFBA73]" /> Location & Cartography
               </h2>
-              <span className="text-xs text-[#00DC82] bg-[#00DC82]/10 border border-[#00DC82]/30 px-2.5 py-1 rounded-full font-bold">
+              <span className="text-xs text-[#DFBA73] bg-[#DFBA73]/10 border border-[#DFBA73]/30 px-2.5 py-1 rounded-full font-bold">
                 {property.location}{property.district ? ` · ${property.district}` : ''}
               </span>
             </div>
@@ -273,13 +273,13 @@ export default function PropertyDetailPage() {
 
           {/* Valuation CTA */}
           {isAuthenticated && (
-            <div className="card-premium p-6 bg-[#00DC82]/10 border border-[#00DC82]/30">
+            <div className="luxury-glass-card p-6 bg-[#DFBA73]/10 border border-[#DFBA73]/30">
               <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                  <h3 className="font-bold text-[#00DC82] flex items-center gap-2 mb-1 text-base">
+                  <h3 className="font-serif font-bold text-[#DFBA73] flex items-center gap-2 mb-1 text-lg">
                     <Brain size={18} /> Benchmark Property Valuation
                   </h3>
-                  <p className="text-[#94A3B8] text-xs leading-relaxed max-w-xl">
+                  <p className="text-neutral-300 text-xs leading-relaxed max-w-xl">
                     Run the 23-district valuation engine on this property&apos;s specifications to calculate fair-market value and confidence intervals.
                   </p>
                 </div>
@@ -295,18 +295,18 @@ export default function PropertyDetailPage() {
 
           {/* Schedule Viewing / Inquire Modal */}
           {inquireModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-fade-in">
-              <div className="card-premium max-w-lg w-full p-6 bg-[#0B1722] border border-[#162E40] shadow-2xl relative">
-                <div className="flex items-center justify-between mb-5 border-b border-[#162E40] pb-3">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in">
+              <div className="luxury-glass-card max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-white/[0.15]">
+                <div className="flex items-center justify-between mb-5 border-b border-white/[0.08] pb-3">
                   <div>
-                    <h3 className="text-base font-bold text-white flex items-center gap-2">
-                      <Mail size={16} className="text-[#00DC82]" /> Schedule Property Viewing
+                    <h3 className="text-lg font-serif font-bold text-white flex items-center gap-2">
+                      <Mail size={16} className="text-[#DFBA73]" /> Schedule Property Viewing
                     </h3>
-                    <p className="text-xs text-[#94A3B8] mt-0.5">{property.title} ({property.location})</p>
+                    <p className="text-xs text-neutral-400 mt-0.5">{property.title} ({property.location})</p>
                   </div>
                   <button
                     onClick={() => setInquireModal(false)}
-                    className="p-1.5 rounded-lg text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors"
+                    className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-white/5 transition-colors"
                   >
                     <X size={18} />
                   </button>
@@ -314,7 +314,7 @@ export default function PropertyDetailPage() {
 
                 <form onSubmit={handleInquirySubmit} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Your Full Name *</label>
+                    <label className="block text-xs font-semibold text-neutral-300 mb-1">Your Full Name *</label>
                     <input
                       type="text"
                       required
@@ -326,7 +326,7 @@ export default function PropertyDetailPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Phone Number *</label>
+                      <label className="block text-xs font-semibold text-neutral-300 mb-1">Phone Number *</label>
                       <input
                         type="tel"
                         required
@@ -337,7 +337,7 @@ export default function PropertyDetailPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Preferred Date</label>
+                      <label className="block text-xs font-semibold text-neutral-300 mb-1">Preferred Date</label>
                       <input
                         type="date"
                         value={inquiry.date}
@@ -347,7 +347,7 @@ export default function PropertyDetailPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Email (Optional)</label>
+                    <label className="block text-xs font-semibold text-neutral-300 mb-1">Email (Optional)</label>
                     <input
                       type="email"
                       placeholder="your.email@example.com"
@@ -357,7 +357,7 @@ export default function PropertyDetailPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#CBD5E1] mb-1">Message for Agent / Broker</label>
+                    <label className="block text-xs font-semibold text-neutral-300 mb-1">Message for Agent / Broker</label>
                     <textarea
                       rows={3}
                       placeholder="I would like to schedule a viewing or request the legal title report..."

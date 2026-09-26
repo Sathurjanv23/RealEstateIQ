@@ -76,17 +76,17 @@ export default function DashboardPage() {
       <DashboardLayout title="Intelligence Hub">
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           {/* Welcome Banner */}
-          <div className="card-premium p-6 sm:p-8 bg-[#0B1722] border border-[#162E40] shadow-xl">
+          <div className="luxury-glass-card p-6 sm:p-8 shadow-xl">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#00DC82]/10 text-[#00DC82] text-[11px] font-bold uppercase tracking-wider mb-2 border border-[#00DC82]/30">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#DFBA73]/10 text-[#DFBA73] text-[11px] font-bold uppercase tracking-wider mb-2 border border-[#DFBA73]/30">
                   <ShieldCheck size={12} /> RealEstateIQ Verified Portfolio
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-white">
-                  Welcome back, <span className="text-[#00DC82]">{user?.name}</span>
+                <h2 className="text-2xl sm:text-3xl font-serif font-black text-white">
+                  Welcome back, <span className="text-[#DFBA73]">{user?.name}</span>
                 </h2>
-                <p className="text-[#94A3B8] text-sm mt-1">
-                  Access institutional-grade valuation analytics and track Sri Lankan real estate assets.
+                <p className="text-neutral-400 text-sm mt-1">
+                  Access institutional-grade valuation analytics and track Sri Lankan luxury real estate assets.
                 </p>
               </div>
 
@@ -106,26 +106,26 @@ export default function DashboardPage() {
             <StatCard
               label="Properties Monitored"
               value={totalProperties}
-              icon={<Home size={20} className="text-[#00DC82]" />}
-              color="bg-[#00DC82]/10 border border-[#00DC82]/25"
+              icon={<Home size={20} className="text-[#DFBA73]" />}
+              color="bg-[#DFBA73]/10 border border-[#DFBA73]/25"
             />
             <StatCard
               label="My Valuations"
               value={historyData?.data?.data?.pagination?.total || 0}
-              icon={<Brain size={20} className="text-[#00DC82]" />}
-              color="bg-[#00DC82]/10 border border-[#00DC82]/25"
+              icon={<Brain size={20} className="text-[#DFBA73]" />}
+              color="bg-[#DFBA73]/10 border border-[#DFBA73]/25"
             />
             <StatCard
               label="Engine Version"
               value={modelVersion}
-              icon={<TrendingUp size={20} className="text-[#C9A227]" />}
-              color="bg-[#C9A227]/10 border border-[#C9A227]/25"
+              icon={<TrendingUp size={20} className="text-[#DFBA73]" />}
+              color="bg-[#DFBA73]/10 border border-[#DFBA73]/25"
             />
             <StatCard
               label="Model R² Score"
               value={modelR2}
-              icon={<BarChart3 size={20} className="text-[#00DC82]" />}
-              color="bg-[#00DC82]/10 border border-[#00DC82]/25"
+              icon={<BarChart3 size={20} className="text-[#DFBA73]" />}
+              color="bg-[#DFBA73]/10 border border-[#DFBA73]/25"
             />
           </div>
 
@@ -136,18 +136,18 @@ export default function DashboardPage() {
               { href: '/market', icon: <BarChart3 size={22} />, label: 'District Intelligence', desc: 'Examine median square-foot rates and trends', badge: 'Analytics' },
               { href: '/recommendations', icon: <TrendingUp size={22} />, label: 'Curated Asset Matching', desc: 'Identify high-yield opportunities meeting criteria', badge: 'Yields' },
             ].map((action) => (
-              <Link key={action.href} href={action.href} className="card-premium-hover p-6 bg-[#0B1722] border border-[#162E40] group">
+              <Link key={action.href} href={action.href} className="luxury-glass-card p-6 group hover:border-[#DFBA73]/40 transition-all">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#00DC82]/10 border border-[#00DC82]/25 flex items-center justify-center text-[#00DC82] group-hover:bg-[#00DC82] group-hover:text-[#061017] transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-[#DFBA73]/10 border border-[#DFBA73]/25 flex items-center justify-center text-[#DFBA73] group-hover:bg-[#DFBA73] group-hover:text-[#0A0D12] transition-all">
                     {action.icon}
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#00DC82]/15 text-[#00DC82] border border-[#00DC82]/30">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30">
                     {action.badge}
                   </span>
                 </div>
-                <h3 className="font-bold text-white text-sm mb-1 group-hover:text-[#00DC82] transition-colors">{action.label}</h3>
-                <p className="text-[#94A3B8] text-xs leading-relaxed">{action.desc}</p>
-                <div className="flex items-center gap-1 text-xs font-semibold text-[#00DC82] mt-4 group-hover:translate-x-0.5 transition-transform">
+                <h3 className="font-serif font-bold text-white text-base mb-1 group-hover:text-[#DFBA73] transition-colors">{action.label}</h3>
+                <p className="text-neutral-400 text-xs leading-relaxed">{action.desc}</p>
+                <div className="flex items-center gap-1 text-xs font-semibold text-[#DFBA73] mt-4 group-hover:translate-x-0.5 transition-transform">
                   <span>Explore Module</span>
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -156,21 +156,21 @@ export default function DashboardPage() {
           </div>
 
           {/* Recent Predictions */}
-          <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
-            <div className="flex items-center justify-between p-5 border-b border-[#162E40] bg-[#08141F]">
-              <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                <History size={16} className="text-[#00DC82]" /> Recent Property Valuations
+          <div className="luxury-glass-card overflow-hidden">
+            <div className="flex items-center justify-between p-5 border-b border-white/[0.08] bg-[#090D14]">
+              <h3 className="font-serif font-bold text-white text-base flex items-center gap-2">
+                <History size={16} className="text-[#DFBA73]" /> Recent Property Valuations
               </h3>
-              <Link href="/history" className="text-xs font-semibold text-[#00DC82] hover:underline flex items-center gap-1">
+              <Link href="/history" className="text-xs font-semibold text-[#DFBA73] hover:underline flex items-center gap-1">
                 View all history <ArrowRight size={13} />
               </Link>
             </div>
-            <div className="divide-y divide-[#142938]">
+            <div className="divide-y divide-white/[0.06]">
               {predictions.length === 0 ? (
                 <div className="p-12 text-center">
-                  <Brain size={36} className="text-[#64748B] mx-auto mb-3" />
-                  <p className="text-[#94A3B8] text-sm font-medium">No property valuations recorded yet.</p>
-                  <Link href="/predict" className="text-[#00DC82] font-semibold text-xs hover:underline mt-2 inline-block">
+                  <Brain size={36} className="text-neutral-600 mx-auto mb-3" />
+                  <p className="text-neutral-400 text-sm font-medium">No property valuations recorded yet.</p>
+                  <Link href="/predict" className="text-[#DFBA73] font-semibold text-xs hover:underline mt-2 inline-block">
                     Generate your first property valuation →
                   </Link>
                 </div>
@@ -181,11 +181,11 @@ export default function DashboardPage() {
                       <p className="text-sm font-bold text-white">
                         {pred.inputFeatures.location} — {pred.inputFeatures.area.toLocaleString()} sqft, {pred.inputFeatures.bedrooms} Beds
                       </p>
-                      <p className="text-xs text-[#94A3B8] mt-0.5">
+                      <p className="text-xs text-neutral-400 mt-0.5">
                         {new Date(pred.createdAt).toLocaleDateString()} · {pred.modelVersion}
                       </p>
                     </div>
-                    <p className="text-[#00DC82] font-extrabold text-sm sm:text-base">
+                    <p className="text-[#DFBA73] font-serif font-black text-base">
                       Rs. {Math.round(pred.predictedPrice).toLocaleString()}
                     </p>
                   </div>

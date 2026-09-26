@@ -70,7 +70,7 @@ export default function AdminPropertiesPage() {
             </div>
           </div>
 
-          <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
+          <div className="luxury-glass-card overflow-hidden">
             {loading ? (
               <div className="p-8 space-y-3">
                 {[...Array(5)].map((_, i) => (
@@ -88,18 +88,18 @@ export default function AdminPropertiesPage() {
                       <tr key={p._id}>
                         <td>
                           <div>
-                            <p className="font-bold text-white text-sm line-clamp-1">{p.title}</p>
-                            <span className="badge-forest text-[9px] uppercase font-bold capitalize mt-1 inline-flex">{p.propertyType}</span>
+                            <p className="font-serif font-bold text-white text-sm line-clamp-1">{p.title}</p>
+                            <span className="badge-gold text-[9px] uppercase font-bold capitalize mt-1 inline-flex">{p.propertyType}</span>
                           </div>
                         </td>
-                        <td className="text-[#94A3B8] text-xs">{p.location}{p.district ? `, ${p.district}` : ''}</td>
-                        <td className="text-[#CBD5E1] text-xs">{p.area.toLocaleString()} sqft · {p.bedrooms} Beds / {p.bathrooms} Baths</td>
-                        <td className="text-[#00DC82] font-black text-sm">
+                        <td className="text-neutral-400 text-xs">{p.location}{p.district ? `, ${p.district}` : ''}</td>
+                        <td className="text-neutral-300 text-xs">{p.area.toLocaleString()} sqft · {p.bedrooms} Beds / {p.bathrooms} Baths</td>
+                        <td className="text-[#DFBA73] font-serif font-black text-sm">
                           {p.askingPrice ? `Rs. ${p.askingPrice.toLocaleString()}` : '—'}
                         </td>
                         <td>
                           <div className="flex gap-3">
-                            <Link href={`/properties/${p._id}`} className="text-xs font-bold text-[#00DC82] hover:text-[#34D399] transition-colors">View</Link>
+                            <Link href={`/properties/${p._id}`} className="text-xs font-bold text-[#DFBA73] hover:underline transition-colors">View</Link>
                             <button onClick={() => handleDelete(p._id, p.title)}
                               className="text-xs font-bold text-rose-400 hover:text-rose-300 transition-colors">Delete</button>
                           </div>
@@ -112,7 +112,7 @@ export default function AdminPropertiesPage() {
             )}
 
             {pagination && pagination.pages > 1 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-[#162E40] bg-[#08141F]">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-white/[0.08] bg-[#090D14]">
                 <p className="text-xs text-[#94A3B8] font-medium">Page {pagination.page} of {pagination.pages}</p>
                 <div className="flex gap-2">
                   <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}

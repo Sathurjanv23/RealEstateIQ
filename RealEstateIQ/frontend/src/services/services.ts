@@ -9,7 +9,8 @@ export const authService = {
   sendOtp: (email: string, name?: string) => api.post('/api/auth/send-otp', { email, name }),
   verifyRegister: (data: { name: string; email: string; password: string; otp: string }) =>
     api.post('/api/auth/verify-register', data),
-  googleLogin: (credential: string) => api.post('/api/auth/google', { credential }),
+  googleLogin: (payload: { credential?: string; accessToken?: string } | string) =>
+    api.post('/api/auth/google', typeof payload === 'string' ? { credential: payload } : payload),
   logout: () => api.post('/api/auth/logout'),
   getMe: () => api.get('/api/auth/me'),
 };

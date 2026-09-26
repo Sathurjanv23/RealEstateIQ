@@ -50,11 +50,11 @@ export default function AdminAuditLogsPage() {
       <DashboardLayout title="System Audit Logs">
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
           <div>
-            <h2 className="text-2xl font-black text-white">System Audit Logs</h2>
-            <p className="text-[#94A3B8] text-xs mt-1">{pagination?.total || 0} audit events logged · Real-time auto-refresh</p>
+            <h2 className="text-2xl font-serif font-bold text-white">System Audit Logs</h2>
+            <p className="text-neutral-400 text-xs mt-1">{pagination?.total || 0} audit events logged · Real-time auto-refresh</p>
           </div>
 
-          <div className="card-premium overflow-hidden bg-[#0B1722] border border-[#162E40]">
+          <div className="luxury-glass-card overflow-hidden">
             {loading ? (
               <div className="p-8 space-y-3">
                 {[...Array(8)].map((_, i) => (
@@ -63,8 +63,8 @@ export default function AdminAuditLogsPage() {
               </div>
             ) : logs.length === 0 ? (
               <div className="p-16 text-center">
-                <ClipboardList size={48} className="text-[#1E3A4E] mx-auto mb-4" />
-                <p className="text-white font-bold">No audit events recorded.</p>
+                <ClipboardList size={48} className="text-neutral-600 mx-auto mb-4" />
+                <p className="text-white font-serif text-lg">No audit events recorded.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -77,12 +77,12 @@ export default function AdminAuditLogsPage() {
                   <tbody>
                     {logs.map((log) => (
                       <tr key={log._id}>
-                        <td className="text-xs text-[#94A3B8]">
+                        <td className="text-xs text-neutral-400">
                           {new Date(log.createdAt).toLocaleDateString()}{' '}
-                          <span className="text-[10px] text-[#64748B]">{new Date(log.createdAt).toLocaleTimeString()}</span>
+                          <span className="text-[10px] text-neutral-500">{new Date(log.createdAt).toLocaleTimeString()}</span>
                         </td>
                         <td>
-                          <span className={ACTION_COLORS[log.action] || 'badge-forest'}>
+                          <span className={ACTION_COLORS[log.action] || 'badge-gold'}>
                             {log.action.replace(/_/g, ' ')}
                           </span>
                         </td>
@@ -91,11 +91,11 @@ export default function AdminAuditLogsPage() {
                             typeof log.userId === 'object' ? log.userId.email : 'Unknown'
                           ) : 'Anonymous'}
                         </td>
-                        <td className="text-xs text-[#CBD5E1]">
+                        <td className="text-xs text-neutral-300">
                           {log.resource}
-                          {log.resourceId && <span className="text-[#94A3B8] ml-1 font-mono">({log.resourceId.slice(-8)})</span>}
+                          {log.resourceId && <span className="text-neutral-400 ml-1 font-mono">({log.resourceId.slice(-8)})</span>}
                         </td>
-                        <td className="text-xs text-[#94A3B8] font-mono">{log.ipAddress || '—'}</td>
+                        <td className="text-xs text-neutral-400 font-mono">{log.ipAddress || '—'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -104,7 +104,7 @@ export default function AdminAuditLogsPage() {
             )}
 
             {pagination && pagination.pages > 1 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-[#162E40] bg-[#08141F]">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-white/[0.08] bg-[#090D14]">
                 <p className="text-xs text-[#94A3B8] font-medium">Page {pagination.page} of {pagination.pages}</p>
                 <div className="flex gap-2">
                   <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}

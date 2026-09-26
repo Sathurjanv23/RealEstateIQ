@@ -65,15 +65,15 @@ export default function AdminModelsPage() {
           ) : (
             <div className="space-y-4">
               {models.map((model) => (
-                <div key={model._id} className="card-premium p-6 bg-[#0B1722] border border-[#162E40]">
+                <div key={model._id} className="luxury-glass-card p-6">
                   <div className="flex items-start justify-between flex-wrap gap-4">
                     <div>
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-white text-base">{model.modelName}</h3>
-                        <span className={STATUS_COLORS[model.status] || 'badge-forest'}>{model.status}</span>
+                        <h3 className="font-serif font-bold text-white text-base">{model.modelName}</h3>
+                        <span className={STATUS_COLORS[model.status] || 'badge-gold'}>{model.status}</span>
                       </div>
-                      <p className="text-[#00DC82] text-xs font-mono font-bold mb-1">{model.version} · {model.algorithm}</p>
-                      <p className="text-[#94A3B8] text-xs">
+                      <p className="text-[#DFBA73] text-xs font-mono font-bold mb-1">{model.version} · {model.algorithm}</p>
+                      <p className="text-neutral-400 text-xs">
                         Dataset: {model.datasetVersion} · Trained: {new Date(model.trainingDate).toLocaleDateString()}
                         · Train: {model.trainSize} / Test: {model.testSize} rows
                       </p>
@@ -81,7 +81,7 @@ export default function AdminModelsPage() {
                     <select
                       value={model.status}
                       onChange={(e) => statusMutation.mutate({ id: model._id, status: e.target.value })}
-                      className="input-field text-xs py-2 w-auto bg-[#08141F] border-[#162E40] text-white"
+                      className="input-field text-xs py-2 w-auto bg-[#090D14] border-white/[0.12] text-white focus:border-[#DFBA73]"
                     >
                       {['development', 'staging', 'production', 'archived'].map((s) => (
                         <option key={s} value={s} className="capitalize">{s}</option>
@@ -98,16 +98,16 @@ export default function AdminModelsPage() {
                       { label: 'CV R² Mean', value: model.metrics.cv_r2_mean?.toFixed(4) ?? '—' },
                       { label: 'CV R² Std', value: model.metrics.cv_r2_std ? `±${model.metrics.cv_r2_std.toFixed(4)}` : '—' },
                     ].map((m) => (
-                      <div key={m.label} className="p-3 rounded-xl bg-[#08141F] border border-[#162E40] text-center">
-                        <p className="text-[10px] uppercase font-bold text-[#94A3B8] mb-1">{m.label}</p>
-                        <p className="text-sm font-black text-white">{m.value}</p>
+                      <div key={m.label} className="p-3 rounded-xl bg-[#090D14] border border-white/[0.08] text-center">
+                        <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">{m.label}</p>
+                        <p className="text-sm font-bold text-white">{m.value}</p>
                       </div>
                     ))}
                   </div>
 
                   {/* Feature importance bar */}
                   {model.featureImportance && Object.keys(model.featureImportance).length > 0 && (
-                    <div className="mt-5 pt-4 border-t border-[#162E40]">
+                    <div className="mt-5 pt-4 border-t border-white/[0.08]">
                       <p className="text-xs font-bold text-white mb-2">Feature Importance Breakdown</p>
                       <div className="space-y-1.5">
                         {Object.entries(model.featureImportance)
@@ -115,11 +115,11 @@ export default function AdminModelsPage() {
                           .slice(0, 5)
                           .map(([feat, val]) => (
                             <div key={feat} className="flex items-center gap-3 text-xs">
-                              <span className="w-28 text-[#94A3B8] truncate">{feat}</span>
+                              <span className="w-28 text-neutral-400 truncate">{feat}</span>
                               <div className="flex-1 feature-bar">
                                 <div className="feature-bar-fill" style={{ width: `${Math.round(val * 100)}%` }} />
                               </div>
-                              <span className="text-[#00DC82] font-bold w-12 text-right">{(val * 100).toFixed(1)}%</span>
+                              <span className="text-[#DFBA73] font-bold w-12 text-right">{(val * 100).toFixed(1)}%</span>
                             </div>
                           ))}
                       </div>

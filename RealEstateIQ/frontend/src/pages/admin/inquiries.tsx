@@ -89,11 +89,11 @@ export default function AdminInquiriesPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-black text-white flex items-center gap-2.5">
-                <CalendarCheck className="text-[#00DC82]" size={24} />
+              <h2 className="text-2xl font-serif font-bold text-white flex items-center gap-2.5">
+                <CalendarCheck className="text-[#DFBA73]" size={24} />
                 Property Viewing Inquiries
               </h2>
-              <p className="text-[#94A3B8] text-xs mt-1">
+              <p className="text-neutral-400 text-xs mt-1">
                 Manage schedule viewing requests and client inquiries received across all property listings.
               </p>
             </div>
@@ -109,21 +109,21 @@ export default function AdminInquiriesPage() {
 
           {/* Metric KPI cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] border-l-4 border-l-[#00DC82]">
-              <p className="text-[10px] text-[#94A3B8] uppercase font-bold tracking-wider">Total Inquiries</p>
-              <p className="text-2xl font-black text-white mt-1">{counts.total}</p>
+            <div className="luxury-glass-card p-4 border-l-4 border-l-[#DFBA73]">
+              <p className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Total Inquiries</p>
+              <p className="text-2xl font-serif font-black text-white mt-1">{counts.total}</p>
             </div>
-            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] border-l-4 border-l-[#F59E0B]">
-              <p className="text-[10px] text-[#94A3B8] uppercase font-bold tracking-wider">Pending / New</p>
-              <p className="text-2xl font-black text-[#FBBF24] mt-1">{counts.new}</p>
+            <div className="luxury-glass-card p-4 border-l-4 border-l-[#F59E0B]">
+              <p className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Pending / New</p>
+              <p className="text-2xl font-serif font-black text-[#FBBF24] mt-1">{counts.new}</p>
             </div>
-            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] border-l-4 border-l-[#38BDF8]">
-              <p className="text-[10px] text-[#94A3B8] uppercase font-bold tracking-wider">Contacted</p>
-              <p className="text-2xl font-black text-[#38BDF8] mt-1">{counts.contacted}</p>
+            <div className="luxury-glass-card p-4 border-l-4 border-l-[#38BDF8]">
+              <p className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Contacted</p>
+              <p className="text-2xl font-serif font-black text-[#38BDF8] mt-1">{counts.contacted}</p>
             </div>
-            <div className="card-premium p-4 bg-[#0B1722] border border-[#162E40] border-l-4 border-l-[#10B981]">
-              <p className="text-[10px] text-[#94A3B8] uppercase font-bold tracking-wider">Resolved</p>
-              <p className="text-2xl font-black text-[#34D399] mt-1">{counts.resolved}</p>
+            <div className="luxury-glass-card p-4 border-l-4 border-l-[#DFBA73]">
+              <p className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Resolved</p>
+              <p className="text-2xl font-serif font-black text-[#DFBA73] mt-1">{counts.resolved}</p>
             </div>
           </div>
 
@@ -188,21 +188,21 @@ export default function AdminInquiriesPage() {
                       <tr key={inq._id} className="hover:bg-white/[0.02] transition-colors">
                         {/* Inquirer Details */}
                         <td className="py-4 px-4">
-                          <p className="font-bold text-white">{inq.name}</p>
-                          <div className="flex flex-col gap-1 mt-1 text-xs text-[#94A3B8]">
+                          <p className="font-serif font-bold text-white">{inq.name}</p>
+                          <div className="flex flex-col gap-1 mt-1 text-xs text-neutral-400">
                             <a
                               href={`tel:${inq.phone}`}
-                              className="inline-flex items-center gap-1.5 hover:text-[#00DC82] transition-colors font-mono"
+                              className="inline-flex items-center gap-1.5 hover:text-[#DFBA73] transition-colors font-mono"
                             >
-                              <Phone size={12} className="text-[#00DC82]" />
+                              <Phone size={12} className="text-[#DFBA73]" />
                               {inq.phone}
                             </a>
                             {inq.email && (
                               <a
                                 href={`mailto:${inq.email}`}
-                                className="inline-flex items-center gap-1.5 hover:text-[#00DC82] transition-colors"
+                                className="inline-flex items-center gap-1.5 hover:text-[#DFBA73] transition-colors"
                               >
-                                <Mail size={12} className="text-[#00DC82]" />
+                                <Mail size={12} className="text-[#DFBA73]" />
                                 {inq.email}
                               </a>
                             )}
@@ -213,27 +213,27 @@ export default function AdminInquiriesPage() {
                         <td className="py-4 px-4 max-w-xs">
                           <Link
                             href={`/properties/${inq.propertyId}`}
-                            className="font-bold text-white hover:text-[#00DC82] transition-colors inline-flex items-center gap-1 group"
+                            className="font-bold text-white hover:text-[#DFBA73] transition-colors inline-flex items-center gap-1 group"
                           >
                             <span className="truncate">{inq.propertyName}</span>
-                            <ArrowUpRight size={13} className="text-[#00DC82] shrink-0" />
+                            <ArrowUpRight size={13} className="text-[#DFBA73] shrink-0" />
                           </Link>
                           {inq.propertyLocation && (
-                            <p className="text-[11px] text-[#94A3B8] mt-0.5">{inq.propertyLocation}</p>
+                            <p className="text-[11px] text-neutral-400 mt-0.5">{inq.propertyLocation}</p>
                           )}
                         </td>
 
                         {/* Preferred Viewing Date */}
                         <td className="py-4 px-4 whitespace-nowrap">
                           {inq.preferredDate ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#08141F] text-white border border-[#162E40] font-mono text-[11px]">
-                              <Clock size={11} className="text-[#00DC82]" />
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#090D14] text-white border border-white/[0.08] font-mono text-[11px]">
+                              <Clock size={11} className="text-[#DFBA73]" />
                               {inq.preferredDate}
                             </span>
                           ) : (
-                            <span className="text-[#94A3B8] italic">Flexible</span>
+                            <span className="text-neutral-400 italic">Flexible</span>
                           )}
-                          <p className="text-[10px] text-[#64748B] mt-1">
+                          <p className="text-[10px] text-neutral-500 mt-1">
                             {new Date(inq.createdAt).toLocaleDateString()}
                           </p>
                         </td>

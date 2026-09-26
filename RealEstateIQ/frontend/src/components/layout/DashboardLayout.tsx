@@ -17,18 +17,18 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
   const { user } = useAuth();
 
   return (
-    <div className="flex h-screen bg-[#061017] text-[#F8FAFC] overflow-hidden font-sans">
+    <div className="flex h-screen bg-[#080A0E] text-[#F8FAFC] overflow-hidden font-sans">
       {/* Desktop & Mobile Drawer Sidebar */}
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col lg:ml-64 min-w-0">
-        {/* Top bar: Dark Slate (#08141F) with sleek border */}
-        <header className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-[#142938] bg-[#08141F] sticky top-0 z-20 shadow-md">
+        {/* Top bar: Luxury Obsidian Glass with subtle border */}
+        <header className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-white/[0.08] bg-[#0A0D14]/90 backdrop-blur-xl sticky top-0 z-20 shadow-md">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors"
+              className="lg:hidden p-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/5 transition-colors"
               aria-label="Open sidebar"
             >
               <Menu size={22} />
@@ -36,12 +36,12 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
 
             {/* Brand Logo on Mobile, Page Title on Desktop */}
             <div className="lg:hidden">
-              <BrandLogo size="sm" showText={true} />
+              <BrandLogo size="sm" variant="luxury" showText={true} />
             </div>
 
             {title && (
               <div className="hidden lg:flex items-center gap-2">
-                <h1 className="text-lg font-bold text-white tracking-tight">{title}</h1>
+                <h1 className="text-lg font-serif font-normal text-white tracking-tight">{title}</h1>
               </div>
             )}
           </div>
@@ -50,25 +50,25 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
             {/* Go to Home Page Button */}
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0E1F2E] border border-[#1E3A4E] text-[#94A3B8] hover:text-white hover:border-[#00DC82] text-xs font-semibold transition-all group"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/[0.1] text-neutral-300 hover:text-[#DFBA73] hover:border-[#DFBA73]/50 text-xs font-semibold transition-all group"
               title="Go to Home Landing Page"
             >
-              <Home size={15} className="text-[#00DC82] group-hover:scale-110 transition-transform" />
+              <Home size={15} className="text-[#DFBA73] group-hover:scale-110 transition-transform" />
               <span>Home Page</span>
             </Link>
 
             {/* Live Sri Lanka Market Status */}
-            <div className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00DC82]/10 border border-[#00DC82]/30 text-[#00DC82] text-xs font-semibold">
+            <div className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#DFBA73]/10 border border-[#DFBA73]/30 text-[#DFBA73] text-xs font-semibold">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00DC82] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00DC82]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DFBA73] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DFBA73]"></span>
               </span>
-              <span>CMB Market Active</span>
+              <span>SL Market Active</span>
             </div>
 
             {/* Notification button */}
             <button
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-[#94A3B8] hover:text-[#00DC82] hover:bg-white/5 border border-[#142938] transition-all"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-neutral-400 hover:text-[#DFBA73] hover:bg-white/5 border border-white/[0.08] transition-all"
               aria-label="Notifications"
             >
               <Bell size={17} />
@@ -76,8 +76,8 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
 
             {/* User Profile avatar */}
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white shadow-sm border border-[#00DC82]/40"
-              style={{ backgroundColor: '#09211A' }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white shadow-sm border border-[#DFBA73]/40"
+              style={{ backgroundColor: '#0E131C' }}
               title={user?.name || 'User Profile'}
             >
               {user?.avatar ? (
@@ -95,7 +95,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
         </header>
 
         {/* Page content with bottom safe padding for MobileBottomNav */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 pb-28 lg:pb-8 bg-[#061017]">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 pb-28 lg:pb-8 bg-[#080A0E]">
           {children}
         </main>
       </div>

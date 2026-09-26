@@ -75,19 +75,19 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         />
       )}
 
-      {/* Main Luxury Architectural Sidebar in Dark Slate (#08141F) */}
+      {/* Main Luxury Architectural Sidebar in Dark Obsidian */}
       <aside
         className={`fixed top-0 left-0 h-full w-64 z-50 flex flex-col
           transition-transform duration-300 ease-out
           lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}
-          bg-[#08141F] border-r border-[#142938] shadow-2xl`}
+          bg-[#0B0F17] border-r border-white/[0.08] shadow-2xl`}
       >
         {/* Brand Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#142938] bg-[#061017]/80">
-          <BrandLogo size="md" showText={true} />
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08] bg-[#080A0E]/80">
+          <BrandLogo size="md" variant="luxury" showText={true} />
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-xl text-[#94A3B8] hover:text-white hover:bg-white/10 transition-colors"
+            className="lg:hidden p-1.5 rounded-xl text-neutral-400 hover:text-white hover:bg-white/10 transition-colors"
             aria-label="Close navigation"
           >
             <X size={18} />
@@ -95,11 +95,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </div>
 
         {/* User Card */}
-        <div className="px-4 py-3 border-b border-[#142938] bg-[#061017]/40">
-          <div className="flex items-center gap-3 px-2 py-1.5 rounded-xl bg-[#0B1722] border border-[#162E40]">
+        <div className="px-4 py-3 border-b border-white/[0.08] bg-[#080A0E]/40">
+          <div className="flex items-center gap-3 px-2 py-1.5 rounded-xl bg-[#111622] border border-white/[0.08]">
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white shadow-sm border border-[#00DC82]/40 shrink-0"
-              style={{ backgroundColor: '#09211A' }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white shadow-sm border border-[#DFBA73]/40 shrink-0"
+              style={{ backgroundColor: '#080A0E' }}
             >
               {user?.avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -112,15 +112,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
               <p className="text-xs font-bold text-white truncate">{user?.name || 'Estate Investor'}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span
-                  className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded ${
-                    isAdmin
-                      ? 'bg-[#C9A227]/20 text-[#C9A227] border border-[#C9A227]/40'
-                      : 'bg-[#00DC82]/15 text-[#00DC82] border border-[#00DC82]/30'
-                  }`}
+                  className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30"
                 >
                   {isAdmin ? 'Admin' : 'Investor'}
                 </span>
-                {isAdmin && <ShieldCheck size={12} className="text-[#C9A227]" />}
+                {isAdmin && <ShieldCheck size={12} className="text-[#DFBA73]" />}
               </div>
             </div>
           </div>
@@ -128,7 +124,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
         {/* Navigation list */}
         <nav className="flex-1 overflow-y-auto p-3 space-y-1">
-          <p className="text-[10px] font-bold text-[#64748B] uppercase tracking-widest px-3 mb-2 mt-1">
+          <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest px-3 mb-2 mt-1">
             Platform Modules
           </p>
 
@@ -141,20 +137,20 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 onClick={onClose}
                 className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
                   isActive
-                    ? 'bg-[#00DC82]/15 text-[#00DC82] border-l-4 border-l-[#00DC82] border-y border-r border-[#00DC82]/30 shadow-sm font-bold'
-                    : 'text-[#94A3B8] hover:text-white hover:bg-white/5'
+                    ? 'bg-[#DFBA73]/15 text-[#DFBA73] border-l-4 border-l-[#DFBA73] border-y border-r border-[#DFBA73]/30 shadow-sm font-bold'
+                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <span className={isActive ? 'text-[#00DC82]' : 'text-[#64748B] group-hover:text-white'}>
+                <span className={isActive ? 'text-[#DFBA73]' : 'text-neutral-400 group-hover:text-white'}>
                   {item.icon}
                 </span>
                 <span className="flex-1">{item.label}</span>
                 {item.badge && (
-                  <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded bg-[#00DC82]/20 text-[#00DC82] border border-[#00DC82]/40">
+                  <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded bg-[#DFBA73]/20 text-[#DFBA73] border border-[#DFBA73]/40">
                     {item.badge}
                   </span>
                 )}
-                {isActive && <ChevronRight size={13} className="text-[#00DC82]" />}
+                {isActive && <ChevronRight size={13} className="text-[#DFBA73]" />}
               </Link>
             );
           })}
@@ -196,14 +192,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
 
         {/* Footer info & Logout */}
-        <div className="p-3 border-t border-[#142938] bg-[#061017]/80 space-y-2">
+        <div className="p-3 border-t border-white/[0.08] bg-[#080A0E]/80 space-y-2">
           {/* Real estate market badge */}
-          <div className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-[11px] text-[#94A3B8] flex items-center justify-between">
+          <div className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-[11px] text-neutral-400 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00DC82]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#DFBA73]" />
               Sri Lanka Valuation IQ
             </span>
-            <span className="font-mono text-[#00DC82] font-bold text-[10px]">R² 0.996</span>
+            <span className="font-mono text-[#DFBA73] font-bold text-[10px]">R² 0.996</span>
           </div>
 
           <button
