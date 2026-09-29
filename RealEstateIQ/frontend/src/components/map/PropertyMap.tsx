@@ -32,6 +32,14 @@ const CITY_COORDINATES: Record<string, [number, number]> = {
 };
 
 function getPropertyCoordinates(property: Property, index: number): [number, number] {
+  if (
+    typeof property.latitude === 'number' &&
+    typeof property.longitude === 'number' &&
+    !isNaN(property.latitude) &&
+    !isNaN(property.longitude)
+  ) {
+    return [property.latitude, property.longitude];
+  }
   const locKey = property.location || property.district || 'Colombo';
   const base = CITY_COORDINATES[locKey] || CITY_COORDINATES['Colombo'];
   // Deterministic micro-offset so properties in same district don't stack on the exact same coordinate
@@ -169,9 +177,17 @@ export default function PropertyMap({
         icon: createCustomIcon(prop.askingPrice),
       });
 
+      const hasImg = prop.images && prop.images.length > 0 && prop.images[0];
+      const imgHtml = hasImg
+        ? `<div style="width: 100%; height: 95px; border-radius: 10px; overflow: hidden; margin-bottom: 8px; background: #000;">
+            <img src="${prop.images[0]}" alt="${prop.title}" style="width: 100%; height: 100%; object-fit: cover;" />
+          </div>`
+        : '';
+
       // Dark Luxury Styled Popup
       const popupHtml = `
-        <div style="min-width: 210px; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; padding: 2px;">
+        <div style="min-width: 220px; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; padding: 2px;">
+          ${imgHtml}
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
             <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #DFBA73; background: rgba(223,186,115,0.12); padding: 2px 7px; border-radius: 9999px; border: 1px solid rgba(223,186,115,0.3);">
               ${prop.propertyType || 'Residential'}
