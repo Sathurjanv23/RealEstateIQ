@@ -7,7 +7,9 @@ import Link from 'next/link';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { propertyService } from '../../services/services';
-import { SL_LOCATIONS_GROUPED } from '../../utils/sriLankaLocations';
+import { SL_LOCATIONS_GROUPED, mapToMlHub } from '../../utils/sriLankaLocations';
+import PhotoUploader from '../../components/property/PhotoUploader';
+
 const TYPES = ['house', 'apartment', 'land', 'commercial', 'villa'];
 const AMENITIES = ['Swimming Pool', 'Garden', 'Parking', 'Security', 'CCTV', 'Solar Panels', 'Gym', 'Elevator', 'Balcony', 'Mountain View', 'Smart Home'];
 
@@ -16,6 +18,7 @@ export default function NewPropertyPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [form, setForm] = useState({
     title: '', description: '', propertyType: 'house', location: 'Colombo',
     district: '', area: '', bedrooms: '3', bathrooms: '2', parking: '1',
@@ -41,6 +44,8 @@ export default function NewPropertyPage() {
     try {
       const payload = {
         ...form,
+        location: mapToMlHub(form.location),
+        district: form.location,
         area: Number(form.area),
         bedrooms: Number(form.bedrooms),
         bathrooms: Number(form.bathrooms),
@@ -49,6 +54,7 @@ export default function NewPropertyPage() {
         landSize: form.landSize ? Number(form.landSize) : undefined,
         askingPrice: form.askingPrice ? Number(form.askingPrice) : undefined,
         amenities: selectedAmenities,
+        images: images.length > 0 ? images : undefined,
       };
       const res = await propertyService.create(payload);
       const prop = res.data.data.property;
@@ -184,6 +190,11 @@ export default function NewPropertyPage() {
                     );
                   })}
                 </div>
+              </div>
+
+              {/* Real Photo Upload with Cloudinary Support */}
+              <div className="pt-2 pb-2">
+                <PhotoUploader images={images} onChange={setImages} />
               </div>
 
               <div className="pt-4 flex gap-3">

@@ -1,10 +1,12 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { Property } from '../models/Property';
 import { SavedProperty } from '../models/SavedProperty';
 import { Prediction } from '../models/Prediction';
 import { audit } from '../utils/auditLogger';
 import { createError } from '../middleware/errorHandler';
 import { AuthRequest } from '../middleware/auth';
+import { mapToMlHub } from '../utils/sriLankaLocations';
+import { isCloudinaryActive } from '../middleware/upload';
 
 // ── List / Search / Filter ─────────────────────────────────────────────────
 export const getProperties = async (
@@ -109,8 +111,16 @@ export const createProperty = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    const propertyData = { ...req.body };
+    if (propertyData.location) {
+      if (!['Colombo', 'Kandy', 'Galle', 'Negombo'].includes(propertyData.location)) {
+        propertyData.district = propertyData.district || propertyData.location;
+        propertyData.location = mapToMlHub(propertyData.location);
+      }
+    }
+
     const property = await Property.create({
-      ...req.body,
+      ...propertyData,
       createdBy: req.user!._id,
     });
 
@@ -150,7 +160,15 @@ export const updateProperty = async (
       return;
     }
 
-    const updated = await Property.findByIdAndUpdate(req.params.id, req.body, {
+    const updateData = { ...req.body };
+    if (updateData.location) {
+      if (!['Colombo', 'Kandy', 'Galle', 'Negombo'].includes(updateData.location)) {
+        updateData.district = updateData.district || updateData.location;
+        updateData.location = mapToMlHub(updateData.location);
+      }
+    }
+
+    const updated = await Property.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -359,6 +377,60 @@ export const uploadPropertyImage = async (
   } catch (err) {
     next(err);
   }
+};
+
+// ── Upload Multiple Property Images (Cloudinary / Local) ───────────────────
+export const uploadMultiplePropertyImages = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const files = req.files as Express.Multer.File[];
+    if (!files || files.length === 0) {
+      next(createError('No image files provided.', 400, 'FILE_MISSING'));
+      return;
+    }
+
+    const uploaded = files.map((file) => {
+      const imageUrl: string =
+        (file as any).path || `/uploads/${file.filename}`;
+      return {
+        url: imageUrl,
+        filename: file.filename || imageUrl.split('/').pop(),
+        size: file.size,
+        mimetype: file.mimetype,
+      };
+    });
+
+    res.status(201).json({
+      success: true,
+      data: {
+        images: uploaded,
+        urls: uploaded.map((u) => u.url),
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ── Get Storage / Cloudinary Upload Status ───────────────────────────────────
+export const getUploadStatus = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
+  res.json({
+    success: true,
+    data: {
+      provider: isCloudinaryActive ? 'cloudinary' : 'local-disk',
+      isCloudinaryActive,
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME || null,
+      maxFileSizeMb: 5,
+      maxFiles: 8,
+      allowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+    },
+  });
 };
 
 

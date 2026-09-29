@@ -15,6 +15,8 @@ import { WhatsAppButton } from '../../components/ui/WhatsAppButton';
 import { getPropertyWhatsAppUrl } from '../../utils/whatsapp';
 import { DealRatingBadge } from '../../components/deal/DealRatingBadge';
 import { estimatePropertyFairValue } from '../../utils/dealRating';
+import { resolveImageUrl } from '../../utils/imageUrl';
+import { TrendingUp } from 'lucide-react';
 
 const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
   ssr: false,
@@ -48,7 +50,7 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
         {hasImage ? (
           <div className="h-48 w-full relative overflow-hidden bg-[#080A0E]">
             <img
-              src={property.images[0]}
+              src={resolveImageUrl(property.images[0])}
               alt={property.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
@@ -247,6 +249,16 @@ export default function PropertiesPage() {
                     </span>
                   )}
                 </button>
+
+                {/* Heatmap quick button */}
+                <Link
+                  href="/market?tab=heatmap"
+                  className="btn-secondary text-xs py-2 px-3 flex items-center gap-1.5 text-[#DFBA73] border-[#DFBA73]/30 hover:bg-[#DFBA73]/10"
+                  title="District-wise Investment Heatmap & Rental Yield"
+                >
+                  <TrendingUp size={14} />
+                  <span className="hidden sm:inline">Yield Heatmap 🗺️</span>
+                </Link>
 
                 {/* View Mode Toggle: Grid vs Map */}
                 <div className="flex items-center border border-white/[0.1] rounded-xl overflow-hidden p-0.5 bg-[#090D14]">

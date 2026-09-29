@@ -18,6 +18,7 @@ import { getPropertyWhatsAppUrl } from '../../utils/whatsapp';
 import { DealRatingBadge } from '../../components/deal/DealRatingBadge';
 import { estimatePropertyFairValue } from '../../utils/dealRating';
 import { MortgageCalculator } from '../../components/mortgage/MortgageCalculator';
+import { resolveImageUrl } from '../../utils/imageUrl';
 
 const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
   ssr: false,
@@ -145,7 +146,7 @@ export default function PropertyDetailPage() {
             <div className="luxury-glass-card overflow-hidden p-3 space-y-3">
               <div className="relative h-72 md:h-96 rounded-xl overflow-hidden bg-[#080A0E]">
                 <img
-                  src={property.images[activeImage] || property.images[0]}
+                  src={resolveImageUrl(property.images[activeImage] || property.images[0])}
                   alt={property.title}
                   className="w-full h-full object-cover transition-all duration-300"
                 />
@@ -170,7 +171,7 @@ export default function PropertyDetailPage() {
                           : 'border-transparent opacity-60 hover:opacity-100'
                       }`}
                     >
-                      <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                      <img src={resolveImageUrl(img)} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
                     </button>
                   ))}
                 </div>
