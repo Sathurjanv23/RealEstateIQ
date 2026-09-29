@@ -17,6 +17,7 @@ export interface IPrediction extends Document {
   algorithm: string;
   datasetVersion: string;
   featureImportance: Record<string, number>;
+  shapBreakdown?: Record<string, any> | null;
   createdAt: Date;
 }
 
@@ -46,6 +47,7 @@ const predictionSchema = new Schema<IPrediction>(
     algorithm: { type: String, required: true },
     datasetVersion: { type: String, required: true },
     featureImportance: { type: Map, of: Number, default: {} },
+    shapBreakdown: { type: Schema.Types.Mixed, default: null },
   },
   { timestamps: true }
 );

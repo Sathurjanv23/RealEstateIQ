@@ -62,6 +62,31 @@ class PredictRequest(BaseModel):
     }
 
 
+class WaterfallFactor(BaseModel):
+    """Individual factor attribution in the SHAP waterfall breakdown."""
+
+    id: str = Field(..., description="Feature key identifier")
+    feature: str = Field(..., description="Human-readable feature name")
+    user_value: str = Field(..., description="Formatted user input value")
+    impact_lkr: float = Field(..., description="Marginal price impact in LKR (+ or -)")
+    shap_value: float = Field(..., description="Raw SHAP log-odds value")
+    impact_percentage: float = Field(..., description="Relative attribution percentage")
+    direction: str = Field(..., description="'positive' or 'negative'")
+    explanation: str = Field(..., description="Domain surveyor rationale for this factor")
+
+
+class ShapBreakdown(BaseModel):
+    """Explainable AI SHAP Waterfall Breakdown."""
+
+    base_value_lkr: float = Field(..., description="National baseline property value in LKR")
+    final_predicted_price_lkr: float = Field(..., description="Final estimated market price in LKR")
+    net_impact_lkr: float = Field(..., description="Net deviation from baseline in LKR")
+    factors: list[WaterfallFactor] = Field(
+        default_factory=list, description="Ordered waterfall factors contributing to valuation"
+    )
+    summary: str = Field(..., description="Plain-language valuation driver summary")
+
+
 class PredictResponse(BaseModel):
     """Prediction result schema."""
 
@@ -74,6 +99,9 @@ class PredictResponse(BaseModel):
     dataset_version: str = Field(..., description="Dataset version used for training")
     feature_importance: Dict[str, float] = Field(
         default_factory=dict, description="Feature importance scores from the model"
+    )
+    shap_breakdown: Optional[ShapBreakdown] = Field(
+        None, description="Explainable AI SHAP Waterfall Breakdown"
     )
     disclaimer: str = Field(
         default=(

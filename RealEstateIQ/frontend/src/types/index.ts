@@ -30,6 +30,25 @@ export interface Property {
   updatedAt: string;
 }
 
+export interface WaterfallFactor {
+  id: string;
+  feature: string;
+  user_value: string;
+  impact_lkr: number;
+  shap_value: number;
+  impact_percentage: number;
+  direction: 'positive' | 'negative';
+  explanation: string;
+}
+
+export interface ShapBreakdown {
+  base_value_lkr: number;
+  final_predicted_price_lkr: number;
+  net_impact_lkr: number;
+  factors: WaterfallFactor[];
+  summary: string;
+}
+
 export interface Prediction {
   _id: string;
   userId: string;
@@ -48,6 +67,7 @@ export interface Prediction {
   algorithm: string;
   datasetVersion: string;
   featureImportance: Record<string, number>;
+  shapBreakdown?: ShapBreakdown | null;
   createdAt: string;
   disclaimer?: string;
 }

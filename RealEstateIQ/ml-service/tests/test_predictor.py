@@ -58,3 +58,31 @@ def test_predict_all_locations():
             parking=1,
         )
         assert result["predicted_price"] > 0
+
+
+def test_shap_waterfall_breakdown():
+    """Verify SHAP Waterfall mathematical conservation and factor structure."""
+    predictor = Predictor.get_instance()
+    result = predictor.predict(
+        area=2400.0,
+        bedrooms=4,
+        bathrooms=3,
+        location="Colombo",
+        house_age=4,
+        parking=2,
+    )
+    assert "shap_breakdown" in result
+    shap_info = result["shap_breakdown"]
+    assert shap_info is not None
+
+    base_val = shap_info["base_value_lkr"]
+    final_val = shap_info["final_predicted_price_lkr"]
+    net_impact = shap_info["net_impact_lkr"]
+    factors = shap_info["factors"]
+
+    assert len(factors) == 6
+    assert abs((base_val + net_impact) - final_val) < 0.05
+    factor_sum = sum(f["impact_lkr"] for f in factors)
+    assert abs(factor_sum - net_impact) < 0.05
+    assert len(shap_info["summary"]) > 20
+
