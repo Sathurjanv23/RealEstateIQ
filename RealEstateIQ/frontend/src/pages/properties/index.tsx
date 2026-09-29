@@ -11,6 +11,8 @@ import { useAuth } from '../../context/AuthContext';
 import { propertyService } from '../../services/services';
 import { Property } from '../../types';
 import { SL_LOCATIONS_GROUPED } from '../../utils/sriLankaLocations';
+import { WhatsAppButton } from '../../components/ui/WhatsAppButton';
+import { getPropertyWhatsAppUrl } from '../../utils/whatsapp';
 
 const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
   ssr: false,
@@ -21,6 +23,14 @@ const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 function PropertyCard({ property, onSave, saved }: { property: Property; onSave: (id: string) => void; saved: boolean }) {
   const hasImage = property.images && property.images.length > 0 && property.images[0];
+  const whatsappUrl = getPropertyWhatsAppUrl({
+    propertyTitle: property.title,
+    location: property.location,
+    price: property.askingPrice,
+    propertyId: property._id,
+    bedrooms: property.bedrooms,
+    area: property.area,
+  });
 
   return (
     <div className="luxury-glass-card overflow-hidden group flex flex-col justify-between hover:border-[#DFBA73]/40 transition-all">
@@ -79,7 +89,7 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2 pt-1">
             <div>
               {property.askingPrice ? (
                 <p className="text-[#DFBA73] font-serif font-black text-base">Rs. {property.askingPrice.toLocaleString()}</p>
@@ -87,12 +97,15 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
                 <p className="text-neutral-400 text-xs font-semibold">Price on Inquiry</p>
               )}
             </div>
-            <Link
-              href={`/properties/${property._id}`}
-              className="text-xs font-bold text-[#DFBA73] hover:underline transition-colors"
-            >
-              View Asset →
-            </Link>
+            <div className="flex items-center gap-2">
+              <WhatsAppButton href={whatsappUrl} variant="card" />
+              <Link
+                href={`/properties/${property._id}`}
+                className="text-xs font-bold text-[#DFBA73] hover:underline transition-colors shrink-0"
+              >
+                View Asset →
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -8,6 +8,8 @@ import { useAuth } from '../../context/AuthContext';
 import { Prediction } from '../../types';
 import { generateValuationPDF } from '../../utils/pdfGenerator';
 import { ShapWaterfallCard } from '../../components/prediction/ShapWaterfallCard';
+import { WhatsAppButton } from '../../components/ui/WhatsAppButton';
+import { getValuationWhatsAppUrl } from '../../utils/whatsapp';
 
 function FeatureBar({ name, value }: { name: string; value: number }) {
   const pct = Math.round(value * 100);
@@ -59,6 +61,15 @@ export default function PredictionResultPage() {
   const low = Math.max(0, Math.round(predictedPrice - margin));
   const high = Math.round(predictedPrice + margin);
 
+  const certId = prediction._id ? `RIQ-${prediction._id.slice(-8).toUpperCase()}` : 'RIQ-CERT';
+  const valuationWhatsappUrl = getValuationWhatsAppUrl({
+    certificateId: certId,
+    location: inputFeatures.location,
+    area: inputFeatures.area,
+    bedrooms: inputFeatures.bedrooms,
+    predictedPrice,
+  });
+
   return (
     <>
       <Head>
@@ -106,13 +117,19 @@ export default function PredictionResultPage() {
               </span>
             </div>
 
-            <div className="mt-6 flex justify-center">
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 onClick={() => generateValuationPDF(prediction)}
-                className="btn-primary text-sm py-3 px-6 font-bold"
+                className="btn-primary text-sm py-3 px-6 font-bold w-full sm:w-auto"
               >
-                <Download size={16} /> Download Official PDF Valuation Certificate
+                <Download size={16} /> Download Official PDF Certificate (with QR Seal)
               </button>
+              <WhatsAppButton
+                href={valuationWhatsappUrl}
+                label="WhatsApp Advisory Chat"
+                sublabel="Connect with Chartered Broker"
+                className="w-full sm:w-auto"
+              />
             </div>
           </div>
 
