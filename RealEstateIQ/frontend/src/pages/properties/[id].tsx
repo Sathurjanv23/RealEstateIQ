@@ -13,6 +13,8 @@ import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { propertyService, inquiryService } from '../../services/services';
 import { Property } from '../../types';
+import { WhatsAppButton, WhatsAppIcon } from '../../components/ui/WhatsAppButton';
+import { getPropertyWhatsAppUrl } from '../../utils/whatsapp';
 
 const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
   ssr: false,
@@ -104,6 +106,15 @@ export default function PropertyDetailPage() {
     ? Math.round(property.askingPrice / property.area)
     : null;
 
+  const whatsappUrl = getPropertyWhatsAppUrl({
+    propertyTitle: property.title,
+    location: property.location,
+    price: property.askingPrice,
+    propertyId: property._id,
+    bedrooms: property.bedrooms,
+    area: property.area,
+  });
+
   return (
     <>
       <Head>
@@ -178,6 +189,11 @@ export default function PropertyDetailPage() {
                   </div>
                 )}
                 <div className="flex flex-wrap items-center gap-2">
+                  <WhatsAppButton
+                    href={whatsappUrl}
+                    label="1-Click WhatsApp Inquiry"
+                    sublabel="Instant Agent Direct Chat"
+                  />
                   <button
                     onClick={() => setInquireModal(true)}
                     className="btn-primary text-xs py-2.5 px-4 font-bold"
@@ -310,6 +326,20 @@ export default function PropertyDetailPage() {
                   >
                     <X size={18} />
                   </button>
+                </div>
+
+                {/* Instant WhatsApp Quick Action Banner */}
+                <div className="p-3.5 rounded-xl bg-[#25D366]/10 border border-[#25D366]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[#25D366] text-black flex items-center justify-center shrink-0">
+                      <WhatsAppIcon size={16} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white">Prefer instant response?</p>
+                      <p className="text-[11px] text-neutral-300">Skip the form and chat directly with our verified broker</p>
+                    </div>
+                  </div>
+                  <WhatsAppButton href={whatsappUrl} variant="compact" label="Chat Now" />
                 </div>
 
                 <form onSubmit={handleInquirySubmit} className="space-y-4">
