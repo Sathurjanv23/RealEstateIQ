@@ -7,6 +7,7 @@ import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { Prediction } from '../../types';
 import { generateValuationPDF } from '../../utils/pdfGenerator';
+import { ShapWaterfallCard } from '../../components/prediction/ShapWaterfallCard';
 
 function FeatureBar({ name, value }: { name: string; value: number }) {
   const pct = Math.round(value * 100);
@@ -49,7 +50,7 @@ export default function PredictionResultPage() {
 
   if (!prediction) return null;
 
-  const { predictedPrice, pricePerSqft, modelVersion, algorithm, datasetVersion, featureImportance, inputFeatures, createdAt } = prediction;
+  const { predictedPrice, pricePerSqft, modelVersion, algorithm, datasetVersion, featureImportance, shapBreakdown, inputFeatures, createdAt } = prediction;
   const sortedFeatures = Object.entries(featureImportance || {}).sort(([, a], [, b]) => b - a);
 
   // Confidence calculations
@@ -114,6 +115,14 @@ export default function PredictionResultPage() {
               </button>
             </div>
           </div>
+
+          {/* Explainable AI SHAP Waterfall Breakdown Card 🧠 */}
+          <ShapWaterfallCard
+            breakdown={shapBreakdown}
+            predictedPrice={predictedPrice}
+            inputFeatures={inputFeatures}
+            algorithm={algorithm}
+          />
 
           {/* Property Input Summary */}
           <div className="luxury-glass-card p-6">

@@ -32,6 +32,7 @@ export const estimatePrediction = async (
           algorithm: mlResult.algorithm,
           datasetVersion: mlResult.dataset_version,
           featureImportance: mlResult.feature_importance,
+          shapBreakdown: mlResult.shap_breakdown || null,
           disclaimer: mlResult.disclaimer,
         },
       },
@@ -72,6 +73,7 @@ export const createPrediction = async (
       algorithm: mlResult.algorithm,
       datasetVersion: mlResult.dataset_version,
       featureImportance: mlResult.feature_importance,
+      shapBreakdown: mlResult.shap_breakdown || null,
     });
 
     await audit({
@@ -94,6 +96,7 @@ export const createPrediction = async (
           algorithm: prediction.algorithm,
           datasetVersion: prediction.datasetVersion,
           featureImportance: prediction.featureImportance,
+          shapBreakdown: prediction.shapBreakdown || mlResult.shap_breakdown || null,
           inputFeatures: prediction.inputFeatures,
           createdAt: prediction.createdAt,
           disclaimer:
