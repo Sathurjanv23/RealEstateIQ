@@ -302,16 +302,24 @@ export default function PropertiesPage() {
             )}
           </div>
 
-          {/* Map View */}
+          {/* Map View with Smart Marker Clustering */}
           {viewMode === 'map' && (
-            <div className="luxury-glass-card p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-xs font-serif font-bold text-white">
-                  Interactive Sri Lanka Asset Map ({properties.length} displayed)
-                </span>
-                <span className="text-xs text-neutral-400">Click any pin to inspect pricing</span>
+            <div className="luxury-glass-card p-4 sm:p-5">
+              <div className="mb-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#DFBA73] animate-pulse" />
+                  <span className="text-xs font-serif font-bold text-white tracking-wide">
+                    Interactive Sri Lanka Asset Map ({properties.length} Properties Mapped)
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#DFBA73]/10 border border-[#DFBA73]/30 text-[10px] text-[#DFBA73] font-semibold">
+                    ✨ Smart Clustering Active
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-[11px] text-neutral-400">
+                  <span>Click cluster or pin to zoom & inspect pricing</span>
+                </div>
               </div>
-              <PropertyMap properties={properties} height="560px" />
+              <PropertyMap properties={properties} height="580px" />
             </div>
           )}
 
