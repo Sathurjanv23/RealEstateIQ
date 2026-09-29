@@ -32,6 +32,14 @@ export const propertyService = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+  uploadMultipleImages: (files: File[]) => {
+    const formData = new FormData();
+    files.forEach((f) => formData.append('images', f));
+    return api.post('/api/properties/upload-multiple', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  getUploadStatus: () => api.get('/api/properties/upload-status'),
 };
 
 export const inquiryService = {

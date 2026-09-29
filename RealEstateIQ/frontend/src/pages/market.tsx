@@ -1,14 +1,23 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { BarChart3, TrendingUp, Home, MapPin, ShieldCheck } from 'lucide-react';
+import { BarChart3, TrendingUp, Home, MapPin, ShieldCheck, Map as MapIcon } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 import { marketService } from '../services/services';
 import { MarketAnalytics } from '../types';
 import { SL_LOCATIONS_GROUPED } from '../utils/sriLankaLocations';
+
+const InvestmentHeatmap = dynamic(
+  () => import('../components/analytics/InvestmentHeatmap'),
+  {
+    ssr: false,
+    loading: () => <div className="skeleton h-[520px] w-full rounded-2xl" />,
+  }
+);
 
 const COLORS = ['#DFBA73', '#C5A880', '#E8C888', '#9B7B3E', '#F6E7CA', '#B8934A'];
 const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
@@ -26,7 +35,14 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
 export default function MarketPage() {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
+  const [activeTab, setActiveTab] = useState<'trends' | 'heatmap'>('trends');
   const [filters, setFilters] = useState({ location: '', propertyType: '' });
+
+  useEffect(() => {
+    if (router.query.tab === 'heatmap') {
+      setActiveTab('heatmap');
+    }
+  }, [router.query.tab]);
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ['marketAnalytics', filters],
@@ -40,174 +56,212 @@ export default function MarketPage() {
   return (
     <>
       <Head>
-        <title>Market Intelligence — RealEstateIQ</title>
-        <meta name="description" content="Authentic Sri Lankan real estate market analytics across 23 districts and property types." />
+        <title>Market Intelligence & Heatmap — RealEstateIQ</title>
+        <meta name="description" content="Authentic Sri Lankan real estate market analytics, investment heatmap, and rental yields across 25 districts." />
       </Head>
-      <DashboardLayout title="Market Intelligence">
+      <DashboardLayout title="Market Intelligence & Heatmap">
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
-          {/* Header controls */}
+          {/* Header controls & Tab Bar */}
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h2 className="text-2xl font-serif font-bold text-white">Market Intelligence & Trends</h2>
-              <p className="text-neutral-400 text-xs mt-1">Calibrated from authentic transaction and listing records</p>
+              <h2 className="text-2xl font-serif font-bold text-white">Market Intelligence & Macro Insights</h2>
+              <p className="text-neutral-400 text-xs mt-1">Calibrated from authentic Sri Lanka transactions, Central Bank indicators & tourist yields</p>
             </div>
-            <div className="flex gap-2.5">
-              <select
-                value={filters.location}
-                onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-                className="input-field text-xs py-2 w-auto bg-[#090D14] border-white/[0.12] text-white focus:border-[#DFBA73]"
+
+            {/* Navigation Tabs */}
+            <div className="flex bg-[#090D14] p-1 rounded-xl border border-white/[0.12]">
+              <button
+                type="button"
+                onClick={() => setActiveTab('trends')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === 'trends'
+                    ? 'bg-[#DFBA73] text-[#0A0D12] shadow-sm'
+                    : 'text-neutral-400 hover:text-white'
+                }`}
               >
-                <option value="">All Districts</option>
-                {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
-                  <optgroup key={province} label={`— ${province}`}>
-                    {locs.map(loc => (
-                      <option key={loc.value} value={loc.value}>{loc.label}</option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-              <select
-                value={filters.propertyType}
-                onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })}
-                className="input-field text-xs py-2 w-auto bg-[#090D14] border-white/[0.12] text-white focus:border-[#DFBA73]"
+                <BarChart3 size={14} /> Market Trends
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('heatmap')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === 'heatmap'
+                    ? 'bg-[#DFBA73] text-[#0A0D12] shadow-sm'
+                    : 'text-neutral-400 hover:text-white'
+                }`}
               >
-                <option value="">All Asset Types</option>
-                {TYPES.filter(Boolean).map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
-              </select>
+                <MapIcon size={14} /> Investment Heatmap & Rental Yield 🗺️
+              </button>
             </div>
           </div>
 
-          {/* Institutional Note */}
-          <div className="luxury-glass-card p-4 border border-[#DFBA73]/30 bg-[#DFBA73]/10 flex gap-3 items-center">
-            <ShieldCheck size={18} className="text-[#DFBA73] shrink-0" />
-            <p className="text-xs text-neutral-300 font-medium">
-              {analytics?.note || 'Market metrics computed from verified transaction records.'}
-              {' '}Calibrated on Sri Lankan real estate benchmarks across 23 districts.
-            </p>
-          </div>
+          {/* TAB 1: Heatmap & Rental Yield */}
+          {activeTab === 'heatmap' && (
+            <InvestmentHeatmap />
+          )}
 
-          {/* Overall Stats */}
-          {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="skeleton h-28 rounded-2xl" />
-              ))}
-            </div>
-          ) : analytics?.overall ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <StatCard label="Total Monitored" value={String(analytics.overall.count)} />
-              <StatCard label="Average Price" value={formatPrice(analytics.overall.avgPrice)} />
-              <StatCard label="Median Price" value={formatPrice(analytics.overall.medianPrice)} />
-              <StatCard label="Avg Price / Sqft" value={analytics.overall.avgPricePerSqft ? `Rs. ${Math.round(analytics.overall.avgPricePerSqft).toLocaleString()}` : 'N/A'} />
-            </div>
-          ) : null}
+          {/* TAB 2: Standard Market Trends & Database Analytics */}
+          {activeTab === 'trends' && (
+            <div className="space-y-6 animate-fade-in">
+              {/* Filter controls */}
+              <div className="flex justify-end gap-2.5">
+                <select
+                  value={filters.location}
+                  onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                  className="input-field text-xs py-2 w-auto bg-[#090D14] border-white/[0.12] text-white focus:border-[#DFBA73]"
+                >
+                  <option value="">All Districts</option>
+                  {Object.entries(SL_LOCATIONS_GROUPED).map(([province, locs]) => (
+                    <optgroup key={province} label={`— ${province}`}>
+                      {locs.map(loc => (
+                        <option key={loc.value} value={loc.value}>{loc.label}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <select
+                  value={filters.propertyType}
+                  onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })}
+                  className="input-field text-xs py-2 w-auto bg-[#090D14] border-white/[0.12] text-white focus:border-[#DFBA73]"
+                >
+                  <option value="">All Asset Types</option>
+                  {TYPES.filter(Boolean).map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
+                </select>
+              </div>
 
-          {/* Charts */}
-          {analytics && (
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Avg price by location */}
-              {analytics.byLocation.length > 0 && (
-                <div className="luxury-glass-card p-6">
-                  <h3 className="font-serif font-bold text-white text-base mb-5 flex items-center gap-2">
-                    <MapPin size={16} className="text-[#DFBA73]" /> Average Price by District (LKR)
-                  </h3>
-                  <ResponsiveContainer width="100%" height={230}>
-                    <BarChart data={analytics.byLocation}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" />
-                      <XAxis dataKey="_id" tick={{ fill: '#94A3B8', fontSize: 11 }} />
-                      <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickFormatter={(v) => `${(v / 1000000).toFixed(1)}M`} />
-                      <Tooltip
-                        contentStyle={{ background: '#090D14', border: '1px solid rgba(223, 186, 115, 0.3)', borderRadius: '10px', color: '#F8FAFC', boxShadow: '0 8px 24px rgba(0,0,0,0.7)' }}
-                        formatter={(v: number) => [`Rs. ${Math.round(v).toLocaleString()}`, 'Avg Price']}
-                      />
-                      <Bar dataKey="avgPrice" fill="#DFBA73" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+              {/* Institutional Note */}
+              <div className="luxury-glass-card p-4 border border-[#DFBA73]/30 bg-[#DFBA73]/10 flex gap-3 items-center">
+                <ShieldCheck size={18} className="text-[#DFBA73] shrink-0" />
+                <p className="text-xs text-neutral-300 font-medium">
+                  {analytics?.note || 'Market metrics computed from verified transaction records.'}
+                  {' '}Calibrated on Sri Lankan real estate benchmarks across 25 districts.
+                </p>
+              </div>
+
+              {/* Overall Stats */}
+              {loading ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="skeleton h-28 rounded-2xl" />
+                  ))}
+                </div>
+              ) : analytics?.overall ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <StatCard label="Total Monitored" value={String(analytics.overall.count)} />
+                  <StatCard label="Average Price" value={formatPrice(analytics.overall.avgPrice)} />
+                  <StatCard label="Median Price" value={formatPrice(analytics.overall.medianPrice)} />
+                  <StatCard label="Avg Price / Sqft" value={analytics.overall.avgPricePerSqft ? `Rs. ${Math.round(analytics.overall.avgPricePerSqft).toLocaleString()}` : 'N/A'} />
+                </div>
+              ) : null}
+
+              {/* Charts */}
+              {analytics && (
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Avg price by location */}
+                  {analytics.byLocation.length > 0 && (
+                    <div className="luxury-glass-card p-6">
+                      <h3 className="font-serif font-bold text-white text-base mb-5 flex items-center gap-2">
+                        <MapPin size={16} className="text-[#DFBA73]" /> Average Price by District (LKR)
+                      </h3>
+                      <ResponsiveContainer width="100%" height={230}>
+                        <BarChart data={analytics.byLocation}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" />
+                          <XAxis dataKey="_id" tick={{ fill: '#94A3B8', fontSize: 11 }} />
+                          <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} tickFormatter={(v) => `${(v / 1000000).toFixed(1)}M`} />
+                          <Tooltip
+                            contentStyle={{ background: '#090D14', border: '1px solid rgba(223, 186, 115, 0.3)', borderRadius: '10px', color: '#F8FAFC', boxShadow: '0 8px 24px rgba(0,0,0,0.7)' }}
+                            formatter={(v: number) => [`Rs. ${Math.round(v).toLocaleString()}`, 'Avg Price']}
+                          />
+                          <Bar dataKey="avgPrice" fill="#DFBA73" radius={[6, 6, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
+
+                  {/* By property type */}
+                  {analytics.byPropertyType.length > 0 && (
+                    <div className="luxury-glass-card p-6">
+                      <h3 className="font-serif font-bold text-white text-base mb-5 flex items-center gap-2">
+                        <Home size={16} className="text-[#DFBA73]" /> Portfolio Composition by Type
+                      </h3>
+                      <ResponsiveContainer width="100%" height={260}>
+                        <PieChart>
+                          <Pie
+                            data={analytics.byPropertyType}
+                            dataKey="count"
+                            nameKey="_id"
+                            cx="50%"
+                            cy="45%"
+                            innerRadius={45}
+                            outerRadius={75}
+                            paddingAngle={3}
+                          >
+                            {analytics.byPropertyType.map((_, i) => (
+                              <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip
+                            contentStyle={{
+                              background: '#08141F',
+                              border: '1px solid #162E40',
+                              borderRadius: '10px',
+                              color: '#F8FAFC',
+                              boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+                            }}
+                          />
+                          <Legend
+                            verticalAlign="bottom"
+                            height={36}
+                            iconType="circle"
+                            wrapperStyle={{ fontSize: '11px', color: '#94A3B8', paddingTop: '10px' }}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
                 </div>
               )}
 
-              {/* By property type */}
-              {analytics.byPropertyType.length > 0 && (
-                <div className="luxury-glass-card p-6">
-                  <h3 className="font-serif font-bold text-white text-base mb-5 flex items-center gap-2">
-                    <Home size={16} className="text-[#DFBA73]" /> Portfolio Composition by Type
-                  </h3>
-                  <ResponsiveContainer width="100%" height={260}>
-                    <PieChart>
-                      <Pie
-                        data={analytics.byPropertyType}
-                        dataKey="count"
-                        nameKey="_id"
-                        cx="50%"
-                        cy="45%"
-                        innerRadius={45}
-                        outerRadius={75}
-                        paddingAngle={3}
-                      >
-                        {analytics.byPropertyType.map((_, i) => (
-                          <Cell key={i} fill={COLORS[i % COLORS.length]} />
+              {/* Price by location table */}
+              {analytics && analytics.byLocation.length > 0 && (
+                <div className="luxury-glass-card overflow-hidden">
+                  <div className="px-6 py-4 border-b border-white/[0.08] bg-[#090D14] flex items-center justify-between">
+                    <h3 className="font-serif font-bold text-white text-base flex items-center gap-2">
+                      <BarChart3 size={16} className="text-[#DFBA73]" /> District Valuation Breakdown
+                    </h3>
+                    <span className="text-xs text-neutral-400 font-medium md:hidden">Scroll sideways →</span>
+                  </div>
+                  <div className="overflow-x-auto w-full">
+                    <table className="data-table min-w-[620px]">
+                      <thead>
+                        <tr>
+                          <th>District</th><th>Assets</th><th>Average Price</th><th>Min Price</th><th>Max Price</th><th>Avg Area</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {analytics.byLocation.map((loc) => (
+                          <tr key={loc._id}>
+                            <td className="font-serif font-bold text-white">{loc._id}</td>
+                            <td className="text-neutral-400 font-medium">{loc.count}</td>
+                            <td className="text-[#DFBA73] font-bold">Rs. {Math.round(loc.avgPrice).toLocaleString()}</td>
+                            <td className="text-neutral-300">Rs. {loc.minPrice ? Math.round(loc.minPrice).toLocaleString() : '—'}</td>
+                            <td className="text-neutral-300">Rs. {loc.maxPrice ? Math.round(loc.maxPrice).toLocaleString() : '—'}</td>
+                            <td className="text-neutral-400">{loc.avgArea ? `${Math.round(loc.avgArea).toLocaleString()} sqft` : '—'}</td>
+                          </tr>
                         ))}
-                      </Pie>
-                      <Tooltip
-                        contentStyle={{
-                          background: '#08141F',
-                          border: '1px solid #162E40',
-                          borderRadius: '10px',
-                          color: '#F8FAFC',
-                          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-                        }}
-                      />
-                      <Legend
-                        verticalAlign="bottom"
-                        height={36}
-                        iconType="circle"
-                        wrapperStyle={{ fontSize: '11px', color: '#94A3B8', paddingTop: '10px' }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
-            </div>
-          )}
 
-          {/* Price by location table */}
-          {analytics && analytics.byLocation.length > 0 && (
-            <div className="luxury-glass-card overflow-hidden">
-              <div className="px-6 py-4 border-b border-white/[0.08] bg-[#090D14] flex items-center justify-between">
-                <h3 className="font-serif font-bold text-white text-base flex items-center gap-2">
-                  <BarChart3 size={16} className="text-[#DFBA73]" /> District Valuation Breakdown
-                </h3>
-                <span className="text-xs text-neutral-400 font-medium md:hidden">Scroll sideways →</span>
-              </div>
-              <div className="overflow-x-auto w-full">
-                <table className="data-table min-w-[620px]">
-                  <thead>
-                    <tr>
-                      <th>District</th><th>Assets</th><th>Average Price</th><th>Min Price</th><th>Max Price</th><th>Avg Area</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {analytics.byLocation.map((loc) => (
-                      <tr key={loc._id}>
-                        <td className="font-serif font-bold text-white">{loc._id}</td>
-                        <td className="text-neutral-400 font-medium">{loc.count}</td>
-                        <td className="text-[#DFBA73] font-bold">Rs. {Math.round(loc.avgPrice).toLocaleString()}</td>
-                        <td className="text-neutral-300">Rs. {loc.minPrice ? Math.round(loc.minPrice).toLocaleString() : '—'}</td>
-                        <td className="text-neutral-300">Rs. {loc.maxPrice ? Math.round(loc.maxPrice).toLocaleString() : '—'}</td>
-                        <td className="text-neutral-400">{loc.avgArea ? `${Math.round(loc.avgArea).toLocaleString()} sqft` : '—'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {analytics?.overall?.count === 0 && (
-            <div className="luxury-glass-card p-16 text-center">
-              <BarChart3 size={48} className="text-neutral-600 mx-auto mb-4" />
-              <p className="text-white font-serif text-lg">No property records available for analytics.</p>
-              <p className="text-neutral-400 text-xs mt-1">Add property listings to generate district intelligence.</p>
+              {analytics?.overall?.count === 0 && (
+                <div className="luxury-glass-card p-16 text-center">
+                  <BarChart3 size={48} className="text-neutral-600 mx-auto mb-4" />
+                  <p className="text-white font-serif text-lg">No property records available for analytics.</p>
+                  <p className="text-neutral-400 text-xs mt-1">Add property listings to generate district intelligence.</p>
+                </div>
+              )}
             </div>
           )}
         </div>
