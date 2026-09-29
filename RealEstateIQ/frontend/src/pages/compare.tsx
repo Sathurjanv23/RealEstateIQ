@@ -9,6 +9,7 @@ import { useAuth } from '../context/AuthContext';
 import { propertyService } from '../services/services';
 import { Property } from '../types';
 import Link from 'next/link';
+import { DealRatingBadge } from '../components/deal/DealRatingBadge';
 
 interface ComparisonResult {
   property: Property;
@@ -180,8 +181,15 @@ export default function ComparePage() {
                     </div>
 
                     {r.estimatedValue && (
-                      <div className="p-3 rounded-xl bg-[#DFBA73]/10 border border-[#DFBA73]/20 mb-4">
-                        <p className="text-[10px] uppercase font-bold text-[#DFBA73]">Fair Market Valuation</p>
+                      <div className="p-3 rounded-xl bg-[#DFBA73]/10 border border-[#DFBA73]/20 mb-4 space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <p className="text-[10px] uppercase font-bold text-[#DFBA73]">Fair Valuation</p>
+                          <DealRatingBadge
+                            askingPrice={r.property.askingPrice}
+                            estimatedPrice={r.estimatedValue}
+                            variant="card"
+                          />
+                        </div>
                         <p className="text-base font-serif font-black text-white">Rs. {Math.round(r.estimatedValue).toLocaleString()}</p>
                       </div>
                     )}

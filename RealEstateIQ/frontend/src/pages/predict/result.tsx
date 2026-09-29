@@ -10,6 +10,7 @@ import { generateValuationPDF } from '../../utils/pdfGenerator';
 import { ShapWaterfallCard } from '../../components/prediction/ShapWaterfallCard';
 import { WhatsAppButton } from '../../components/ui/WhatsAppButton';
 import { getValuationWhatsAppUrl } from '../../utils/whatsapp';
+import { MortgageCalculator } from '../../components/mortgage/MortgageCalculator';
 
 function FeatureBar({ name, value }: { name: string; value: number }) {
   const pct = Math.round(value * 100);
@@ -139,6 +140,13 @@ export default function PredictionResultPage() {
             predictedPrice={predictedPrice}
             inputFeatures={inputFeatures}
             algorithm={algorithm}
+          />
+
+          {/* Sri Lanka Home Loan & Mortgage EMI Calculator 🧮 */}
+          <MortgageCalculator
+            initialPrice={Math.round(predictedPrice)}
+            propertyTitle={`Valuation Certificate (${inputFeatures.location})`}
+            location={inputFeatures.location}
           />
 
           {/* Property Input Summary */}

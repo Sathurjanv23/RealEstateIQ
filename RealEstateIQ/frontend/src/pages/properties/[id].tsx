@@ -15,6 +15,9 @@ import { propertyService, inquiryService } from '../../services/services';
 import { Property } from '../../types';
 import { WhatsAppButton, WhatsAppIcon } from '../../components/ui/WhatsAppButton';
 import { getPropertyWhatsAppUrl } from '../../utils/whatsapp';
+import { DealRatingBadge } from '../../components/deal/DealRatingBadge';
+import { estimatePropertyFairValue } from '../../utils/dealRating';
+import { MortgageCalculator } from '../../components/mortgage/MortgageCalculator';
 
 const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
   ssr: false,
@@ -105,6 +108,14 @@ export default function PropertyDetailPage() {
   const pricePerSqft = property.askingPrice && property.area > 0
     ? Math.round(property.askingPrice / property.area)
     : null;
+
+  const estimatedPrice = estimatePropertyFairValue({
+    area: property.area,
+    location: property.location,
+    bedrooms: property.bedrooms,
+    bathrooms: property.bathrooms,
+    houseAge: property.houseAge,
+  });
 
   const whatsappUrl = getPropertyWhatsAppUrl({
     propertyTitle: property.title,
@@ -220,6 +231,15 @@ export default function PropertyDetailPage() {
             </div>
           </div>
 
+          {/* AI Valuation Deal Rating Banner ⚖️ */}
+          {property.askingPrice && (
+            <DealRatingBadge
+              askingPrice={property.askingPrice}
+              estimatedPrice={estimatedPrice}
+              variant="banner"
+            />
+          )}
+
           {/* Details Grid */}
           <div className="grid md:grid-cols-2 gap-6">
             {/* Property Specs */}
@@ -308,6 +328,13 @@ export default function PropertyDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Sri Lanka Home Loan & Mortgage EMI Calculator 🧮 */}
+          <MortgageCalculator
+            initialPrice={property.askingPrice || estimatedPrice}
+            propertyTitle={property.title}
+            location={property.location}
+          />
 
           {/* Schedule Viewing / Inquire Modal */}
           {inquireModal && (
