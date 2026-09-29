@@ -1,0 +1,42 @@
+name: Keep Alive Services (Prevent Render Cold-Start)
+
+on:
+  schedule:
+    # Run every 10 minutes to prevent Render 15-minute sleep
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions dashboard
+
+jobs:
+  ping-services:
+    name: Ping Render Microservices
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Backend REST API
+        run: |
+          echo "=========================================================="
+          echo "Pinging Node.js Backend API: https://realestateiq-1.onrender.com/health"
+          echo "=========================================================="
+          RESPONSE=$(curl -s -S --max-time 60 -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}s" "https://realestateiq-1.onrender.com/health")
+          echo "$RESPONSE"
+          STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
+          if [ "$STATUS" -ne 200 ]; then
+            echo "::warning ::Backend API returned HTTP status $STATUS"
+          else
+            echo "✅ Backend API is awake and healthy!"
+          fi
+
+      - name: Ping Python ML Engine API
+        run: |
+          echo "=========================================================="
+          echo "Pinging Python FastAPI ML Service: https://realestateiq-8b3k.onrender.com/health"
+          echo "=========================================================="
+          RESPONSE=$(curl -s -S --max-time 60 -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}s" "https://realestateiq-8b3k.onrender.com/health")
+          echo "$RESPONSE"
+          STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
+          if [ "$STATUS" -ne 200 ]; then
+            echo "::warning ::ML Engine returned HTTP status $STATUS"
+          else
+            echo "✅ ML Engine is awake and healthy!"
+          fi
