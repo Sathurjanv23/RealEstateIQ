@@ -1,45 +1,46 @@
 {
   "selected_model": {
-    "model_name": "RandomForestRegressor",
-    "version": "RF-v1.0",
-    "algorithm": "RandomForestRegressor",
+    "model_name": "GradientBoostingRegressor",
+    "version": "GB-v1.0",
+    "algorithm": "GradientBoostingRegressor",
     "metrics": {
-      "mae": 10430635.46,
-      "rmse": 23631793.45,
-      "r2": 0.4427
+      "mae": 10348858.15,
+      "rmse": 23698147.6,
+      "r2": 0.4395,
+      "log_r2": 0.669
     },
     "feature_importance": {
-      "area": 0.614305,
-      "bedrooms": 0.030368,
-      "bathrooms": 0.237096,
-      "house_age": 0.050971,
-      "parking": 0.006739,
-      "district_rate": 0.041648,
-      "location_Colombo": 0.007907,
-      "location_Gampaha": 0.002525,
-      "location_Kalutara": 0.00149,
-      "location_Kandy": 0.001128,
-      "location_Matale": 0.000101,
-      "location_Nuwara Eliya": 6.2e-05,
-      "location_Galle": 0.001817,
-      "location_Matara": 0.00043,
-      "location_Hambantota": 5e-05,
-      "location_Jaffna": 0.000112,
+      "area": 0.546313,
+      "bedrooms": 0.02988,
+      "bathrooms": 0.323856,
+      "house_age": 0.025324,
+      "parking": 0.007724,
+      "district_rate": 0.041998,
+      "location_Colombo": 0.007369,
+      "location_Gampaha": 0.00276,
+      "location_Kalutara": 0.00262,
+      "location_Kandy": 0.001646,
+      "location_Matale": 0.000523,
+      "location_Nuwara Eliya": 0.00082,
+      "location_Galle": 0.001136,
+      "location_Matara": 0.000815,
+      "location_Hambantota": 0.000268,
+      "location_Jaffna": 0.00028,
       "location_Kilinochchi": 0.0,
-      "location_Mannar": 0.0,
+      "location_Mannar": 5.7e-05,
       "location_Vavuniya": 0.0,
       "location_Mullativu": 0.0,
-      "location_Trincomalee": 3e-06,
-      "location_Batticaloa": 2.2e-05,
-      "location_Ampara": 5e-06,
-      "location_Kurunegala": 0.001481,
-      "location_Puttalam": 2.5e-05,
-      "location_Anuradhapura": 0.000498,
-      "location_Polonnaruwa": 4e-06,
-      "location_Badulla": 0.000271,
-      "location_Monaragala": 3e-05,
-      "location_Ratnapura": 0.000341,
-      "location_Kegalle": 0.000573
+      "location_Trincomalee": 2.1e-05,
+      "location_Batticaloa": 0.000254,
+      "location_Ampara": 0.000312,
+      "location_Kurunegala": 0.002112,
+      "location_Puttalam": 5.6e-05,
+      "location_Anuradhapura": 0.000904,
+      "location_Polonnaruwa": 8.3e-05,
+      "location_Badulla": 0.00023,
+      "location_Monaragala": 0.000187,
+      "location_Ratnapura": 0.001222,
+      "location_Kegalle": 0.001228
     },
     "district_rates": {
       "Ampara": 4519.392005192838,
@@ -68,9 +69,9 @@
       "national_avg": 12700.825117442262
     },
     "dataset_version": "v4.0-authentic-sl-all-23-districts-14833rows",
-    "training_date": "2026-09-19T13:42:28.452954Z",
+    "training_date": "2026-09-29T11:27:20.361567Z",
     "status": "production",
-    "model_file": "pipeline_rf_v1.0.joblib",
+    "model_file": "pipeline_gb_v1.0.joblib",
     "numeric_features": [
       "area",
       "bedrooms",
@@ -118,25 +119,43 @@
       "model_name": "LinearRegression",
       "mae": 12293683.84,
       "rmse": 25800486.79,
-      "r2": 0.3357
+      "r2": 0.3357,
+      "log_r2": 0.574
     },
     {
       "model_name": "DecisionTreeRegressor",
       "mae": 10914201.89,
       "rmse": 24604900.7,
-      "r2": 0.3958
+      "r2": 0.3958,
+      "log_r2": 0.6271
     },
     {
       "model_name": "RandomForestRegressor",
-      "mae": 10430635.46,
-      "rmse": 23631793.45,
-      "r2": 0.4427
+      "mae": 10435047.21,
+      "rmse": 23652025.4,
+      "r2": 0.4417,
+      "log_r2": 0.6598
     },
     {
       "model_name": "GradientBoostingRegressor",
-      "mae": 10425226.73,
-      "rmse": 23882918.04,
-      "r2": 0.4308
+      "mae": 10348858.15,
+      "rmse": 23698147.6,
+      "r2": 0.4395,
+      "log_r2": 0.669
+    },
+    {
+      "model_name": "XGBRegressor",
+      "mae": 10517547.69,
+      "rmse": 23991258.62,
+      "r2": 0.4256,
+      "log_r2": 0.6655
+    },
+    {
+      "model_name": "LGBMRegressor",
+      "mae": 10633132.76,
+      "rmse": 24175164.13,
+      "r2": 0.4168,
+      "log_r2": 0.6604
     }
   ]
 }

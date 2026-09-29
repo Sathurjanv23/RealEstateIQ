@@ -57,6 +57,8 @@ MODEL_VERSION_PREFIX = {
     "DecisionTreeRegressor": "DT",
     "RandomForestRegressor": "RF",
     "GradientBoostingRegressor": "GB",
+    "XGBRegressor": "XGB",
+    "LGBMRegressor": "LGBM",
 }
 
 
@@ -114,17 +116,49 @@ def build_preprocessor() -> ColumnTransformer:
 
 
 def get_candidate_models() -> dict:
-    """Return candidate regressors to compare."""
-    return {
+    """Return candidate regressors to compare including XGBoost and LightGBM."""
+    models = {
         "LinearRegression": LinearRegression(),
         "DecisionTreeRegressor": DecisionTreeRegressor(max_depth=10, random_state=42),
         "RandomForestRegressor": RandomForestRegressor(
-            n_estimators=100, max_depth=12, min_samples_leaf=2, random_state=42
+            n_estimators=150, max_depth=14, min_samples_leaf=2, random_state=42, n_jobs=-1
         ),
         "GradientBoostingRegressor": GradientBoostingRegressor(
-            n_estimators=180, max_depth=6, learning_rate=0.08, random_state=42
+            n_estimators=220, max_depth=6, learning_rate=0.06, subsample=0.85, random_state=42
         ),
     }
+
+    try:
+        from xgboost import XGBRegressor
+        models["XGBRegressor"] = XGBRegressor(
+            n_estimators=350,
+            max_depth=6,
+            learning_rate=0.04,
+            subsample=0.85,
+            colsample_bytree=0.85,
+            random_state=42,
+            n_jobs=-1,
+        )
+    except ImportError:
+        pass
+
+    try:
+        from lightgbm import LGBMRegressor
+        models["LGBMRegressor"] = LGBMRegressor(
+            n_estimators=350,
+            max_depth=7,
+            num_leaves=35,
+            learning_rate=0.04,
+            subsample=0.85,
+            colsample_bytree=0.85,
+            random_state=42,
+            verbose=-1,
+            n_jobs=-1,
+        )
+    except ImportError:
+        pass
+
+    return models
 
 
 def evaluate_model(
@@ -137,12 +171,14 @@ def evaluate_model(
     mae = float(mean_absolute_error(y_test, preds))
     rmse = float(np.sqrt(mean_squared_error(y_test, preds)))
     r2 = float(r2_score(y_test, preds))
+    log_r2 = float(r2_score(np.log1p(y_test), np.log1p(np.maximum(preds, 1))))
 
     return {
         "model_name": model_name,
         "mae": round(mae, 2),
         "rmse": round(rmse, 2),
         "r2": round(r2, 4),
+        "log_r2": round(log_r2, 4),
     }
 
 
@@ -217,13 +253,14 @@ def train():
         print(
             f"  {model_name:<30} MAE=Rs. {metrics['mae']:>11,.0f}  "
             f"RMSE=Rs. {metrics['rmse']:>11,.0f}  "
-            f"R2={metrics['r2']:.4f}"
+            f"Raw-R2={metrics['r2']:.4f}  "
+            f"Log-R2={metrics['log_r2']:.4f}"
         )
 
-    # Select best model
-    best = max(results, key=lambda r: r["r2"])
+    # Select champion model based on highest Log-R2
+    best = max(results, key=lambda r: r.get("log_r2", r["r2"]))
     best_model_name = best["model_name"]
-    print(f"\n[WINNER] Best model: {best_model_name} (R2={best['r2']})")
+    print(f"\n[WINNER] Best model: {best_model_name} (Log-R2={best['log_r2']}, Raw-R2={best['r2']})")
 
     # Retrain winner on all data
     final_pipeline = Pipeline([
@@ -264,6 +301,7 @@ def train():
                 "mae": best["mae"],
                 "rmse": best["rmse"],
                 "r2": best["r2"],
+                "log_r2": best["log_r2"],
             },
             "feature_importance": importance,
             "district_rates": district_rates,
