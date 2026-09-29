@@ -7,8 +7,9 @@ export default function Document() {
         <meta charSet="UTF-8" />
         
         {/* Favicon & Brand Icons */}
+        <link rel="icon" type="image/png" href="/logo.png" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         
         {/* PWA Webmanifest */}
         <link rel="manifest" href="/manifest.json" />
