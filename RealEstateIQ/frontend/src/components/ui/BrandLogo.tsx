@@ -2,30 +2,36 @@ import React from 'react';
 import Link from 'next/link';
 
 interface BrandLogoProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   showText?: boolean;
+  showSubtitle?: boolean;
   href?: string;
   className?: string;
   inverted?: boolean;
   variant?: 'luxury' | 'emerald';
+  mode?: 'emblem' | 'full';
 }
 
 export function BrandLogo({
   size = 'md',
   showText = true,
+  showSubtitle = false,
   href = '/',
   className = '',
   inverted = false,
   variant = 'luxury',
+  mode = 'emblem',
 }: BrandLogoProps) {
   const iconSizes = {
-    sm: 30,
-    md: 38,
-    lg: 46,
-    xl: 58,
+    xs: 26,
+    sm: 34,
+    md: 42,
+    lg: 54,
+    xl: 70,
   };
 
   const textSizes = {
+    xs: 'text-sm',
     sm: 'text-base',
     md: 'text-lg',
     lg: 'text-2xl',
@@ -36,69 +42,120 @@ export function BrandLogo({
   const textColor = inverted ? 'text-[#17231C]' : 'text-white';
   const isLuxury = variant === 'luxury';
   const accentColor = isLuxury ? '#DFBA73' : '#00DC82';
-  const accentBorder = isLuxury ? 'rgba(223, 186, 115, 0.45)' : 'rgba(0, 220, 130, 0.4)';
-  const accentGlow = isLuxury ? '0 0 18px -2px rgba(223, 186, 115, 0.3)' : '0 0 16px -2px rgba(0, 220, 130, 0.25)';
-  const bgColor = isLuxury ? '#0E131C' : '#09211A';
+  const accentBorder = isLuxury ? 'rgba(223, 186, 115, 0.4)' : 'rgba(0, 220, 130, 0.4)';
+  const accentGlow = isLuxury
+    ? '0 0 20px -2px rgba(223, 186, 115, 0.35)'
+    : '0 0 18px -2px rgba(0, 220, 130, 0.3)';
 
-  const logoSvg = (
-    <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
-      {/* Sleek IQ Monogram Emblem */}
+  // Full Badge Mode (Displays full official branded emblem)
+  if (mode === 'full') {
+    const fullBadgeContent = (
       <div
-        className="relative flex items-center justify-center shrink-0 rounded-xl transition-all duration-300"
-        style={{
-          width: currentSize,
-          height: currentSize,
-          backgroundColor: bgColor,
-          border: `1px solid ${accentBorder}`,
-          boxShadow: accentGlow,
-        }}
+        className={`flex flex-col items-center text-center p-3 rounded-2xl bg-[#090D14]/90 border border-[#DFBA73]/30 shadow-2xl transition-all duration-300 hover:border-[#DFBA73]/60 group ${className}`}
       >
-        <svg
-          viewBox="0 0 36 36"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-3/4 h-3/4"
+        <div
+          className="relative rounded-2xl overflow-hidden mb-3 transition-transform duration-300 group-hover:scale-105"
+          style={{
+            width: currentSize * 2,
+            height: currentSize * 2,
+            boxShadow: accentGlow,
+            border: `1.5px solid ${accentBorder}`,
+          }}
         >
-          {/* Letter I / Pillar */}
-          <rect x="7" y="9" width="4.5" height="18" rx="2.25" fill={accentColor} />
-          
-          {/* Letter Q / Orbiting Architectural Ring */}
-          <path
-            d="M20 9C15.58 9 12 12.58 12 17C12 21.42 15.58 25 20 25C24.42 25 28 21.42 28 17C28 12.58 24.42 9 20 9ZM20 21.5C17.51 21.5 15.5 19.49 15.5 17C15.5 14.51 17.51 12.5 20 12.5C22.49 12.5 24.5 14.51 24.5 17C24.5 19.49 22.49 21.5 20 21.5Z"
-            fill="#FFFFFF"
-            opacity="0.95"
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/logo.png"
+            alt="RealEstateIQ Brand Emblem"
+            className="w-full h-full object-cover"
           />
-          <path
-            d="M23 21L27.5 26"
-            stroke={accentColor}
-            strokeWidth="3.5"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
-
-      {/* Brand Typography */}
-      {showText && (
+        </div>
         <div className="flex items-center tracking-tight leading-none font-bold">
           <span className={`${textColor} ${textSizes[size]} font-extrabold tracking-tight`}>
             RealEstate
           </span>
-          <span
-            className={`${textSizes[size]} font-black ml-0.5`}
-            style={{ color: accentColor }}
-          >
+          <span className={`${textSizes[size]} font-black ml-0.5`} style={{ color: accentColor }}>
             IQ
           </span>
           <span
             className="ml-1.5 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded border backdrop-blur-md"
             style={{
               color: accentColor,
-              backgroundColor: isLuxury ? 'rgba(223, 186, 115, 0.1)' : 'rgba(0, 220, 130, 0.1)',
-              borderColor: isLuxury ? 'rgba(223, 186, 115, 0.3)' : 'rgba(0, 220, 130, 0.3)',
+              backgroundColor: 'rgba(223, 186, 115, 0.12)',
+              borderColor: 'rgba(223, 186, 115, 0.35)',
             }}
           >
             LK
           </span>
+        </div>
+        {showSubtitle && (
+          <p className="text-[11px] text-neutral-400 mt-1 max-w-xs font-medium">
+            Sri Lanka&apos;s AI-Powered Real Estate Valuation &amp; Market Intelligence Platform
+          </p>
+        )}
+      </div>
+    );
+
+    if (href) {
+      return (
+        <Link href={href} className="inline-flex focus:outline-none">
+          {fullBadgeContent}
+        </Link>
+      );
+    }
+    return fullBadgeContent;
+  }
+
+  // Emblem Mode (Compact gold monogram emblem icon + typography)
+  const emblemContent = (
+    <div className={`inline-flex items-center gap-2.5 select-none group ${className}`}>
+      {/* Golden 3D Monogram Emblem Icon */}
+      <div
+        className="relative flex items-center justify-center shrink-0 rounded-xl overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_24px_rgba(223,186,115,0.5)]"
+        style={{
+          width: currentSize,
+          height: currentSize,
+          backgroundColor: '#070A0F',
+          border: `1.5px solid ${accentBorder}`,
+          boxShadow: accentGlow,
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/logo.png"
+          alt="RealEstateIQ Logo"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Brand Typography */}
+      {showText && (
+        <div className="flex flex-col justify-center text-left leading-none">
+          <div className="flex items-center tracking-tight font-bold">
+            <span className={`${textColor} ${textSizes[size]} font-extrabold tracking-tight`}>
+              RealEstate
+            </span>
+            <span
+              className={`${textSizes[size]} font-black ml-0.5`}
+              style={{ color: accentColor }}
+            >
+              IQ
+            </span>
+            <span
+              className="ml-1.5 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded border backdrop-blur-md"
+              style={{
+                color: accentColor,
+                backgroundColor: isLuxury ? 'rgba(223, 186, 115, 0.12)' : 'rgba(0, 220, 130, 0.12)',
+                borderColor: isLuxury ? 'rgba(223, 186, 115, 0.35)' : 'rgba(0, 220, 130, 0.35)',
+              }}
+            >
+              LK
+            </span>
+          </div>
+          {showSubtitle && (
+            <span className="text-[10px] text-neutral-400 font-medium tracking-wide mt-1">
+              Sri Lanka Real Estate Intelligence
+            </span>
+          )}
         </div>
       )}
     </div>
@@ -107,10 +164,11 @@ export function BrandLogo({
   if (href) {
     return (
       <Link href={href} className="inline-flex focus:outline-none">
-        {logoSvg}
+        {emblemContent}
       </Link>
     );
   }
 
-  return logoSvg;
+  return emblemContent;
 }
+export default BrandLogo;

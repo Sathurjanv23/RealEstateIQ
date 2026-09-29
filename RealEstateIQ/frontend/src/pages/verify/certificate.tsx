@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { WhatsAppButton } from '../../components/ui/WhatsAppButton';
 import { getValuationWhatsAppUrl } from '../../utils/whatsapp';
+import { BrandLogo } from '../../components/ui/BrandLogo';
 
 export default function CertificateVerificationPage() {
   const router = useRouter();
@@ -58,14 +59,7 @@ export default function CertificateVerificationPage() {
         {/* Top Navbar */}
         <header className="border-b border-white/[0.08] bg-[#0A0D14]/80 backdrop-blur-md px-6 py-4">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-lg bg-[#DFBA73]/15 border border-[#DFBA73]/30 flex items-center justify-center text-[#DFBA73] font-serif font-black">
-                R
-              </div>
-              <span className="font-serif font-bold text-white text-base tracking-tight">
-                RealEstate<span className="text-[#DFBA73]">IQ</span>
-              </span>
-            </Link>
+            <BrandLogo size="md" variant="luxury" />
 
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#00DC82]/15 text-[#00DC82] border border-[#00DC82]/30">
               <CheckCircle2 size={13} /> Registry Live
