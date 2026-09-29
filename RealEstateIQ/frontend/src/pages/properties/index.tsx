@@ -13,6 +13,8 @@ import { Property } from '../../types';
 import { SL_LOCATIONS_GROUPED } from '../../utils/sriLankaLocations';
 import { WhatsAppButton } from '../../components/ui/WhatsAppButton';
 import { getPropertyWhatsAppUrl } from '../../utils/whatsapp';
+import { DealRatingBadge } from '../../components/deal/DealRatingBadge';
+import { estimatePropertyFairValue } from '../../utils/dealRating';
 
 const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
   ssr: false,
@@ -23,6 +25,14 @@ const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 function PropertyCard({ property, onSave, saved }: { property: Property; onSave: (id: string) => void; saved: boolean }) {
   const hasImage = property.images && property.images.length > 0 && property.images[0];
+  const estimatedPrice = estimatePropertyFairValue({
+    area: property.area,
+    location: property.location,
+    bedrooms: property.bedrooms,
+    bathrooms: property.bathrooms,
+    houseAge: property.houseAge,
+  });
+
   const whatsappUrl = getPropertyWhatsAppUrl({
     propertyTitle: property.title,
     location: property.location,
@@ -45,6 +55,15 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
             <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30 shadow-sm backdrop-blur-md">
               {property.propertyType}
             </span>
+            {property.askingPrice && (
+              <div className="absolute top-3 right-3 z-10">
+                <DealRatingBadge
+                  askingPrice={property.askingPrice}
+                  estimatedPrice={estimatedPrice}
+                  variant="card"
+                />
+              </div>
+            )}
           </div>
         ) : (
           <div className="h-2 w-full bg-gradient-to-r from-[#DFBA73] to-[#C5A880]" />
@@ -53,11 +72,20 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
         <div className="p-5">
           <div className="flex items-start justify-between mb-2">
             <div className="flex-1 min-w-0 pr-2">
-              {!hasImage && (
-                <span className="text-[10px] uppercase font-bold mb-2 inline-flex px-2 py-0.5 rounded bg-[#DFBA73]/10 text-[#DFBA73] border border-[#DFBA73]/30">
-                  {property.propertyType}
-                </span>
-              )}
+              <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                {!hasImage && (
+                  <span className="text-[10px] uppercase font-bold inline-flex px-2 py-0.5 rounded bg-[#DFBA73]/10 text-[#DFBA73] border border-[#DFBA73]/30">
+                    {property.propertyType}
+                  </span>
+                )}
+                {!hasImage && property.askingPrice && (
+                  <DealRatingBadge
+                    askingPrice={property.askingPrice}
+                    estimatedPrice={estimatedPrice}
+                    variant="card"
+                  />
+                )}
+              </div>
               <h3 className="font-serif font-bold text-white text-base truncate mt-0.5">{property.title}</h3>
             </div>
             <button
