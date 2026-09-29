@@ -15,6 +15,7 @@ import adminRoutes from './routes/adminRoutes';
 import inquiryRoutes from './routes/inquiryRoutes';
 import { errorHandler, notFound } from './middleware/errorHandler';
 import { logger } from './utils/logger';
+import { initKeepAlive } from './utils/keepAlive';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -123,6 +124,7 @@ const startServer = async () => {
   await connectDB();
   app.listen(PORT, () => {
     logger.info(`RealEstateIQ Backend running on port ${PORT}`);
+    initKeepAlive();
   });
 };
 
