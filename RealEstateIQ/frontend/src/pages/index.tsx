@@ -11,6 +11,7 @@ import { MarketIntelligenceSection } from '../components/home/MarketIntelligence
 import { WhyRealEstateIqSection } from '../components/home/WhyRealEstateIqSection';
 import { FinalCtaSection } from '../components/home/FinalCtaSection';
 import { PwaInstallPrompt } from '../components/ui/PwaInstallPrompt';
+import { AiRealEstateConcierge } from '../components/chat/AiRealEstateConcierge';
 import { useAuth } from '../context/AuthContext';
 
 const stakeholderPills = [
@@ -141,6 +142,9 @@ export default function LandingPage() {
 
         {/* LUXURY FOOTER */}
         <LuxuryFooter />
+
+        {/* AI Real Estate Concierge */}
+        <AiRealEstateConcierge />
 
         {/* PWA Prompt */}
         <PwaInstallPrompt />
