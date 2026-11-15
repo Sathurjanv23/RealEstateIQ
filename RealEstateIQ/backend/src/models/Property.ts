@@ -1,14 +1,17 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { ALL_SL_LOCATIONS } from '../utils/sriLankaLocations';
 
 export type PropertyType = 'house' | 'apartment' | 'land' | 'commercial' | 'villa';
-export type Location = 'Colombo' | 'Kandy' | 'Galle' | 'Negombo';
+export type PropertyStatus = 'active' | 'pending' | 'sold' | 'rejected';
 
 export interface IProperty extends Document {
   title: string;
   description: string;
   propertyType: PropertyType;
-  location: Location;
+  location: string;
   district: string;
+  status: PropertyStatus;
+  featured: boolean;
   area: number;
   landSize?: number;
   bedrooms: number;
@@ -45,10 +48,28 @@ const propertySchema = new Schema<IProperty>(
     },
     location: {
       type: String,
-      enum: ['Colombo', 'Kandy', 'Galle', 'Negombo'],
       required: [true, 'Location is required'],
+      trim: true,
     },
-    district: { type: String, trim: true, maxlength: 100 },
+    district: { 
+      type: String, 
+      trim: true, 
+      maxlength: 100,
+      default: function(this: IProperty) {
+        return this.location;
+      }
+    },
+    status: {
+      type: String,
+      enum: ['active', 'pending', 'sold', 'rejected'],
+      default: 'active',
+      index: true,
+    },
+    featured: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
     area: {
       type: Number,
       required: [true, 'Area is required'],
@@ -88,12 +109,20 @@ const propertySchema = new Schema<IProperty>(
   { timestamps: true }
 );
 
-// Indexes for common query patterns
-propertySchema.index({ location: 1 });
-propertySchema.index({ propertyType: 1 });
-propertySchema.index({ askingPrice: 1 });
+// High-performance compound indexes for zero-lag queries under 10k users
+propertySchema.index({ status: 1, featured: -1, createdAt: -1 });
+propertySchema.index({ status: 1, location: 1, askingPrice: 1 });
+propertySchema.index({ status: 1, district: 1, askingPrice: 1 });
+propertySchema.index({ status: 1, propertyType: 1, askingPrice: 1 });
 propertySchema.index({ bedrooms: 1, bathrooms: 1 });
 propertySchema.index({ area: 1 });
+propertySchema.index({ askingPrice: 1 });
 propertySchema.index({ createdAt: -1 });
+
+// Full-text search index for fast keyword lookup
+propertySchema.index(
+  { title: 'text', description: 'text', district: 'text', location: 'text' },
+  { weights: { title: 10, district: 5, location: 5, description: 1 } }
+);
 
 export const Property = mongoose.model<IProperty>('Property', propertySchema);

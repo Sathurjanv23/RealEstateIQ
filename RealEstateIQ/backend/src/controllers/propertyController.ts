@@ -27,12 +27,28 @@ export const getProperties = async (
       page = '1',
       limit = '12',
       search,
+      featured,
+      status,
     } = req.query;
 
     const filter: Record<string, unknown> = {};
 
-    if (location) filter.location = location;
+    // For non-admin, default to only active listings
+    if (status && req.user?.role === 'ADMIN') {
+      filter.status = status;
+    } else {
+      filter.status = { $ne: 'rejected' }; // Show active and pending (or active by default)
+    }
+
+    if (location) {
+      filter.$or = [
+        { location: { $regex: new RegExp(`^${location}$`, 'i') } },
+        { district: { $regex: new RegExp(`^${location}$`, 'i') } },
+      ];
+    }
+
     if (propertyType) filter.propertyType = propertyType;
+    if (featured === 'true') filter.featured = true;
     if (bedrooms) filter.bedrooms = { $gte: Number(bedrooms) };
     if (bathrooms) filter.bathrooms = { $gte: Number(bathrooms) };
     if (minArea || maxArea) {
@@ -45,11 +61,14 @@ export const getProperties = async (
       if (minPrice) (filter.askingPrice as Record<string, number>).$gte = Number(minPrice);
       if (maxPrice) (filter.askingPrice as Record<string, number>).$lte = Number(maxPrice);
     }
-    if (search) {
+
+    if (search && typeof search === 'string' && search.trim()) {
+      const sanitized = search.trim();
       filter.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } },
-        { district: { $regex: search, $options: 'i' } },
+        { title: { $regex: sanitized, $options: 'i' } },
+        { description: { $regex: sanitized, $options: 'i' } },
+        { district: { $regex: sanitized, $options: 'i' } },
+        { location: { $regex: sanitized, $options: 'i' } },
       ];
     }
 
@@ -57,12 +76,15 @@ export const getProperties = async (
     const limitNum = Math.min(50, Math.max(1, parseInt(limit as string)));
     const skip = (pageNum - 1) * limitNum;
 
+    // Use .lean() and projection for 10K+ zero-lag queries
     const [properties, total] = await Promise.all([
       Property.find(filter)
+        .select('title description propertyType location district area landSize bedrooms bathrooms parking houseAge askingPrice images featured status createdAt createdBy')
         .populate('createdBy', 'name email')
-        .sort({ createdAt: -1 })
+        .sort({ featured: -1, createdAt: -1 })
         .skip(skip)
-        .limit(limitNum),
+        .limit(limitNum)
+        .lean(),
       Property.countDocuments(filter),
     ]);
 
@@ -90,10 +112,10 @@ export const getProperty = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const property = await Property.findById(req.params.id).populate(
-      'createdBy',
-      'name email'
-    );
+    const property = await Property.findById(req.params.id)
+      .populate('createdBy', 'name email phone')
+      .lean();
+
     if (!property) {
       next(createError('Property not found.', 404, 'NOT_FOUND'));
       return;
@@ -112,15 +134,13 @@ export const createProperty = async (
 ): Promise<void> => {
   try {
     const propertyData = { ...req.body };
-    if (propertyData.location) {
-      if (!['Colombo', 'Kandy', 'Galle', 'Negombo'].includes(propertyData.location)) {
-        propertyData.district = propertyData.district || propertyData.location;
-        propertyData.location = mapToMlHub(propertyData.location);
-      }
+    if (!propertyData.district && propertyData.location) {
+      propertyData.district = propertyData.location;
     }
 
     const property = await Property.create({
       ...propertyData,
+      status: 'active',
       createdBy: req.user!._id,
     });
 
@@ -161,11 +181,8 @@ export const updateProperty = async (
     }
 
     const updateData = { ...req.body };
-    if (updateData.location) {
-      if (!['Colombo', 'Kandy', 'Galle', 'Negombo'].includes(updateData.location)) {
-        updateData.district = updateData.district || updateData.location;
-        updateData.location = mapToMlHub(updateData.location);
-      }
+    if (updateData.location && !updateData.district) {
+      updateData.district = updateData.location;
     }
 
     const updated = await Property.findByIdAndUpdate(req.params.id, updateData, {
