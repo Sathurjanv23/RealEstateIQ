@@ -4,7 +4,10 @@ import { Sidebar } from './Sidebar';
 import { MobileBottomNav } from './MobileBottomNav';
 import { BrandLogo } from '../ui/BrandLogo';
 import { PwaInstallPrompt } from '../ui/PwaInstallPrompt';
-import { Menu, Bell, Home } from 'lucide-react';
+import { CurrencySelector } from '../ui/CurrencySelector';
+import { NotificationCenter } from '../ui/NotificationCenter';
+import { AiRealEstateConcierge } from '../chat/AiRealEstateConcierge';
+import { Menu, Home } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 interface DashboardLayoutProps {
@@ -57,6 +60,9 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
               <span>Home Page</span>
             </Link>
 
+            {/* Currency Selector (LKR, USD, GBP, AUD, AED...) */}
+            <CurrencySelector />
+
             {/* Live Sri Lanka Market Status */}
             <div className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#DFBA73]/10 border border-[#DFBA73]/30 text-[#DFBA73] text-xs font-semibold">
               <span className="relative flex h-2 w-2">
@@ -66,13 +72,8 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
               <span>SL Market Active</span>
             </div>
 
-            {/* Notification button */}
-            <button
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-neutral-400 hover:text-[#DFBA73] hover:bg-white/5 border border-white/[0.08] transition-all"
-              aria-label="Notifications"
-            >
-              <Bell size={17} />
-            </button>
+            {/* Notification Center Popover */}
+            <NotificationCenter />
 
             {/* User Profile avatar */}
             <div
@@ -102,6 +103,9 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
 
       {/* Mobile Bottom Navigation Bar */}
       <MobileBottomNav onOpenMenu={() => setSidebarOpen(true)} />
+
+      {/* AI Real Estate Concierge Assistant 🇱🇰 */}
+      <AiRealEstateConcierge />
 
       {/* PWA Install Banner */}
       <PwaInstallPrompt />
