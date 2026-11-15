@@ -13,6 +13,7 @@ out/
 build/
 dist/
 .cache/
+*.tsbuildinfo
 
 # Environment Variables & Sensitive Credentials (NEVER commit secrets!)
 .env

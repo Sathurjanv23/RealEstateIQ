@@ -1,0 +1,11 @@
+# RealEstateIQ — AI Real Estate Intelligence Platform Robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /dashboard
+Disallow: /verify/certificate
+Disallow: /payment/cancel
+
+# Host & Sitemap
+Sitemap: https://real-estate-iq-pi.vercel.app/sitemap.xml

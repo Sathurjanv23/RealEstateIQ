@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { GitCompare, Plus, X, Home, Bed, Bath, Car, MapPin, Brain } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { propertyService } from '../services/services';
 import { Property } from '../types';
 import Link from 'next/link';
@@ -21,6 +22,7 @@ interface ComparisonResult {
 export default function ComparePage() {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
+  const { formatPrice } = useCurrency();
   const [ids, setIds] = useState(['', '']);
   const [results, setResults] = useState<ComparisonResult[] | null>(null);
 
@@ -108,7 +110,7 @@ export default function ComparePage() {
                       <option value="">Choose property {i + 1}...</option>
                       {availableProperties.map((p) => (
                         <option key={p._id} value={p._id}>
-                          {p.title} ({p.location}) — Rs. {p.askingPrice ? p.askingPrice.toLocaleString() : 'Price on Inquiry'}
+                          {p.title} ({p.location}) — {formatPrice(p.askingPrice)}
                         </option>
                       ))}
                     </select>
@@ -170,12 +172,12 @@ export default function ComparePage() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-neutral-400">Asking Price:</span>
-                        <strong className="text-[#DFBA73]">{r.property.askingPrice ? `Rs. ${r.property.askingPrice.toLocaleString()}` : 'N/A'}</strong>
+                        <strong className="text-[#DFBA73]">{formatPrice(r.property.askingPrice)}</strong>
                       </div>
                       {r.pricePerSqft && (
                         <div className="flex justify-between">
                           <span className="text-neutral-400">Rate / sqft:</span>
-                          <strong className="text-white">Rs. {Math.round(r.pricePerSqft).toLocaleString()}</strong>
+                          <strong className="text-white">{formatPrice(r.pricePerSqft)}</strong>
                         </div>
                       )}
                     </div>

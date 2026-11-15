@@ -21,6 +21,7 @@ import {
   Building2,
   X,
   ShieldCheck,
+  CreditCard,
 } from 'lucide-react';
 import { BrandLogo } from '../ui/BrandLogo';
 import { useAuth } from '../../context/AuthContext';
@@ -43,6 +44,7 @@ const userNav: NavItem[] = [
   { href: '/compare', label: 'Compare Assets', icon: <GitCompare size={18} /> },
   { href: '/market', label: 'Market Analytics', icon: <BarChart3 size={18} /> },
   { href: '/recommendations', label: 'Curated Yields', icon: <Star size={18} /> },
+  { href: '/pricing', label: 'Pricing & Boost', icon: <CreditCard size={18} />, badge: 'PayHere' },
 ];
 
 const adminNav: NavItem[] = [

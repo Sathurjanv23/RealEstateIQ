@@ -4,6 +4,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
+import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 
 import { connectDB } from './config/database';
@@ -13,6 +14,7 @@ import predictionRoutes from './routes/predictionRoutes';
 import marketRoutes from './routes/marketRoutes';
 import adminRoutes from './routes/adminRoutes';
 import inquiryRoutes from './routes/inquiryRoutes';
+import paymentRoutes from './routes/paymentRoutes';
 import { errorHandler, notFound } from './middleware/errorHandler';
 import { logger } from './utils/logger';
 import { initKeepAlive } from './utils/keepAlive';
@@ -82,6 +84,9 @@ const authLimiter = rateLimit({
 app.use('/api', generalLimiter);
 app.use('/api/auth', authLimiter);
 
+// ── Compression (Gzip / Brotli for 10K+ users zero-lag payloads) ────────────
+app.use(compression());
+
 // ── Body parsing ────────────────────────────────────────────────────────────
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -114,6 +119,7 @@ app.use('/api/predictions', predictionRoutes);
 app.use('/api/market', marketRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/inquiries', inquiryRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // ── 404 & Error handlers ─────────────────────────────────────────────────────
 app.use(notFound);

@@ -122,9 +122,11 @@ export function LuxuryFooter() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 gap-3">
           <p>© {new Date().getFullYear()} RealEstateIQ Sri Lanka. All rights reserved.</p>
           <div className="flex items-center gap-4 text-[11px]">
-            <span>Institutional Real Estate Infrastructure</span>
+            <Link href="/terms" className="hover:text-[#DFBA73] transition-colors">Terms & Refunds</Link>
             <span>•</span>
-            <span className="text-neutral-400">Sri Lankan Market Intelligence</span>
+            <Link href="/privacy" className="hover:text-[#DFBA73] transition-colors">Privacy Policy</Link>
+            <span>•</span>
+            <Link href="/pricing" className="hover:text-[#DFBA73] transition-colors">Pricing & Boosts</Link>
           </div>
         </div>
       </div>

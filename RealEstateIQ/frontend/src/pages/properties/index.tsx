@@ -5,9 +5,10 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { Search, Filter, Home, MapPin, Bed, Bath, BookmarkPlus, BookmarkCheck, ChevronLeft, ChevronRight, X, Map, LayoutGrid } from 'lucide-react';
+import { Search, Filter, Home, MapPin, Bed, Bath, BookmarkPlus, BookmarkCheck, ChevronLeft, ChevronRight, X, Map, LayoutGrid, Crown } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
+import { useCurrency } from '../../context/CurrencyContext';
 import { propertyService } from '../../services/services';
 import { Property } from '../../types';
 import { SL_LOCATIONS_GROUPED } from '../../utils/sriLankaLocations';
@@ -26,6 +27,7 @@ const PropertyMap = dynamic(() => import('../../components/map/PropertyMap'), {
 const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 function PropertyCard({ property, onSave, saved }: { property: Property; onSave: (id: string) => void; saved: boolean }) {
+  const { formatPrice } = useCurrency();
   const hasImage = property.images && property.images.length > 0 && property.images[0];
   const estimatedPrice = estimatePropertyFairValue({
     area: property.area,
@@ -57,6 +59,11 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
             <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30 shadow-sm backdrop-blur-md">
               {property.propertyType}
             </span>
+            {property.featured && (
+              <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#DFBA73] to-[#B38F46] text-[#080A0E] shadow-lg flex items-center gap-1 z-10">
+                <Crown size={11} /> Featured
+              </span>
+            )}
             {property.askingPrice && (
               <div className="absolute top-3 right-3 z-10">
                 <DealRatingBadge
@@ -121,11 +128,7 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
 
           <div className="flex items-center justify-between gap-2 pt-1">
             <div>
-              {property.askingPrice ? (
-                <p className="text-[#DFBA73] font-serif font-black text-base">Rs. {property.askingPrice.toLocaleString()}</p>
-              ) : (
-                <p className="text-neutral-400 text-xs font-semibold">Price on Inquiry</p>
-              )}
+              <p className="text-[#DFBA73] font-serif font-black text-base">{formatPrice(property.askingPrice)}</p>
             </div>
             <div className="flex items-center gap-2">
               <WhatsAppButton href={whatsappUrl} variant="card" />

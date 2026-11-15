@@ -12,8 +12,10 @@ export interface Property {
   title: string;
   description: string;
   propertyType: 'house' | 'apartment' | 'land' | 'commercial' | 'villa';
-  location: 'Colombo' | 'Kandy' | 'Galle' | 'Negombo';
-  district: string;
+  location: string;
+  district?: string;
+  status?: 'active' | 'pending' | 'sold' | 'rejected';
+  featured?: boolean;
   area: number;
   landSize?: number;
   bedrooms: number;
@@ -25,7 +27,7 @@ export interface Property {
   latitude?: number;
   longitude?: number;
   images: string[];
-  createdBy: { name: string; email: string } | string;
+  createdBy: { name: string; email: string; phone?: string } | string;
   createdAt: string;
   updatedAt: string;
 }
@@ -67,6 +69,7 @@ export interface Prediction {
   algorithm: string;
   datasetVersion: string;
   featureImportance: Record<string, number>;
+  confidenceGrade?: 'High' | 'Medium' | 'Standard';
   shapBreakdown?: ShapBreakdown | null;
   createdAt: string;
   disclaimer?: string;

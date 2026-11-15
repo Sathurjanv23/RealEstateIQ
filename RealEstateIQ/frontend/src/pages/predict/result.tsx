@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { Brain, ArrowLeft, Download, ShieldCheck, MapPin, Home, Bed, Bath, Clock, Car } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
+import { useCurrency } from '../../context/CurrencyContext';
 import { Prediction } from '../../types';
 import { generateValuationPDF } from '../../utils/pdfGenerator';
 import { ShapWaterfallCard } from '../../components/prediction/ShapWaterfallCard';
@@ -32,6 +33,7 @@ function FeatureBar({ name, value }: { name: string; value: number }) {
 export default function PredictionResultPage() {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
+  const { formatPrice, currency } = useCurrency();
   const [prediction, setPrediction] = useState<Prediction | null>(null);
 
   useEffect(() => {
@@ -96,12 +98,17 @@ export default function PredictionResultPage() {
               Estimated Fair Market Value
             </p>
             <h1 className="text-4xl sm:text-5xl font-serif font-black text-[#DFBA73] mb-2 tracking-tight">
-              Rs. {Math.round(predictedPrice).toLocaleString()}
+              {formatPrice(predictedPrice)}
             </h1>
+            {currency !== 'LKR' && (
+              <p className="text-xs text-neutral-400 font-mono mb-2">
+                ≈ Rs. {Math.round(predictedPrice).toLocaleString()} LKR
+              </p>
+            )}
 
             {pricePerSqft && (
               <p className="text-sm font-semibold text-neutral-400 mb-5">
-                Rs. {Math.round(pricePerSqft).toLocaleString()} per square foot
+                {formatPrice(pricePerSqft)} per square foot
               </p>
             )}
 
@@ -111,10 +118,10 @@ export default function PredictionResultPage() {
                 95% Valuation Confidence Interval
               </span>
               <span className="text-base sm:text-lg font-serif font-black text-white">
-                Rs. {low.toLocaleString()} – Rs. {high.toLocaleString()}
+                {formatPrice(low)} – {formatPrice(high)}
               </span>
               <span className="text-[11px] text-neutral-400 mt-0.5 font-medium">
-                Calculated Model Margin: ± Rs. {margin.toLocaleString()} ({algorithm || 'RandomForest'} MAE: Rs. {Math.round(mae).toLocaleString()})
+                Calculated Model Margin: ± {formatPrice(margin)} ({algorithm || 'RandomForest'} MAE: {formatPrice(mae)})
               </span>
             </div>
 
