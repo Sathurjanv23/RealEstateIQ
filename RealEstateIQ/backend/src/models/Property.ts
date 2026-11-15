@@ -55,9 +55,7 @@ const propertySchema = new Schema<IProperty>(
       type: String, 
       trim: true, 
       maxlength: 100,
-      default: function(this: IProperty) {
-        return this.location;
-      }
+      default: '',
     },
     status: {
       type: String,
@@ -108,6 +106,13 @@ const propertySchema = new Schema<IProperty>(
   },
   { timestamps: true }
 );
+
+propertySchema.pre('save', function (next) {
+  if (!this.district && this.location) {
+    this.district = this.location;
+  }
+  next();
+});
 
 // High-performance compound indexes for zero-lag queries under 10k users
 propertySchema.index({ status: 1, featured: -1, createdAt: -1 });
