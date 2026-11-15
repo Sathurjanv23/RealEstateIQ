@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
 import { BrandLogo } from '../ui/BrandLogo';
+import { CurrencySelector } from '../ui/CurrencySelector';
 import { useAuth } from '../../context/AuthContext';
 
 export function LuxuryNavbar() {
@@ -84,6 +85,8 @@ export function LuxuryNavbar() {
 
           {/* Right: CTA & Auth Controls */}
           <div className="hidden lg:flex items-center gap-3">
+            <CurrencySelector />
+
             {isAuthenticated ? (
               <Link
                 href="/dashboard"
@@ -162,6 +165,11 @@ export function LuxuryNavbar() {
         </div>
 
         <div className="pt-6 border-t border-white/[0.08] space-y-3 pb-8">
+          <div className="flex justify-between items-center pb-2 px-1">
+            <span className="text-xs font-semibold text-neutral-400">Display Currency:</span>
+            <CurrencySelector />
+          </div>
+
           <Link
             href="/predict"
             onClick={() => setMobileMenuOpen(false)}

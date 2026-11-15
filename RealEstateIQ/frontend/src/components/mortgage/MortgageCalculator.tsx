@@ -2,6 +2,7 @@ import React, { useState, useId } from 'react';
 import { Calculator, Landmark, ShieldCheck, DollarSign, ChevronRight, Info } from 'lucide-react';
 import { WhatsAppButton } from '../ui/WhatsAppButton';
 import { sanitizeWhatsAppPhone } from '../../utils/whatsapp';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface MortgageCalculatorProps {
   initialPrice?: number;
@@ -24,6 +25,7 @@ export function MortgageCalculator({
   location = 'Sri Lanka',
   className = '',
 }: MortgageCalculatorProps) {
+  const { formatPrice, currency } = useCurrency();
   const [propertyPrice, setPropertyPrice] = useState<number>(initialPrice || 30000000);
   const [downPaymentPercent, setDownPaymentPercent] = useState<number>(20);
   const [interestRate, setInterestRate] = useState<number>(12.0);
@@ -264,11 +266,16 @@ export function MortgageCalculator({
             </div>
 
             <div className="text-3xl sm:text-4xl font-serif font-black text-[#DFBA73] tracking-tight">
-              Rs. {monthlyEmi.toLocaleString()}
+              {formatPrice(monthlyEmi)}
               <span className="text-xs font-sans font-medium text-neutral-400"> / month</span>
             </div>
+            {currency !== 'LKR' && (
+              <p className="text-[10px] text-neutral-400 font-mono mt-0.5">
+                ≈ Rs. {monthlyEmi.toLocaleString()} LKR / mo
+              </p>
+            )}
             <p className="text-[11px] text-neutral-400 mt-1">
-              Principal: Rs. {principal.toLocaleString()} LKR
+              Principal Loan: {formatPrice(principal)}
             </p>
           </div>
 

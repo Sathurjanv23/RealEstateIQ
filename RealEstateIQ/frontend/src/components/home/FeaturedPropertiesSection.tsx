@@ -16,6 +16,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useCurrency } from '../../context/CurrencyContext';
 import { propertyService } from '../../services/services';
 import { Property } from '../../types';
 
@@ -101,6 +102,7 @@ const FALLBACK_PROPERTIES: Property[] = [
 
 export function FeaturedPropertiesSection() {
   const { isAuthenticated } = useAuth();
+  const { formatPrice } = useCurrency();
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
 
   // 1. Fetch authentic properties directly from live MongoDB REST API
@@ -168,11 +170,6 @@ export function FeaturedPropertiesSection() {
       setSavedIds((prev) => ({ ...prev, [id]: wasSaved }));
       toast.error('Failed to update saved status');
     }
-  };
-
-  const formatPrice = (price?: number) => {
-    if (!price) return 'Price on Inquiry';
-    return `Rs. ${price.toLocaleString()}`;
   };
 
   return (
