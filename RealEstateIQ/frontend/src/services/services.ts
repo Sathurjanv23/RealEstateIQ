@@ -82,3 +82,10 @@ export const adminService = {
   getDatasets: () => api.get('/api/admin/datasets'),
   getAuditLogs: (params?: Record<string, unknown>) => api.get('/api/admin/audit-logs', { params }),
 };
+
+export const paymentService = {
+  getPackages: () => api.get('/api/payments/packages'),
+  createCheckout: (data: { packageId: string; propertyId?: string; phone?: string }) =>
+    api.post('/api/payments/checkout', data),
+  getHistory: () => api.get('/api/payments/history'),
+};
