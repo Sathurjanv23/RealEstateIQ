@@ -13,7 +13,7 @@
 
 **An enterprise-grade Full-Stack + Machine Learning PropTech platform delivering automated fair-market property valuations, explainable AI analytics (SHAP), dynamic market intelligence, and end-to-end real estate transaction management across Sri Lanka's 23 administrative districts and global jurisdictions.**
 
-[🌐 Explore Live Application](https://real-estate-iq-pi.vercel.app) · [📖 ML API Docs](https://realestateiq-8b3k.onrender.com/docs) · [🚀 Deployment Guide](RealEstateIQ/DEPLOYMENT.md) · [📋 QA Test Reports](QA_DOCUMENTATION/FINAL_QA_REPORT.md)
+[🌐 Explore Live Application](https://real-estate-iq-pi.vercel.app) · [📖 ML API Docs](https://realestateiq-8b3k.onrender.com/docs) · [🚀 Deployment Guide](DEPLOYMENT.md) · [📋 QA Test Reports](QA_DOCUMENTATION/FINAL_QA_REPORT.md)
 
 </div>
 
@@ -268,51 +268,51 @@ RealEstateIQ/
 │   ├── RESPONSIVE_TEST_REPORT.md  # Multi-device & browser testing matrix
 │   ├── SECURITY_AUDIT.md          # OWASP Top 10 vulnerabilities assessment
 │   └── UI_UX_AUDIT.md             # UX heuristic evaluation & flow analysis
-├── RealEstateIQ/
-│   ├── backend/                   # Node.js + Express + TypeScript REST API
-│   │   ├── src/
-│   │   │   ├── config/            # Database connection & environment configuration
-│   │   │   ├── controllers/       # Route request handlers & business logic
-│   │   │   ├── middleware/        # JWT auth, RBAC, multer upload, validation, errors
-│   │   │   ├── models/            # Mongoose schemas (User, Property, Prediction, etc.)
-│   │   │   ├── routes/            # REST API routing definitions
-│   │   │   ├── services/          # Email dispatch & external service adapters
-│   │   │   ├── utils/             # ML client, logger, locations, keep-alive, seeder
-│   │   │   └── __tests__/         # Jest integration & unit test suites
-│   │   ├── Dockerfile             # Multi-stage container build for backend
-│   │   ├── package.json           # Dependencies & scripts
-│   │   └── tsconfig.json          # TypeScript compiler options
-│   ├── frontend/                  # Next.js 15 + React + Tailwind CSS client
-│   │   ├── public/                # Static assets, icons, manifest.json
-│   │   ├── src/
-│   │   │   ├── components/        # Modular UI components (Home, Map, Prediction, etc.)
-│   │   │   ├── context/           # React context providers (Auth, Currency, Unit, Lang)
-│   │   │   ├── pages/             # Next.js page routes (Predict, Properties, Market, etc.)
-│   │   │   ├── services/          # Axios API client & service wrappers
-│   │   │   ├── styles/            # Tailwind CSS globals & design tokens
-│   │   │   ├── types/             # Shared TypeScript interfaces & types
-│   │   │   └── utils/             # PDF generator, currency math, location datasets
-│   │   ├── Dockerfile             # Multi-stage Next.js production container
-│   │   ├── package.json           # Frontend dependencies & scripts
-│   │   └── tailwind.config.js     # Tailwind design system configuration
-│   ├── ml-service/                # Python 3.12 + FastAPI Machine Learning microservice
-│   │   ├── app/
-│   │   │   ├── api/               # FastAPI route endpoints (/predict, /health, etc.)
-│   │   │   ├── prediction/        # Predictor singleton class & pipeline loader
-│   │   │   ├── preprocessing/     # Feature encoders & cleaning routines
-│   │   │   ├── schemas/           # Pydantic request/response schemas
-│   │   │   └── services/          # SHAP calculation helpers
-│   │   ├── data/                  # Raw & cleaned Kaggle housing datasets (CSV)
-│   │   ├── models/                # Serialized Joblib pipelines & model_metadata.json
-│   │   ├── tests/                 # Pytest prediction test cases
-│   │   ├── training/              # Training scripts & pipeline generator
-│   │   ├── Dockerfile             # Python ASGI container configuration
-│   │   ├── main.py                # FastAPI entry point & CORS configuration
-│   │   └── requirements.txt       # Python dependencies
-│   ├── DEPLOYMENT.md              # Detailed step-by-step production deployment guide
-│   ├── docker-compose.yml         # Full-stack multi-container orchestration
-│   └── render.yaml                # Render Blueprint infrastructure-as-code
-└── README.md                      # Primary project documentation
+├── backend/                       # Node.js + Express + TypeScript REST API
+│   ├── src/
+│   │   ├── config/                # Database connection & environment configuration
+│   │   ├── controllers/           # Route request handlers & business logic
+│   │   ├── middleware/            # JWT auth, RBAC, multer upload, validation, errors
+│   │   ├── models/                # Mongoose schemas (User, Property, Prediction, etc.)
+│   │   ├── routes/                # REST API routing definitions
+│   │   ├── services/              # Email dispatch & external service adapters
+│   │   ├── utils/                 # ML client, logger, locations, keep-alive, seeder
+│   │   └── __tests__/             # Jest integration & unit test suites
+│   ├── Dockerfile                 # Multi-stage container build for backend
+│   ├── package.json               # Dependencies & scripts
+│   └── tsconfig.json              # TypeScript compiler options
+├── frontend/                      # Next.js 15 + React + Tailwind CSS client
+│   ├── public/                    # Static assets, icons, manifest.json
+│   ├── src/
+│   │   ├── components/            # Modular UI components (Home, Map, Prediction, etc.)
+│   │   ├── context/               # React context providers (Auth, Currency, Unit, Lang)
+│   │   ├── pages/                 # Next.js page routes (Predict, Properties, Market, etc.)
+│   │   ├── services/              # Axios API client & service wrappers
+│   │   ├── styles/                # Tailwind CSS globals & design tokens
+│   │   ├── types/                 # Shared TypeScript interfaces & types
+│   │   └── utils/                 # PDF generator, currency math, location datasets
+│   ├── Dockerfile                 # Multi-stage Next.js production container
+│   ├── package.json               # Frontend dependencies & scripts
+│   └── tailwind.config.js         # Tailwind design system configuration
+├── ml-service/                    # Python 3.12 + FastAPI Machine Learning microservice
+│   ├── app/
+│   │   ├── api/                   # FastAPI route endpoints (/predict, /health, etc.)
+│   │   ├── prediction/            # Predictor singleton class & pipeline loader
+│   │   ├── preprocessing/         # Feature encoders & cleaning routines
+│   │   ├── schemas/               # Pydantic request/response schemas
+│   │   └── services/              # SHAP calculation helpers
+│   ├── data/                      # Raw & cleaned Kaggle housing datasets (CSV)
+│   ├── models/                    # Serialized Joblib pipelines & model_metadata.json
+│   ├── tests/                     # Pytest prediction test cases
+│   ├── training/                  # Training scripts & pipeline generator
+│   ├── Dockerfile                 # Python ASGI container configuration
+│   ├── main.py                    # FastAPI entry point & CORS configuration
+│   └── requirements.txt           # Python dependencies
+├── .gitignore                     # Git ignore rules
+├── DEPLOYMENT.md                  # Detailed step-by-step production deployment guide
+├── docker-compose.yml             # Full-stack multi-container orchestration
+├── render.yaml                    # Render Blueprint infrastructure-as-code
+└── README.md                      # Project documentation
 ```
 
 ---
@@ -409,7 +409,7 @@ RealEstateIQ/
 
 ## 🔐 Environment Variables Matrix
 
-### Backend (`RealEstateIQ/backend/.env`)
+### Backend (`backend/.env`)
 ```bash
 # Database Configuration
 MONGO_URI=mongodb+srv://<user>:<password>@cluster0.mongodb.net/realestate_iq?retryWrites=true&w=majority
@@ -444,7 +444,7 @@ GOOGLE_CLIENT_ID=your-google-oauth-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-google-oauth-client-secret
 ```
 
-### Frontend (`RealEstateIQ/frontend/.env.local`)
+### Frontend (`frontend/.env.local`)
 ```bash
 # Backend REST API Base URL
 NEXT_PUBLIC_API_URL=http://localhost:5000
@@ -453,7 +453,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-oauth-client-id.apps.googleusercontent.com
 ```
 
-### ML Microservice (`RealEstateIQ/ml-service/.env`)
+### ML Microservice (`ml-service/.env`)
 ```bash
 PORT=8000
 HOST=0.0.0.0
@@ -475,7 +475,7 @@ ALLOWED_ORIGINS=http://localhost:5000,http://backend:5000
 ### Step 1: Clone the Repository
 ```bash
 git clone https://github.com/Sathurjanv23/RealEstateIQ.git
-cd RealEstateIQ/RealEstateIQ
+cd RealEstateIQ
 ```
 
 ---
@@ -505,7 +505,7 @@ python main.py
 ### Step 3: Set Up & Run the Node.js Backend API
 Open a new terminal window:
 ```bash
-cd RealEstateIQ/backend
+cd backend
 
 # Install dependencies
 npm install
@@ -527,7 +527,7 @@ npm run dev
 ### Step 4: Set Up & Run the Next.js Frontend
 Open a third terminal window:
 ```bash
-cd RealEstateIQ/frontend
+cd frontend
 
 # Install dependencies
 npm install
@@ -544,10 +544,9 @@ npm run dev
 ---
 
 ### Option B: Run Everything via Docker Compose
-If you have Docker and Docker Compose installed, you can spin up the entire multi-tier stack with a single command:
+If you have Docker and Docker Compose installed, you can spin up the entire multi-tier stack with a single command from the project root:
 ```bash
-cd RealEstateIQ
-docker-compose up --build
+docker compose up --build
 ```
 This automatically builds and orchestrates:
 * `realestate_iq_ml` on port `8000`
@@ -575,21 +574,21 @@ RealEstateIQ includes an exhaustive quality assurance and test documentation sui
 
 #### 1. Backend Integration & Unit Tests (Jest + Supertest)
 ```bash
-cd RealEstateIQ/backend
+cd backend
 npm test
 ```
 * Covers: Auth registration, login, JWT verification, OTP flows, property CRUD, prediction routing, inquiry dispatch, and health checks.
 
 #### 2. ML Service Unit Tests (Pytest)
 ```bash
-cd RealEstateIQ/ml-service
+cd ml-service
 pytest tests/
 ```
 * Covers: Predictor singleton initialization, feature preprocessing, boundary condition handling, and response schema integrity.
 
 #### 3. Frontend Static Verification & Linting
 ```bash
-cd RealEstateIQ/frontend
+cd frontend
 npm run lint
 ```
 
@@ -605,20 +604,20 @@ npm run lint
 
 ### 1. Frontend on Vercel
 1. Link your GitHub repository in the [Vercel Dashboard](https://vercel.com).
-2. Set **Root Directory** to `RealEstateIQ/frontend`.
+2. Set **Root Directory** to `frontend`.
 3. Set Environment Variable:
    * `NEXT_PUBLIC_API_URL` = `https://realestateiq-1.onrender.com`
 4. Deploy. Vercel automatically handles edge caching and SSL certificates.
 
 ### 2. Backend & ML Service on Render
-The repository includes a ready-to-use [`render.yaml`](RealEstateIQ/render.yaml) Blueprint that configures both services automatically:
+The repository includes a ready-to-use [`render.yaml`](render.yaml) Blueprint that configures both services automatically:
 1. Connect your repository in [Render Dashboard](https://dashboard.render.com).
-2. Select **Blueprints** and point to `RealEstateIQ/render.yaml`.
+2. Select **Blueprints** and point to `render.yaml`.
 3. Fill in secret environment variables:
    * `MONGO_URI`, `JWT_SECRET`, `SMTP_PASS`, `CLOUDINARY_API_SECRET`.
 4. Deploy.
 
-For step-by-step guidance, refer to the full [Production Deployment Guide](RealEstateIQ/DEPLOYMENT.md).
+For step-by-step guidance, refer to the full [Production Deployment Guide](DEPLOYMENT.md).
 
 ---
 

@@ -74,7 +74,7 @@ A step-by-step walkthrough for deploying the full RealEstateIQ stack to:
 1. Go to https://dashboard.render.com → **New** → **Web Service**
 2. Connect your GitHub repo.
 3. Settings:
-   - **Root directory**: `RealEstateIQ/ml-service`
+   - **Root directory**: `ml-service`
    - **Runtime**: Python 3
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**: `python -m uvicorn main:app --host 0.0.0.0 --port $PORT`
@@ -87,7 +87,7 @@ A step-by-step walkthrough for deploying the full RealEstateIQ stack to:
 
 1. **New** → **Web Service** → Connect repo.
 2. Settings:
-   - **Root directory**: `RealEstateIQ/backend`
+   - **Root directory**: `backend`
    - **Runtime**: Node
    - **Build Command**: `npm ci && npm run build`
    - **Start Command**: `npm start`
@@ -122,7 +122,7 @@ A step-by-step walkthrough for deploying the full RealEstateIQ stack to:
 ## 6. Deploy Frontend on Vercel
 
 1. Go to https://vercel.com → **New Project** → Import from GitHub.
-2. Select the repository. Set **Root Directory** to `RealEstateIQ/frontend`.
+2. Select the repository. Set **Root Directory** to `frontend`.
 3. Framework preset: **Next.js** (auto-detected).
 4. Add **Environment Variable**:
    ```
@@ -149,10 +149,10 @@ To run the entire stack locally with Docker:
 
 ```bash
 # Copy and fill in env vars
-cp RealEstateIQ/backend/.env.example .env
+cp backend/.env.example backend/.env
 
 # Build and start all services
-docker compose -f RealEstateIQ/docker-compose.yml --env-file .env up --build
+docker compose up --build
 
 # Frontend: http://localhost:3000
 # Backend:  http://localhost:5000

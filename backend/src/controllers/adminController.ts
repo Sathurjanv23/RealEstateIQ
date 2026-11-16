@@ -42,8 +42,8 @@ export const getDashboardMetrics = async (
           ? {
               version: activeModel.version,
               algorithm: activeModel.algorithm,
-              r2: activeModel.metrics.r2,
-              mae: activeModel.metrics.mae,
+              r2: activeModel.metrics?.r2,
+              mae: activeModel.metrics?.mae,
             }
           : null,
       },

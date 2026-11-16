@@ -381,9 +381,10 @@ class Predictor:
             raise ModelNotFoundError("Pipeline not loaded.")
 
         # Benchmark rate for district (or national average if unknown)
+        norm_location = "Gampaha" if location == "Negombo" else ("Mullativu" if location == "Mullaitivu" else location)
         d_rate = float(
             self.district_rates.get(
-                str(location),
+                str(norm_location),
                 self.district_rates.get("national_avg", 10000.0)
             )
         )
@@ -397,7 +398,7 @@ class Predictor:
                 "house_age": [int(house_age)],
                 "parking": [int(parking)],
                 "district_rate": [d_rate],
-                "location": [str(location)],
+                "location": [str(norm_location)],
             }
         )[NUMERIC_FEATURES + CATEGORICAL_FEATURES]
 

@@ -71,9 +71,9 @@ export default function PredictionResultPage() {
   const certId = prediction._id ? `RIQ-${prediction._id.slice(-8).toUpperCase()}` : 'RIQ-CERT';
   const valuationWhatsappUrl = getValuationWhatsAppUrl({
     certificateId: certId,
-    location: inputFeatures.location,
-    area: inputFeatures.area,
-    bedrooms: inputFeatures.bedrooms,
+    location: inputFeatures?.location || 'Colombo',
+    area: inputFeatures?.area || 0,
+    bedrooms: inputFeatures?.bedrooms || 0,
     predictedPrice,
   });
 
