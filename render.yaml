@@ -8,8 +8,9 @@ services:
     env: python
     region: singapore
     plan: free
-    buildCommand: cd RealEstateIQ/ml-service && pip install -r requirements.txt
-    startCommand: cd RealEstateIQ/ml-service && python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    rootDir: ml-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: PORT
@@ -21,8 +22,9 @@ services:
     env: node
     region: singapore
     plan: free
-    buildCommand: cd RealEstateIQ/backend && npm ci && npm run build
-    startCommand: cd RealEstateIQ/backend && npm start
+    rootDir: backend
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV

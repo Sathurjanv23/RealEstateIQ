@@ -41,11 +41,15 @@ export const getProperties = async (
       filter.status = { $ne: 'rejected' }; // Show active and pending (or active by default)
     }
 
+    const andClauses: Record<string, unknown>[] = [];
+
     if (location) {
-      filter.$or = [
-        { location: { $regex: new RegExp(`^${location}$`, 'i') } },
-        { district: { $regex: new RegExp(`^${location}$`, 'i') } },
-      ];
+      andClauses.push({
+        $or: [
+          { location: { $regex: new RegExp(`^${location}$`, 'i') } },
+          { district: { $regex: new RegExp(`^${location}$`, 'i') } },
+        ],
+      });
     }
 
     if (propertyType) filter.propertyType = propertyType;
@@ -66,12 +70,18 @@ export const getProperties = async (
 
     if (search && typeof search === 'string' && search.trim()) {
       const sanitized = search.trim();
-      filter.$or = [
-        { title: { $regex: sanitized, $options: 'i' } },
-        { description: { $regex: sanitized, $options: 'i' } },
-        { district: { $regex: sanitized, $options: 'i' } },
-        { location: { $regex: sanitized, $options: 'i' } },
-      ];
+      andClauses.push({
+        $or: [
+          { title: { $regex: sanitized, $options: 'i' } },
+          { description: { $regex: sanitized, $options: 'i' } },
+          { district: { $regex: sanitized, $options: 'i' } },
+          { location: { $regex: sanitized, $options: 'i' } },
+        ],
+      });
+    }
+
+    if (andClauses.length > 0) {
+      filter.$and = andClauses;
     }
 
     const pageNum = Math.max(1, parseInt(page as string));

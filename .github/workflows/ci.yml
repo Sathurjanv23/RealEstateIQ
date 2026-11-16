@@ -36,10 +36,10 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: RealEstateIQ/backend/package-lock.json
+          cache-dependency-path: backend/package-lock.json
 
       - name: Install Backend Dependencies
-        working-directory: RealEstateIQ/backend
+        working-directory: backend
         run: npm ci --legacy-peer-deps
 
       - name: Wait for MongoDB to be healthy
@@ -55,7 +55,7 @@ jobs:
           done
 
       - name: Seed Test MongoDB
-        working-directory: RealEstateIQ/backend
+        working-directory: backend
         env:
           MONGODB_URI: mongodb://127.0.0.1:27017/realestate_iq
           MONGO_URI: mongodb://127.0.0.1:27017/realestate_iq
@@ -66,11 +66,11 @@ jobs:
           echo "Seed completed with exit code: $?"
 
       - name: Build Backend (TypeScript)
-        working-directory: RealEstateIQ/backend
+        working-directory: backend
         run: npm run build
 
       - name: Run Backend Tests (Jest)
-        working-directory: RealEstateIQ/backend
+        working-directory: backend
         env:
           MONGODB_URI: mongodb://127.0.0.1:27017/realestate_iq
           MONGO_URI: mongodb://127.0.0.1:27017/realestate_iq
@@ -108,20 +108,20 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
-          cache-dependency-path: RealEstateIQ/ml-service/requirements.txt
+          cache-dependency-path: ml-service/requirements.txt
 
       - name: Install ML Dependencies
-        working-directory: RealEstateIQ/ml-service
+        working-directory: ml-service
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt pytest
 
       - name: Train and Verify ML Model in Runner
-        working-directory: RealEstateIQ/ml-service
+        working-directory: ml-service
         run: python training/train_pipeline.py
 
       - name: Run ML Unit Tests (pytest)
-        working-directory: RealEstateIQ/ml-service
+        working-directory: ml-service
         run: pytest tests/ -v
 
   # ── Frontend CI: Next.js TypeScript Build ────────────────────────
@@ -138,14 +138,14 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: RealEstateIQ/frontend/package-lock.json
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install Frontend Dependencies
-        working-directory: RealEstateIQ/frontend
+        working-directory: frontend
         run: npm ci --legacy-peer-deps
 
       - name: Build Next.js Application
-        working-directory: RealEstateIQ/frontend
+        working-directory: frontend
         env:
           NEXT_PUBLIC_API_URL: http://localhost:5000
           NEXT_PUBLIC_GOOGLE_CLIENT_ID: "1057402952960-juqhht2uh0b1t4krf1kj9gr17urpekdi.apps.googleusercontent.com"

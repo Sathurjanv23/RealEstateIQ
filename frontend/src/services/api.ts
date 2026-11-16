@@ -25,9 +25,13 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('riq_token');
-        localStorage.removeItem('riq_user');
-        window.location.href = '/login';
+        const isAuthEndpoint = error.config?.url?.includes('/auth/');
+        const isAuthPage = window.location.pathname.startsWith('/login') || window.location.pathname.startsWith('/register');
+        if (!isAuthEndpoint && !isAuthPage) {
+          localStorage.removeItem('riq_token');
+          localStorage.removeItem('riq_user');
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);

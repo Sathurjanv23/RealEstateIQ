@@ -13,13 +13,13 @@ const router = Router();
 
 const VALID_LOCATIONS = [
   // Western Province
-  'Colombo', 'Gampaha', 'Kalutara',
+  'Colombo', 'Gampaha', 'Kalutara', 'Negombo',
   // Central Province
   'Kandy', 'Matale', 'Nuwara Eliya',
   // Southern Province
   'Galle', 'Matara', 'Hambantota',
   // Northern Province
-  'Jaffna', 'Kilinochchi', 'Mannar', 'Vavuniya', 'Mullativu',
+  'Jaffna', 'Kilinochchi', 'Mannar', 'Vavuniya', 'Mullativu', 'Mullaitivu',
   // Eastern Province
   'Trincomalee', 'Batticaloa', 'Ampara',
   // North Western Province
