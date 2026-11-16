@@ -6,6 +6,8 @@ import { BrandLogo } from '../ui/BrandLogo';
 import { PwaInstallPrompt } from '../ui/PwaInstallPrompt';
 import { CurrencySelector } from '../ui/CurrencySelector';
 import { AreaUnitSelector } from '../ui/AreaUnitSelector';
+import { CountrySelector } from '../ui/CountrySelector';
+import { LanguageSelector } from '../ui/LanguageSelector';
 import { NotificationCenter } from '../ui/NotificationCenter';
 import { AiRealEstateConcierge } from '../chat/AiRealEstateConcierge';
 import { Menu, Home } from 'lucide-react';
@@ -61,11 +63,17 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
               <span>Home Page</span>
             </Link>
 
+            {/* Country Selector (Sri Lanka, USA, UK, UAE, Australia) */}
+            <CountrySelector />
+
             {/* Currency Selector (LKR, USD, GBP, AUD, AED...) */}
             <CurrencySelector />
 
             {/* Area Unit Selector (Sq.ft, Perches, Acres, Sq.m) */}
             <AreaUnitSelector />
+
+            {/* Language Selector (English, Tamil, Sinhala) */}
+            <LanguageSelector />
 
             {/* Live Sri Lanka Market Status */}
             <div className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#DFBA73]/10 border border-[#DFBA73]/30 text-[#DFBA73] text-xs font-semibold">

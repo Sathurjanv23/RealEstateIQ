@@ -14,6 +14,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { useCurrency } from '../../context/CurrencyContext';
+import { useCountry } from '../../context/CountryContext';
 
 interface HiddenCostDetectorProps {
   propertyPrice: number;
@@ -27,6 +28,7 @@ export function HiddenCostDetector({
   location = 'Sri Lanka',
 }: HiddenCostDetectorProps) {
   const { formatPrice, currency } = useCurrency();
+  const { currentCountry } = useCountry();
 
   // Interactive Options
   const [isFinanced, setIsFinanced] = useState(false);
@@ -35,15 +37,18 @@ export function HiddenCostDetector({
   const [renovationRate, setRenovationRate] = useState(2); // 2% reserve
   const [isExpanded, setIsExpanded] = useState(true);
 
-  // Calculations (Sri Lanka Land Registry & Legal Standards)
-  // 1. Stamp Duty: 3% on first 100k, 4% on remaining
-  const calculateStampDuty = (price: number, firstTime: boolean) => {
+  // Dynamic Country-based Tax Rules
+  const calculateTransferTax = (price: number, firstTime: boolean) => {
     if (price <= 0) return 0;
     let duty = 0;
-    if (price <= 100000) {
-      duty = price * 0.03;
+    if (currentCountry.tax.isTieredStampDuty) {
+      if (price <= 100000) {
+        duty = price * 0.03;
+      } else {
+        duty = 100000 * 0.03 + (price - 100000) * 0.04;
+      }
     } else {
-      duty = 100000 * 0.03 + (price - 100000) * 0.04;
+      duty = price * currentCountry.tax.transferTaxRate;
     }
     // First time buyer relief (10% discount on duty)
     if (firstTime) {
@@ -52,16 +57,16 @@ export function HiddenCostDetector({
     return Math.round(duty);
   };
 
-  const stampDuty = calculateStampDuty(propertyPrice, isFirstTimeBuyer);
+  const stampDuty = calculateTransferTax(propertyPrice, isFirstTimeBuyer);
 
-  // 2. Notary & Legal Conveyancing (1.2% average)
-  const legalFees = Math.round(propertyPrice * 0.012);
+  // 2. Legal & Conveyancing Fees by country rate
+  const legalFees = Math.round(propertyPrice * currentCountry.tax.legalFeeRate);
 
-  // 3. Land Registry Folio & 30-Year Title Search (fixed standard)
-  const titleSearchFee = 25000;
+  // 3. Title Registry / Title Insurance fee
+  const titleSearchFee = currentCountry.tax.fixedTitleSearchFeeLkr;
 
-  // 4. Municipal Council Assessment Transfer & Rates Clearance
-  const municipalTransferTax = Math.round(propertyPrice * 0.005);
+  // 4. Municipal Rates & Local Assessment Transfer
+  const municipalTransferTax = Math.round(propertyPrice * currentCountry.tax.municipalRateTaxRate);
 
   // 5. Bank Valuation & Loan Processing (if mortgage)
   const loanAmount = isFinanced ? (propertyPrice * loanPercentage) / 100 : 0;
@@ -85,32 +90,32 @@ export function HiddenCostDetector({
   const costItems = [
     {
       id: 'stamp_duty',
-      title: 'Provincial Stamp Duty (முத்திரை வரி)',
-      description: '3% on first Rs. 100,000 + 4% on remainder to Provincial Council.',
+      title: `${currentCountry.tax.transferTaxName}`,
+      description: currentCountry.tax.summary,
       amount: stampDuty,
       icon: <Scale size={16} className="text-[#DFBA73]" />,
-      badge: isFirstTimeBuyer ? '10% Rebate Applied' : 'Provincial Tax',
+      badge: isFirstTimeBuyer ? '10% Rebate Applied' : `${currentCountry.flag} Statutory Duty`,
     },
     {
       id: 'legal_fees',
-      title: 'Legal & Notary Conveyancing (நோட்டரி கட்டணம்)',
-      description: '1.2% for deed execution, protocol verification, and attestations.',
+      title: `Legal & Conveyancing (${(currentCountry.tax.legalFeeRate * 100).toFixed(1)}%)`,
+      description: `Professional legal representation under ${currentCountry.legalSystem}.`,
       amount: legalFees,
       icon: <FileText size={16} className="text-[#DFBA73]" />,
-      badge: 'Legal Mandatory',
+      badge: 'Mandatory Closing',
     },
     {
       id: 'title_search',
-      title: 'Land Registry 30-Year Title Search (காணிப் பதிவக தேடல்)',
-      description: 'Search of day-book folios to ensure unencumbered pedigree & no lis pendens.',
+      title: `Title Search & Verification (${currentCountry.registryAuthority})`,
+      description: 'Public records search, deed authenticity check, and encumbrance certificate.',
       amount: titleSearchFee,
       icon: <Building size={16} className="text-[#DFBA73]" />,
-      badge: 'Fixed Due Diligence',
+      badge: 'Due Diligence',
     },
     {
       id: 'municipal_tax',
-      title: 'Municipal Council Rates & Transfer (நகரசபை வரிகள்)',
-      description: 'Ownership name mutation in municipal assessment records (approx 0.5%).',
+      title: `Municipal & Local Authority Assessment (${(currentCountry.tax.municipalRateTaxRate * 100).toFixed(1)}%)`,
+      description: 'Transfer of assessment register and local council municipal clearance.',
       amount: municipalTransferTax,
       icon: <Building size={16} className="text-[#DFBA73]" />,
       badge: 'Local Authority',
@@ -152,12 +157,13 @@ export function HiddenCostDetector({
             <h3 className="font-serif font-black text-white text-lg sm:text-xl">
               Hidden Cost Detector™
             </h3>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
-              AI Due Diligence
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider flex items-center gap-1">
+              <span>{currentCountry.flag}</span>
+              <span>{currentCountry.name} Rules</span>
             </span>
           </div>
           <p className="text-xs text-neutral-400 max-w-xl">
-            RealEstateIQ calculates mandatory legal closing fees, provincial stamp duties, municipal levies, and immediate renovation buffers before you commit.
+            RealEstateIQ dynamically models closing costs under {currentCountry.name} law ({currentCountry.registryAuthority}). Capital gains rate: {currentCountry.tax.capitalGainsRate}.
           </p>
         </div>
 

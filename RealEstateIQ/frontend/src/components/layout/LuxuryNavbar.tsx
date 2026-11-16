@@ -5,11 +5,15 @@ import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
 import { BrandLogo } from '../ui/BrandLogo';
 import { CurrencySelector } from '../ui/CurrencySelector';
 import { AreaUnitSelector } from '../ui/AreaUnitSelector';
+import { CountrySelector } from '../ui/CountrySelector';
+import { LanguageSelector } from '../ui/LanguageSelector';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function LuxuryNavbar() {
   const router = useRouter();
   const { isAuthenticated, user, logout } = useAuth();
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -39,11 +43,11 @@ export function LuxuryNavbar() {
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Properties', href: '/properties' },
-    { name: 'Valuation', href: '/predict' },
-    { name: 'Market Intelligence', href: '/market' },
-    { name: 'About', href: '/#why-realestateiq' },
+    { name: t('navHome', 'Home'), href: '/' },
+    { name: t('navProperties', 'Properties'), href: '/properties' },
+    { name: t('navValuation', 'Valuation'), href: '/predict' },
+    { name: t('navMarket', 'Market Intelligence'), href: '/market' },
+    { name: t('navAbout', 'About'), href: '/#why-realestateiq' },
   ];
 
   const isActive = (path: string) => {
@@ -85,9 +89,11 @@ export function LuxuryNavbar() {
           </nav>
 
           {/* Right: CTA & Auth Controls */}
-          <div className="hidden lg:flex items-center gap-2.5">
+          <div className="hidden lg:flex items-center gap-2">
+            <CountrySelector />
             <CurrencySelector />
             <AreaUnitSelector />
+            <LanguageSelector />
 
             {isAuthenticated ? (
               <Link
@@ -168,12 +174,20 @@ export function LuxuryNavbar() {
 
         <div className="pt-6 border-t border-white/[0.08] space-y-3 pb-8">
           <div className="flex justify-between items-center pb-2 px-1">
+            <span className="text-xs font-semibold text-neutral-400">Jurisdiction & Region:</span>
+            <CountrySelector />
+          </div>
+          <div className="flex justify-between items-center pb-2 px-1">
             <span className="text-xs font-semibold text-neutral-400">Display Currency:</span>
             <CurrencySelector />
           </div>
           <div className="flex justify-between items-center pb-2 px-1">
             <span className="text-xs font-semibold text-neutral-400">Measurement Unit:</span>
             <AreaUnitSelector />
+          </div>
+          <div className="flex justify-between items-center pb-2 px-1">
+            <span className="text-xs font-semibold text-neutral-400">Language (மொழி):</span>
+            <LanguageSelector />
           </div>
 
           <Link

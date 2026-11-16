@@ -6,6 +6,8 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '../context/AuthContext';
 import { CurrencyProvider } from '../context/CurrencyContext';
 import { UnitProvider } from '../context/UnitContext';
+import { CountryProvider } from '../context/CountryContext';
+import { LanguageProvider } from '../context/LanguageContext';
 import '../styles/globals.css';
 import 'leaflet/dist/leaflet.css';
 
@@ -36,28 +38,32 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
   const content = (
     <AuthProvider>
-      <CurrencyProvider>
-        <UnitProvider>
-          <Component {...pageProps} />
-          <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: '#1e1e38',
-              color: '#fff',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px',
-            },
-            success: {
-              iconTheme: { primary: '#10b981', secondary: '#fff' },
-            },
-            error: {
-              iconTheme: { primary: '#f43f5e', secondary: '#fff' },
-            },
-          }}
-        />
-        </UnitProvider>
-      </CurrencyProvider>
+      <LanguageProvider>
+        <CurrencyProvider>
+          <UnitProvider>
+            <CountryProvider>
+              <Component {...pageProps} />
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  style: {
+                    background: '#1e1e38',
+                    color: '#fff',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '12px',
+                  },
+                  success: {
+                    iconTheme: { primary: '#10b981', secondary: '#fff' },
+                  },
+                  error: {
+                    iconTheme: { primary: '#f43f5e', secondary: '#fff' },
+                  },
+                }}
+              />
+            </CountryProvider>
+          </UnitProvider>
+        </CurrencyProvider>
+      </LanguageProvider>
     </AuthProvider>
   );
 
