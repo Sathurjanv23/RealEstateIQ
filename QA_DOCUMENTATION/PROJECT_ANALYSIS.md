@@ -56,6 +56,21 @@ flowchart TD
     ExpressAPI -->|Transactional Emails| SMTPServer[Gmail / Enterprise SMTP Server]
 ```
 
+### Clean Production Repository Layout
+```text
+RealEstateIQ/
+├── .github/workflows/ci.yml       # Automated GitHub Actions CI/CD matrix pipeline
+├── backend/                       # Node.js 20 Express TypeScript REST API server
+├── frontend/                      # Next.js 15 React 19 Luxury Frontend Web App
+├── ml-service/                    # Python 3.12 FastAPI Machine Learning Microservice
+├── QA_DOCUMENTATION/              # 14-Document Master Enterprise QA Audit Suite
+├── docs/                          # Architecture blueprints and system analysis specs
+├── docker-compose.yml             # Multi-container orchestration specification
+├── DEPLOYMENT.md                  # Comprehensive step-by-step deployment guide
+├── README.md                      # Technical project documentation and developer guide
+└── render.yaml                    # Render.com multi-service blueprint
+```
+
 ---
 
 ## 3. Technology Stack Inventory
