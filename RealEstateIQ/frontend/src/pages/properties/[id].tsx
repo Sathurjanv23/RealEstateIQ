@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import {
   ArrowLeft, Home, MapPin, Bed, Bath, Car, Calendar, Brain,
-  BookmarkPlus, BookmarkCheck, Mail, Send, X, GitCompare, Loader2, Share2, Zap, Award, Download
+  BookmarkPlus, BookmarkCheck, Mail, Send, X, GitCompare, Loader2, Share2, Zap, Award, Download, Handshake, KeyRound
 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
@@ -17,6 +17,8 @@ import { AreaUnitSelector } from '../../components/ui/AreaUnitSelector';
 import { HiddenCostDetector } from '../../components/calculator/HiddenCostDetector';
 import { NeighborhoodScore } from '../../components/property/NeighborhoodScore';
 import { PriceWatchButton } from '../../components/property/PriceWatchButton';
+import { MakeOfferModal } from '../../components/property/MakeOfferModal';
+import { RentalApplicationModal } from '../../components/property/RentalApplicationModal';
 import { propertyService, inquiryService } from '../../services/services';
 import { Property, Prediction } from '../../types';
 import { generateValuationPDF } from '../../utils/pdfGenerator';
@@ -41,6 +43,8 @@ export default function PropertyDetailPage() {
   const [saved, setSaved] = useState(false);
   const [activeImage, setActiveImage] = useState<number>(0);
   const [inquireModal, setInquireModal] = useState(false);
+  const [offerModal, setOfferModal] = useState(false);
+  const [rentalModal, setRentalModal] = useState(false);
   const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
   const [inquiry, setInquiry] = useState({ name: '', phone: '', email: '', date: '', message: '' });
 
@@ -262,9 +266,20 @@ export default function PropertyDetailPage() {
           <div className="luxury-glass-card p-6 sm:p-8">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
               <div className="flex-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider mb-2.5 inline-flex px-2 py-0.5 rounded bg-[#DFBA73]/10 text-[#DFBA73] border border-[#DFBA73]/30">
-                  {property.propertyType}
-                </span>
+                <div className="flex items-center gap-2 mb-2.5 flex-wrap">
+                  <span className="text-[10px] font-bold uppercase tracking-wider inline-flex px-2 py-0.5 rounded bg-[#DFBA73]/10 text-[#DFBA73] border border-[#DFBA73]/30">
+                    {property.propertyType}
+                  </span>
+                  {property.listingType === 'rent' ? (
+                    <span className="text-[10px] font-bold uppercase tracking-wider inline-flex px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                      For Rent / வாடகை
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-bold uppercase tracking-wider inline-flex px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                      For Sale / விற்பனை
+                    </span>
+                  )}
+                </div>
                 <h1 className="text-2xl sm:text-3xl font-serif font-black text-white mb-2">{property.title}</h1>
                 <div className="flex items-center gap-1.5 text-neutral-400 text-sm">
                   <MapPin size={15} className="text-[#DFBA73]" /> {property.location}{property.district ? `, ${property.district}` : ''}
@@ -274,8 +289,13 @@ export default function PropertyDetailPage() {
               <div className="flex flex-col md:items-end gap-3.5 shrink-0">
                 {property.askingPrice && (
                   <div className="md:text-right">
-                    <p className="text-xs uppercase font-bold text-neutral-400 mb-0.5">Asking Price</p>
-                    <p className="text-3xl font-serif font-black text-[#DFBA73]">{formatPrice(property.askingPrice)}</p>
+                    <p className="text-xs uppercase font-bold text-neutral-400 mb-0.5">
+                      {property.listingType === 'rent' ? 'Monthly Rental' : 'Asking Price'}
+                    </p>
+                    <p className="text-3xl font-serif font-black text-[#DFBA73]">
+                      {formatPrice(property.askingPrice)}
+                      {property.listingType === 'rent' && <span className="text-sm font-sans font-normal text-neutral-400"> / mo</span>}
+                    </p>
                     {currency !== 'LKR' && (
                       <p className="text-[11px] text-neutral-400 font-mono">≈ Rs. {property.askingPrice.toLocaleString()} LKR</p>
                     )}
@@ -292,6 +312,21 @@ export default function PropertyDetailPage() {
                     label="1-Click WhatsApp Inquiry"
                     sublabel="Instant Agent Direct Chat"
                   />
+                  {property.listingType === 'rent' ? (
+                    <button
+                      onClick={() => setRentalModal(true)}
+                      className="btn-primary text-xs py-2.5 px-4 font-bold bg-gradient-to-r from-emerald-500 to-teal-600 border-none text-white hover:from-emerald-600 hover:to-teal-700 shadow-md flex items-center gap-1.5"
+                    >
+                      <KeyRound size={15} /> Apply for Tenancy
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setOfferModal(true)}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#DFBA73]/20 to-[#B38F46]/20 border border-[#DFBA73]/50 text-[#DFBA73] hover:bg-[#DFBA73]/30 text-xs font-bold transition-all shadow-sm"
+                    >
+                      <Handshake size={15} /> Make an Offer
+                    </button>
+                  )}
                   <PriceWatchButton
                     propertyId={property._id}
                     propertyTitle={property.title}
@@ -576,6 +611,26 @@ export default function PropertyDetailPage() {
               </div>
             </div>
           )}
+          {/* Make an Offer Modal */}
+          <MakeOfferModal
+            propertyId={property._id}
+            propertyTitle={property.title}
+            askingPrice={property.askingPrice || estimatedPrice}
+            location={property.location}
+            isOpen={offerModal}
+            onClose={() => setOfferModal(false)}
+          />
+
+          {/* Rental Application Modal */}
+          <RentalApplicationModal
+            propertyId={property._id}
+            propertyTitle={property.title}
+            monthlyRent={property.askingPrice || 150000}
+            rentalPeriod={property.rentalPeriod || 'monthly'}
+            location={property.location}
+            isOpen={rentalModal}
+            onClose={() => setRentalModal(false)}
+          />
         </div>
       </DashboardLayout>
     </>

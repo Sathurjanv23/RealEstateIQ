@@ -29,6 +29,7 @@ export const getProperties = async (
       search,
       featured,
       status,
+      listingType,
     } = req.query;
 
     const filter: Record<string, unknown> = {};
@@ -48,6 +49,7 @@ export const getProperties = async (
     }
 
     if (propertyType) filter.propertyType = propertyType;
+    if (listingType && (listingType === 'sale' || listingType === 'rent')) filter.listingType = listingType;
     if (featured === 'true') filter.featured = true;
     if (bedrooms) filter.bedrooms = { $gte: Number(bedrooms) };
     if (bathrooms) filter.bathrooms = { $gte: Number(bathrooms) };

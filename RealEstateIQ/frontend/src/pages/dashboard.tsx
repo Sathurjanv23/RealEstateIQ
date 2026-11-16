@@ -1,12 +1,14 @@
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { Brain, Home, History, TrendingUp, ArrowRight, BarChart3, ShieldCheck } from 'lucide-react';
+import { Brain, Home, History, TrendingUp, ArrowRight, BarChart3, ShieldCheck, Handshake, KeyRound, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
-import { predictionService, propertyService, marketService } from '../services/services';
+import { useCurrency } from '../context/CurrencyContext';
+import { predictionService, propertyService, marketService, offerService, rentalService } from '../services/services';
+import { Offer, RentalApplication } from '../types';
 
 function StatCard({ label, value, icon, color }: { label: string; value: string | number; icon: React.ReactNode; color: string }) {
   return (
@@ -27,6 +29,8 @@ function StatCard({ label, value, icon, color }: { label: string; value: string 
 export default function DashboardPage() {
   const router = useRouter();
   const { isAuthenticated, isLoading, user } = useAuth();
+  const { formatPrice } = useCurrency();
+  const [activityTab, setActivityTab] = useState<'offers' | 'rentals'>('offers');
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -51,6 +55,21 @@ export default function DashboardPage() {
     queryFn: () => marketService.getModelInfo(),
     enabled: isAuthenticated,
   });
+
+  const { data: offersData } = useQuery({
+    queryKey: ['myOffers'],
+    queryFn: () => offerService.getMyOffers(),
+    enabled: isAuthenticated,
+  });
+
+  const { data: rentalsData } = useQuery({
+    queryKey: ['myRentalApplications'],
+    queryFn: () => rentalService.getMyApplications(),
+    enabled: isAuthenticated,
+  });
+
+  const myOffers: Offer[] = offersData?.data?.data?.offers || [];
+  const myApplications: RentalApplication[] = rentalsData?.data?.data?.applications || [];
 
   const predictions = historyData?.data?.data?.predictions || [];
   const totalProperties = propertiesData?.data?.data?.pagination?.total || 0;
@@ -153,6 +172,148 @@ export default function DashboardPage() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          {/* Active Offers & Tenancy Applications */}
+          <div className="luxury-glass-card overflow-hidden">
+            <div className="p-5 border-b border-white/[0.08] bg-[#090D14] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="font-serif font-bold text-white text-base flex items-center gap-2">
+                  <Handshake size={17} className="text-[#DFBA73]" /> My Real Estate Pipeline & Offers
+                </h3>
+                <p className="text-xs text-neutral-400 mt-0.5">Track your submitted purchase offers and rental applications</p>
+              </div>
+
+              {/* Toggle Pills */}
+              <div className="flex items-center gap-1 p-1 rounded-xl bg-[#04080D] border border-white/[0.08] self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => setActivityTab('offers')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                    activityTab === 'offers'
+                      ? 'bg-gradient-to-r from-[#DFBA73] to-[#B38F46] text-[#050B10] font-bold shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                >
+                  <Handshake size={13} />
+                  <span>Purchase Offers ({myOffers.length})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActivityTab('rentals')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                    activityTab === 'rentals'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                >
+                  <KeyRound size={13} />
+                  <span>Rental Applications ({myApplications.length})</span>
+                </button>
+              </div>
+            </div>
+
+            {activityTab === 'offers' ? (
+              <div className="divide-y divide-white/[0.06]">
+                {myOffers.length === 0 ? (
+                  <div className="p-10 text-center">
+                    <Handshake size={32} className="text-neutral-600 mx-auto mb-2.5" />
+                    <p className="text-neutral-400 text-xs font-medium">No purchase offers submitted yet.</p>
+                    <Link href="/properties" className="text-[#DFBA73] font-semibold text-xs hover:underline mt-1.5 inline-block">
+                      Browse properties to make an offer →
+                    </Link>
+                  </div>
+                ) : (
+                  myOffers.map((offer) => {
+                    const prop = typeof offer.propertyId === 'object' ? (offer.propertyId as any) : null;
+                    return (
+                      <div key={offer._id} className="p-4 sm:px-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors gap-3">
+                        <div>
+                          <p className="text-sm font-bold text-white">
+                            {prop?.title || 'Property Asset'}
+                          </p>
+                          <div className="flex items-center gap-2 text-xs text-neutral-400 mt-0.5 flex-wrap">
+                            <span>Financing: <strong className="text-white">{offer.financingType}</strong></span>
+                            <span>·</span>
+                            <span>Closing: <strong className="text-white">{offer.targetClosingDays} days</strong></span>
+                            <span>·</span>
+                            <span>{new Date(offer.createdAt).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+
+                        <div className="text-right shrink-0">
+                          <p className="text-[#DFBA73] font-serif font-black text-sm sm:text-base">
+                            {formatPrice(offer.offerAmount)}
+                          </p>
+                          <span
+                            className={`inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                              offer.status === 'ACCEPTED'
+                                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                                : offer.status === 'COUNTERED'
+                                ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                                : offer.status === 'REJECTED'
+                                ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                                : 'bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30'
+                            }`}
+                          >
+                            {offer.status}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            ) : (
+              <div className="divide-y divide-white/[0.06]">
+                {myApplications.length === 0 ? (
+                  <div className="p-10 text-center">
+                    <KeyRound size={32} className="text-neutral-600 mx-auto mb-2.5" />
+                    <p className="text-neutral-400 text-xs font-medium">No rental applications submitted yet.</p>
+                    <Link href="/properties" className="text-emerald-400 font-semibold text-xs hover:underline mt-1.5 inline-block">
+                      Browse rental listings to apply →
+                    </Link>
+                  </div>
+                ) : (
+                  myApplications.map((app) => {
+                    const prop = typeof app.propertyId === 'object' ? (app.propertyId as any) : null;
+                    return (
+                      <div key={app._id} className="p-4 sm:px-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors gap-3">
+                        <div>
+                          <p className="text-sm font-bold text-white">
+                            {prop?.title || 'Rental Asset'}
+                          </p>
+                          <div className="flex items-center gap-2 text-xs text-neutral-400 mt-0.5 flex-wrap">
+                            <span>Move-in: <strong className="text-white">{new Date(app.moveInDate).toLocaleDateString()}</strong></span>
+                            <span>·</span>
+                            <span>Lease: <strong className="text-white">{app.leaseDurationMonths} mo</strong></span>
+                            <span>·</span>
+                            <span>Occupants: <strong className="text-white">{app.occupantsCount}</strong></span>
+                          </div>
+                        </div>
+
+                        <div className="text-right shrink-0">
+                          <p className="text-emerald-400 font-serif font-black text-sm sm:text-base">
+                            Income: {formatPrice(app.monthlyIncome)}
+                          </p>
+                          <span
+                            className={`inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                              app.status === 'APPROVED'
+                                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                                : app.status === 'DECLINED'
+                                ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                                : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                            }`}
+                          >
+                            {app.status}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            )}
           </div>
 
           {/* Recent Predictions */}

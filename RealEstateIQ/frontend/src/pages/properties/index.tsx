@@ -59,9 +59,20 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
               alt={property.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30 shadow-sm backdrop-blur-md">
-              {property.propertyType}
-            </span>
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#DFBA73]/15 text-[#DFBA73] border border-[#DFBA73]/30 shadow-sm backdrop-blur-md">
+                {property.propertyType}
+              </span>
+              {property.listingType === 'rent' ? (
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-emerald-500/25 text-emerald-400 border border-emerald-500/40 backdrop-blur-md">
+                  Rent
+                </span>
+              ) : (
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-blue-500/25 text-blue-400 border border-blue-500/40 backdrop-blur-md">
+                  Sale
+                </span>
+              )}
+            </div>
             {property.featured && (
               <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#DFBA73] to-[#B38F46] text-[#080A0E] shadow-lg flex items-center gap-1 z-10">
                 <Crown size={11} /> Featured
@@ -131,7 +142,10 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
 
           <div className="flex items-center justify-between gap-2 pt-1">
             <div>
-              <p className="text-[#DFBA73] font-serif font-black text-base">{formatPrice(property.askingPrice)}</p>
+              <p className="text-[#DFBA73] font-serif font-black text-base">
+                {formatPrice(property.askingPrice)}
+                {property.listingType === 'rent' && <span className="text-xs font-sans font-normal text-neutral-400"> / mo</span>}
+              </p>
             </div>
             <div className="flex items-center gap-2">
               <WhatsAppButton href={whatsappUrl} variant="card" />
@@ -154,7 +168,7 @@ export default function PropertiesPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState({ location: '', propertyType: '', minPrice: '', maxPrice: '', bedrooms: '' });
+  const [filters, setFilters] = useState({ location: '', propertyType: '', listingType: '', minPrice: '', maxPrice: '', bedrooms: '' });
   const [showFilters, setShowFilters] = useState(false);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
@@ -209,7 +223,7 @@ export default function PropertiesPage() {
   };
 
   const clearFilters = () => {
-    setFilters({ location: '', propertyType: '', minPrice: '', maxPrice: '', bedrooms: '' });
+    setFilters({ location: '', propertyType: '', listingType: '', minPrice: '', maxPrice: '', bedrooms: '' });
     setSearch('');
     setPage(1);
   };
@@ -224,8 +238,42 @@ export default function PropertiesPage() {
       </Head>
       <DashboardLayout title="Property Inventory">
         <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
-          {/* Header controls: Search & Mode toggle */}
-          <div className="luxury-glass-card p-4">
+          {/* Header controls: Buy / Rent Tabs, Search & Mode toggle */}
+          <div className="luxury-glass-card p-4 space-y-3.5">
+            {/* Top Segmented Bar: Buy vs Rent Marketplace */}
+            <div className="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-white/[0.06]">
+              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#090D14] border border-white/[0.08]">
+                {[
+                  { id: '', label: 'All Inventory' },
+                  { id: 'sale', label: 'Buy / For Sale' },
+                  { id: 'rent', label: 'Rent / For Lease 🔑' },
+                ].map((tab) => {
+                  const isActive = (filters.listingType || '') === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => {
+                        setFilters((prev) => ({ ...prev, listingType: tab.id }));
+                        setPage(1);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                        isActive
+                          ? 'bg-gradient-to-r from-[#DFBA73] to-[#B38F46] text-[#050B10] font-bold shadow-sm'
+                          : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <span className="text-xs text-neutral-400 hidden sm:inline">
+                {(filters.listingType === 'rent') ? 'Showing verified rental properties across Sri Lanka' : 'Authentic properties across 25 Sri Lankan districts'}
+              </span>
+            </div>
+
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               {/* Search input */}
               <div className="relative flex-1 w-full">

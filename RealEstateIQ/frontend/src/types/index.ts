@@ -12,6 +12,9 @@ export interface Property {
   title: string;
   description: string;
   propertyType: 'house' | 'apartment' | 'land' | 'commercial' | 'villa';
+  listingType?: 'sale' | 'rent';
+  rentalPeriod?: 'monthly' | 'yearly';
+  depositAmount?: number;
   location: string;
   district?: string;
   status?: 'active' | 'pending' | 'sold' | 'rejected';
@@ -168,6 +171,49 @@ export interface Inquiry {
   preferredDate?: string;
   message?: string;
   status: 'new' | 'contacted' | 'resolved' | 'cancelled';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Offer {
+  _id: string;
+  propertyId: string | Property;
+  buyerId: string | User;
+  sellerId?: string | User;
+  buyerName: string;
+  buyerEmail: string;
+  buyerPhone: string;
+  offerAmount: number;
+  askingPrice: number;
+  differencePercent: number;
+  financingType: 'CASH' | 'PRE_APPROVED_MORTGAGE' | 'CONTINGENT';
+  targetClosingDays: number;
+  termsMessage?: string;
+  status: 'PENDING' | 'ACCEPTED' | 'COUNTERED' | 'REJECTED' | 'WITHDRAWN';
+  counterOfferAmount?: number;
+  counterMessage?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RentalApplication {
+  _id: string;
+  propertyId: string | Property;
+  tenantId: string | User;
+  landlordId?: string | User;
+  fullName: string;
+  email: string;
+  phone: string;
+  monthlyIncome: number;
+  employmentStatus: 'EMPLOYED' | 'SELF_EMPLOYED' | 'BUSINESS' | 'RETIRED' | 'STUDENT';
+  employerOrBusinessName?: string;
+  occupantsCount: number;
+  hasPets: boolean;
+  moveInDate: string;
+  leaseDurationMonths: number;
+  additionalNotes?: string;
+  identityVerificationConsent: boolean;
+  status: 'PENDING' | 'APPROVED' | 'DECLINED' | 'WITHDRAWN';
   createdAt: string;
   updatedAt: string;
 }

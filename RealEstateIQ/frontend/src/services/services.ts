@@ -89,3 +89,19 @@ export const paymentService = {
     api.post('/api/payments/checkout', data),
   getHistory: () => api.get('/api/payments/history'),
 };
+
+export const offerService = {
+  create: (data: Record<string, unknown>) => api.post('/api/offers', data),
+  getMyOffers: () => api.get('/api/offers/my'),
+  getReceivedOffers: () => api.get('/api/offers/received'),
+  updateStatus: (id: string, data: { status: string; counterOfferAmount?: number; counterMessage?: string }) =>
+    api.patch(`/api/offers/${id}/status`, data),
+};
+
+export const rentalService = {
+  apply: (data: Record<string, unknown>) => api.post('/api/rentals/apply', data),
+  getMyApplications: () => api.get('/api/rentals/my-applications'),
+  getReceivedApplications: () => api.get('/api/rentals/received'),
+  updateStatus: (id: string, data: { status: string }) =>
+    api.patch(`/api/rentals/${id}/status`, data),
+};

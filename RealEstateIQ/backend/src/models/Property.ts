@@ -3,11 +3,16 @@ import { ALL_SL_LOCATIONS } from '../utils/sriLankaLocations';
 
 export type PropertyType = 'house' | 'apartment' | 'land' | 'commercial' | 'villa';
 export type PropertyStatus = 'active' | 'pending' | 'sold' | 'rejected';
+export type ListingType = 'sale' | 'rent';
+export type RentalPeriod = 'monthly' | 'yearly';
 
 export interface IProperty extends Document {
   title: string;
   description: string;
   propertyType: PropertyType;
+  listingType: ListingType;
+  rentalPeriod?: RentalPeriod;
+  depositAmount?: number;
   location: string;
   district: string;
   status: PropertyStatus;
@@ -45,6 +50,21 @@ const propertySchema = new Schema<IProperty>(
       type: String,
       enum: ['house', 'apartment', 'land', 'commercial', 'villa'],
       required: [true, 'Property type is required'],
+    },
+    listingType: {
+      type: String,
+      enum: ['sale', 'rent'],
+      default: 'sale',
+      index: true,
+    },
+    rentalPeriod: {
+      type: String,
+      enum: ['monthly', 'yearly'],
+      default: 'monthly',
+    },
+    depositAmount: {
+      type: Number,
+      min: 0,
     },
     location: {
       type: String,
@@ -117,6 +137,7 @@ propertySchema.pre('save', function (next) {
 // High-performance compound indexes for zero-lag queries under 10k users
 propertySchema.index({ status: 1, featured: -1, createdAt: -1 });
 propertySchema.index({ status: 1, location: 1, askingPrice: 1 });
+propertySchema.index({ status: 1, listingType: 1, askingPrice: 1 });
 propertySchema.index({ status: 1, district: 1, askingPrice: 1 });
 propertySchema.index({ status: 1, propertyType: 1, askingPrice: 1 });
 propertySchema.index({ bedrooms: 1, bathrooms: 1 });

@@ -15,6 +15,8 @@ import marketRoutes from './routes/marketRoutes';
 import adminRoutes from './routes/adminRoutes';
 import inquiryRoutes from './routes/inquiryRoutes';
 import paymentRoutes from './routes/paymentRoutes';
+import offerRoutes from './routes/offerRoutes';
+import rentalRoutes from './routes/rentalRoutes';
 import { errorHandler, notFound } from './middleware/errorHandler';
 import { logger } from './utils/logger';
 import { initKeepAlive } from './utils/keepAlive';
@@ -120,6 +122,8 @@ app.use('/api/market', marketRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/offers', offerRoutes);
+app.use('/api/rentals', rentalRoutes);
 
 // ── 404 & Error handlers ─────────────────────────────────────────────────────
 app.use(notFound);
