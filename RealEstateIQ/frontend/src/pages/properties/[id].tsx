@@ -1,13 +1,13 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import {
   ArrowLeft, Home, MapPin, Bed, Bath, Car, Calendar, Brain,
-  BookmarkPlus, BookmarkCheck, Mail, Send, X, GitCompare, Loader2, Share2, Zap, Award, Download, Handshake, KeyRound
+  BookmarkPlus, BookmarkCheck, Mail, Send, X, GitCompare, Loader2, Share2, Zap, Award, Download, Handshake, KeyRound, Flag
 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
@@ -19,6 +19,8 @@ import { NeighborhoodScore } from '../../components/property/NeighborhoodScore';
 import { PriceWatchButton } from '../../components/property/PriceWatchButton';
 import { MakeOfferModal } from '../../components/property/MakeOfferModal';
 import { RentalApplicationModal } from '../../components/property/RentalApplicationModal';
+import { ReportListingModal } from '../../components/property/ReportListingModal';
+import { addToRecentlyViewed } from '../../components/property/RecentlyViewed';
 import { propertyService, inquiryService } from '../../services/services';
 import { Property, Prediction } from '../../types';
 import { generateValuationPDF } from '../../utils/pdfGenerator';
@@ -45,6 +47,7 @@ export default function PropertyDetailPage() {
   const [inquireModal, setInquireModal] = useState(false);
   const [offerModal, setOfferModal] = useState(false);
   const [rentalModal, setRentalModal] = useState(false);
+  const [reportModal, setReportModal] = useState(false);
   const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
   const [inquiry, setInquiry] = useState({ name: '', phone: '', email: '', date: '', message: '' });
 
@@ -55,6 +58,12 @@ export default function PropertyDetailPage() {
   });
 
   const property: Property | undefined = data?.data?.data?.property;
+
+  useEffect(() => {
+    if (property) {
+      addToRecentlyViewed(property);
+    }
+  }, [property]);
 
   const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -374,6 +383,13 @@ export default function PropertyDetailPage() {
                       {saved ? <><BookmarkCheck size={15} /> Saved</> : <><BookmarkPlus size={15} /> Save</>}
                     </button>
                   )}
+                  <button
+                    onClick={() => setReportModal(true)}
+                    className="btn-secondary text-xs py-2.5 px-3 font-semibold text-rose-400 hover:text-rose-300 border-rose-500/30 hover:border-rose-500/60"
+                    title="Report incorrect, duplicate or suspicious listing"
+                  >
+                    <Flag size={14} /> Report
+                  </button>
                 </div>
               </div>
             </div>
@@ -630,6 +646,14 @@ export default function PropertyDetailPage() {
             location={property.location}
             isOpen={rentalModal}
             onClose={() => setRentalModal(false)}
+          />
+
+          {/* Report Listing Modal */}
+          <ReportListingModal
+            propertyId={property._id}
+            propertyTitle={property.title}
+            isOpen={reportModal}
+            onClose={() => setReportModal(false)}
           />
         </div>
       </DashboardLayout>

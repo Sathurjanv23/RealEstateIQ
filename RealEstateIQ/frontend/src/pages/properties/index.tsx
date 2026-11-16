@@ -5,12 +5,14 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { Search, Filter, Home, MapPin, Bed, Bath, BookmarkPlus, BookmarkCheck, ChevronLeft, ChevronRight, X, Map, LayoutGrid, Crown } from 'lucide-react';
+import { Search, Filter, Home, MapPin, Bed, Bath, BookmarkPlus, BookmarkCheck, ChevronLeft, ChevronRight, X, Map, LayoutGrid, Crown, Calculator } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useAreaUnit } from '../../context/UnitContext';
 import { AreaUnitSelector } from '../../components/ui/AreaUnitSelector';
+import { RecentlyViewed } from '../../components/property/RecentlyViewed';
+import { AffordabilityCalculator } from '../../components/calculator/AffordabilityCalculator';
 import { propertyService } from '../../services/services';
 import { Property } from '../../types';
 import { SL_LOCATIONS_GROUPED } from '../../utils/sriLankaLocations';
@@ -172,6 +174,7 @@ export default function PropertiesPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
+  const [showAffordability, setShowAffordability] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) router.push('/login');
@@ -290,6 +293,16 @@ export default function PropertiesPage() {
               {/* Action buttons */}
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                 <AreaUnitSelector />
+                <button
+                  onClick={() => setShowAffordability(!showAffordability)}
+                  className={`btn-secondary text-xs py-2 px-3 flex items-center gap-1.5 ${
+                    showAffordability ? 'border-[#DFBA73] text-[#DFBA73] bg-[#DFBA73]/10' : 'text-neutral-300'
+                  }`}
+                  title="AI Affordability & Borrowing Capacity Calculator"
+                >
+                  <Calculator size={14} className="text-[#DFBA73]" />
+                  <span className="hidden sm:inline">Affordability</span>
+                </button>
                 <button
                   onClick={() => setShowFilters(!showFilters)}
                   className={`btn-secondary text-xs py-2 px-3.5 ${
@@ -410,6 +423,13 @@ export default function PropertiesPage() {
             )}
           </div>
 
+          {/* AI Home Affordability & Purchasing Power Calculator */}
+          {showAffordability && (
+            <div className="animate-fade-in">
+              <AffordabilityCalculator />
+            </div>
+          )}
+
           {/* Map View with Smart Marker Clustering */}
           {viewMode === 'map' && (
             <div className="luxury-glass-card p-4 sm:p-5">
@@ -493,6 +513,9 @@ export default function PropertiesPage() {
               </div>
             </div>
           )}
+
+          {/* Persistent Recently Viewed Properties History */}
+          <RecentlyViewed />
         </div>
       </DashboardLayout>
     </>
