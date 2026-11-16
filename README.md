@@ -586,10 +586,12 @@ pytest tests/
 ```
 * Covers: Predictor singleton initialization, feature preprocessing, boundary condition handling, and response schema integrity.
 
-#### 3. Frontend Static Verification & Linting
+#### 3. Frontend Static Verification & Typecheck
 ```bash
 cd frontend
-npm run lint
+npm test          # Runs strict TypeScript validation (tsc --noEmit)
+npm run lint      # Runs Next.js code analysis
+npm run build     # Verifies production SSG / SSR compilation
 ```
 
 ### Enterprise QA Reports Summary
