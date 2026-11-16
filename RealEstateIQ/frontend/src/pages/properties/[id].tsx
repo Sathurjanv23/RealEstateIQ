@@ -12,6 +12,11 @@ import {
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useCurrency } from '../../context/CurrencyContext';
+import { useAreaUnit } from '../../context/UnitContext';
+import { AreaUnitSelector } from '../../components/ui/AreaUnitSelector';
+import { HiddenCostDetector } from '../../components/calculator/HiddenCostDetector';
+import { NeighborhoodScore } from '../../components/property/NeighborhoodScore';
+import { PriceWatchButton } from '../../components/property/PriceWatchButton';
 import { propertyService, inquiryService } from '../../services/services';
 import { Property, Prediction } from '../../types';
 import { generateValuationPDF } from '../../utils/pdfGenerator';
@@ -32,6 +37,7 @@ export default function PropertyDetailPage() {
   const { id } = router.query;
   const { isAuthenticated } = useAuth();
   const { formatPrice, currency } = useCurrency();
+  const { formatArea, convertArea, currentConfig: currentUnitConfig } = useAreaUnit();
   const [saved, setSaved] = useState(false);
   const [activeImage, setActiveImage] = useState<number>(0);
   const [inquireModal, setInquireModal] = useState(false);
@@ -109,6 +115,10 @@ export default function PropertyDetailPage() {
     </DashboardLayout>
   );
 
+  const convertedArea = convertArea(property.area);
+  const pricePerUnit = property.askingPrice && convertedArea > 0
+    ? Math.round(property.askingPrice / convertedArea)
+    : null;
   const pricePerSqft = property.askingPrice && property.area > 0
     ? Math.round(property.askingPrice / property.area)
     : null;
@@ -269,7 +279,11 @@ export default function PropertyDetailPage() {
                     {currency !== 'LKR' && (
                       <p className="text-[11px] text-neutral-400 font-mono">≈ Rs. {property.askingPrice.toLocaleString()} LKR</p>
                     )}
-                    {pricePerSqft && <p className="text-xs text-neutral-400 font-semibold mt-0.5">{formatPrice(pricePerSqft)} / sqft</p>}
+                    {pricePerUnit && (
+                      <p className="text-xs text-neutral-400 font-semibold mt-0.5">
+                        {formatPrice(pricePerUnit)} / {currentUnitConfig.shortLabel}
+                      </p>
+                    )}
                   </div>
                 )}
                 <div className="flex flex-wrap items-center gap-2">
@@ -277,6 +291,11 @@ export default function PropertyDetailPage() {
                     href={whatsappUrl}
                     label="1-Click WhatsApp Inquiry"
                     sublabel="Instant Agent Direct Chat"
+                  />
+                  <PriceWatchButton
+                    propertyId={property._id}
+                    propertyTitle={property.title}
+                    currentPrice={property.askingPrice || estimatedPrice}
                   />
                   <button
                     onClick={() => setInquireModal(true)}
@@ -338,12 +357,15 @@ export default function PropertyDetailPage() {
           <div className="grid md:grid-cols-2 gap-6">
             {/* Property Specs */}
             <div className="luxury-glass-card p-6">
-              <h2 className="font-serif font-bold text-white text-base mb-4 pb-2 border-b border-white/[0.08]">
-                Property Specifications
-              </h2>
+              <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/[0.08]">
+                <h2 className="font-serif font-bold text-white text-base">
+                  Property Specifications
+                </h2>
+                <AreaUnitSelector variant="compact" />
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: <Home size={15} className="text-[#DFBA73]" />, label: 'Total Area', value: `${property.area.toLocaleString()} sqft` },
+                  { icon: <Home size={15} className="text-[#DFBA73]" />, label: 'Total Area', value: formatArea(property.area) },
                   { icon: <Bed size={15} className="text-[#DFBA73]" />, label: 'Bedrooms', value: property.bedrooms },
                   { icon: <Bath size={15} className="text-[#DFBA73]" />, label: 'Bathrooms', value: property.bathrooms },
                   { icon: <Car size={15} className="text-[#DFBA73]" />, label: 'Parking', value: property.parking },
@@ -422,6 +444,19 @@ export default function PropertyDetailPage() {
               </div>
             </div>
           )}
+
+          {/* AI Neighborhood Score & Quality of Life Radar 🌟 */}
+          <NeighborhoodScore
+            location={property.location}
+            district={property.district}
+          />
+
+          {/* Hidden Cost Detector (Closing Fees, Stamp Duty & Reserves) 🛡️ */}
+          <HiddenCostDetector
+            propertyPrice={property.askingPrice || estimatedPrice}
+            propertyTitle={property.title}
+            location={property.location}
+          />
 
           {/* Sri Lanka Home Loan & Mortgage EMI Calculator 🧮 */}
           <MortgageCalculator

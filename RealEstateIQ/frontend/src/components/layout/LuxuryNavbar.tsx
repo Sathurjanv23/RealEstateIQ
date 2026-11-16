@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
 import { BrandLogo } from '../ui/BrandLogo';
 import { CurrencySelector } from '../ui/CurrencySelector';
+import { AreaUnitSelector } from '../ui/AreaUnitSelector';
 import { useAuth } from '../../context/AuthContext';
 
 export function LuxuryNavbar() {
@@ -84,8 +85,9 @@ export function LuxuryNavbar() {
           </nav>
 
           {/* Right: CTA & Auth Controls */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2.5">
             <CurrencySelector />
+            <AreaUnitSelector />
 
             {isAuthenticated ? (
               <Link
@@ -168,6 +170,10 @@ export function LuxuryNavbar() {
           <div className="flex justify-between items-center pb-2 px-1">
             <span className="text-xs font-semibold text-neutral-400">Display Currency:</span>
             <CurrencySelector />
+          </div>
+          <div className="flex justify-between items-center pb-2 px-1">
+            <span className="text-xs font-semibold text-neutral-400">Measurement Unit:</span>
+            <AreaUnitSelector />
           </div>
 
           <Link

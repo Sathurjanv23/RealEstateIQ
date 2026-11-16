@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '../context/AuthContext';
 import { CurrencyProvider } from '../context/CurrencyContext';
+import { UnitProvider } from '../context/UnitContext';
 import '../styles/globals.css';
 import 'leaflet/dist/leaflet.css';
 
@@ -36,8 +37,9 @@ export default function App({ Component, pageProps }: AppProps) {
   const content = (
     <AuthProvider>
       <CurrencyProvider>
-        <Component {...pageProps} />
-        <Toaster
+        <UnitProvider>
+          <Component {...pageProps} />
+          <Toaster
           position="top-right"
           toastOptions={{
             style: {
@@ -54,6 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
             },
           }}
         />
+        </UnitProvider>
       </CurrencyProvider>
     </AuthProvider>
   );

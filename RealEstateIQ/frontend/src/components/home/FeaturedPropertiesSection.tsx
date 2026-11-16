@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCurrency } from '../../context/CurrencyContext';
+import { useAreaUnit } from '../../context/UnitContext';
 import { propertyService } from '../../services/services';
 import { Property } from '../../types';
 
@@ -103,6 +104,7 @@ const FALLBACK_PROPERTIES: Property[] = [
 export function FeaturedPropertiesSection() {
   const { isAuthenticated } = useAuth();
   const { formatPrice } = useCurrency();
+  const { formatArea } = useAreaUnit();
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
 
   // 1. Fetch authentic properties directly from live MongoDB REST API
@@ -349,7 +351,7 @@ export function FeaturedPropertiesSection() {
                       </div>
                       <div className="flex items-center gap-1.5 justify-center sm:justify-start">
                         <Home size={14} className="text-[#DFBA73]" />
-                        <span>{prop.area ? `${prop.area.toLocaleString()} sqft` : '—'}</span>
+                        <span>{prop.area ? formatArea(prop.area) : '—'}</span>
                       </div>
                     </div>
 

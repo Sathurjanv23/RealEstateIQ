@@ -6,12 +6,15 @@ import { Brain, ArrowLeft, Download, ShieldCheck, MapPin, Home, Bed, Bath, Clock
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useCurrency } from '../../context/CurrencyContext';
+import { useAreaUnit } from '../../context/UnitContext';
 import { Prediction } from '../../types';
 import { generateValuationPDF } from '../../utils/pdfGenerator';
 import { ShapWaterfallCard } from '../../components/prediction/ShapWaterfallCard';
 import { WhatsAppButton } from '../../components/ui/WhatsAppButton';
 import { getValuationWhatsAppUrl } from '../../utils/whatsapp';
 import { MortgageCalculator } from '../../components/mortgage/MortgageCalculator';
+import { HiddenCostDetector } from '../../components/calculator/HiddenCostDetector';
+import { NeighborhoodScore } from '../../components/property/NeighborhoodScore';
 
 function FeatureBar({ name, value }: { name: string; value: number }) {
   const pct = Math.round(value * 100);
@@ -34,6 +37,7 @@ export default function PredictionResultPage() {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
   const { formatPrice, currency } = useCurrency();
+  const { formatArea } = useAreaUnit();
   const [prediction, setPrediction] = useState<Prediction | null>(null);
 
   useEffect(() => {
@@ -149,6 +153,18 @@ export default function PredictionResultPage() {
             algorithm={algorithm}
           />
 
+          {/* AI Neighborhood Score & Quality of Life Radar 🌟 */}
+          <NeighborhoodScore
+            location={inputFeatures.location}
+          />
+
+          {/* Hidden Cost Detector (Closing Fees, Stamp Duty & Reserves) 🛡️ */}
+          <HiddenCostDetector
+            propertyPrice={Math.round(predictedPrice)}
+            propertyTitle={`Valuation Report (${inputFeatures.location})`}
+            location={inputFeatures.location}
+          />
+
           {/* Sri Lanka Home Loan & Mortgage EMI Calculator 🧮 */}
           <MortgageCalculator
             initialPrice={Math.round(predictedPrice)}
@@ -173,7 +189,7 @@ export default function PredictionResultPage() {
                 <p className="text-neutral-400 font-medium flex items-center gap-1.5 mb-1">
                   <Home size={13} className="text-[#DFBA73]" /> Area
                 </p>
-                <p className="font-bold text-white text-sm">{inputFeatures.area.toLocaleString()} sqft</p>
+                <p className="font-bold text-white text-sm">{formatArea(inputFeatures.area)}</p>
               </div>
 
               <div className="p-3 rounded-xl bg-[#090D14] border border-white/[0.08]">

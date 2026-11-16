@@ -9,6 +9,8 @@ import { Search, Filter, Home, MapPin, Bed, Bath, BookmarkPlus, BookmarkCheck, C
 import { DashboardLayout } from '../../components/layout/DashboardLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useCurrency } from '../../context/CurrencyContext';
+import { useAreaUnit } from '../../context/UnitContext';
+import { AreaUnitSelector } from '../../components/ui/AreaUnitSelector';
 import { propertyService } from '../../services/services';
 import { Property } from '../../types';
 import { SL_LOCATIONS_GROUPED } from '../../utils/sriLankaLocations';
@@ -28,6 +30,7 @@ const TYPES = ['', 'house', 'apartment', 'land', 'commercial', 'villa'];
 
 function PropertyCard({ property, onSave, saved }: { property: Property; onSave: (id: string) => void; saved: boolean }) {
   const { formatPrice } = useCurrency();
+  const { formatArea } = useAreaUnit();
   const hasImage = property.images && property.images.length > 0 && property.images[0];
   const estimatedPrice = estimatePropertyFairValue({
     area: property.area,
@@ -116,7 +119,7 @@ function PropertyCard({ property, onSave, saved }: { property: Property; onSave:
 
           <div className="grid grid-cols-3 gap-2 py-2 border-y border-white/[0.08] mb-4 text-xs text-neutral-400">
             <div className="flex items-center gap-1">
-              <Home size={12} className="text-[#DFBA73]" /> {property.area.toLocaleString()} sqft
+              <Home size={12} className="text-[#DFBA73]" /> {formatArea(property.area)}
             </div>
             <div className="flex items-center gap-1">
               <Bed size={12} className="text-[#DFBA73]" /> {property.bedrooms} Beds
@@ -238,6 +241,7 @@ export default function PropertiesPage() {
 
               {/* Action buttons */}
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <AreaUnitSelector />
                 <button
                   onClick={() => setShowFilters(!showFilters)}
                   className={`btn-secondary text-xs py-2 px-3.5 ${

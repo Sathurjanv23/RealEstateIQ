@@ -8,10 +8,13 @@ import { useAuth } from '../../context/AuthContext';
 import { predictionService } from '../../services/services';
 import { Prediction } from '../../types';
 import { SL_LOCATIONS_GROUPED, SL_LOCATION_VALUES } from '../../utils/sriLankaLocations';
+import { useAreaUnit, AreaUnit, AREA_UNITS } from '../../context/UnitContext';
 
 export default function PredictPage() {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
+  const { unit: globalUnit } = useAreaUnit();
+  const [areaUnit, setAreaUnit] = useState<AreaUnit>(globalUnit || 'sqft');
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     area: '',
@@ -50,14 +53,20 @@ export default function PredictPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.area || Number(form.area) <= 0) {
+    const rawArea = Number(form.area);
+    if (!form.area || rawArea <= 0) {
       toast.error('Please enter a valid area.');
       return;
     }
+
+    // Convert to sqft for the Gradient Boosting model
+    const unitConfig = AREA_UNITS[areaUnit] || AREA_UNITS.sqft;
+    const areaInSqft = Math.round(rawArea * unitConfig.ratioFromSqft);
+
     setLoading(true);
     try {
       const payload = {
-        area: Number(form.area),
+        area: areaInSqft,
         bedrooms: Number(form.bedrooms),
         bathrooms: Number(form.bathrooms),
         location: form.location,
@@ -151,29 +160,86 @@ export default function PredictPage() {
 
               {/* Dynamic numeric fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {fields.map((f) => (
-                  <div key={f.name} className={f.name === 'area' ? 'sm:col-span-2' : ''}>
-                    <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
-                      {f.label} {f.name === 'area' && <span className="text-[#F87171]">*</span>}
-                    </label>
-                    <input
-                      type={f.type}
-                      name={f.name}
-                      value={(form as Record<string, string>)[f.name]}
-                      onChange={handleChange}
-                      placeholder={f.placeholder}
-                      min={f.min}
-                      max={f.max}
-                      className="input-field"
-                      required={f.name === 'area'}
-                    />
-                    {f.note && (
-                      <p className="text-[11px] text-[#DFBA73] font-semibold mt-1">
-                        {f.note}
-                      </p>
-                    )}
-                  </div>
-                ))}
+                {fields.map((f) => {
+                  if (f.name === 'area') {
+                    const unitConfig = AREA_UNITS[areaUnit] || AREA_UNITS.sqft;
+                    const calculatedSqft = form.area ? Math.round(Number(form.area) * unitConfig.ratioFromSqft) : null;
+
+                    return (
+                      <div key={f.name} className="sm:col-span-2">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label className="block text-xs font-semibold text-neutral-300">
+                            Property Extent / Area <span className="text-[#F87171]">*</span>
+                          </label>
+                          {/* Unit switcher pills */}
+                          <div className="inline-flex rounded-lg bg-[#090D14] p-0.5 border border-white/[0.08]">
+                            {(['sqft', 'perch', 'acre', 'sqm'] as AreaUnit[]).map((u) => (
+                              <button
+                                key={u}
+                                type="button"
+                                onClick={() => setAreaUnit(u)}
+                                className={`px-2 py-0.5 text-[10px] font-bold rounded-md transition-all ${
+                                  areaUnit === u
+                                    ? 'bg-[#DFBA73] text-[#050B10]'
+                                    : 'text-neutral-400 hover:text-white'
+                                }`}
+                              >
+                                {AREA_UNITS[u].shortLabel}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="relative">
+                          <input
+                            type="number"
+                            name="area"
+                            value={form.area}
+                            onChange={handleChange}
+                            placeholder={areaUnit === 'perch' ? 'e.g. 10 (perches)' : areaUnit === 'acre' ? 'e.g. 0.5 (acres)' : 'e.g. 2200 (sqft)'}
+                            step={areaUnit === 'sqft' ? '1' : '0.01'}
+                            min="0.1"
+                            max="500000"
+                            className="input-field"
+                            required
+                          />
+                        </div>
+
+                        {calculatedSqft !== null && areaUnit !== 'sqft' && (
+                          <p className="text-[11px] text-emerald-400 font-medium mt-1">
+                            ≈ {calculatedSqft.toLocaleString()} sqft (auto-calibrated for valuation)
+                          </p>
+                        )}
+                        <p className="text-[11px] text-[#DFBA73] font-semibold mt-1">
+                          Primary valuation driver (~70% weight). Supports Perches, Acres & Sq.Ft.
+                        </p>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div key={f.name}>
+                      <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+                        {f.label}
+                      </label>
+                      <input
+                        type={f.type}
+                        name={f.name}
+                        value={(form as Record<string, string>)[f.name]}
+                        onChange={handleChange}
+                        placeholder={f.placeholder}
+                        min={f.min}
+                        max={f.max}
+                        className="input-field"
+                      />
+                      {f.note && (
+                        <p className="text-[11px] text-[#DFBA73] font-semibold mt-1">
+                          {f.note}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Submit Button */}
